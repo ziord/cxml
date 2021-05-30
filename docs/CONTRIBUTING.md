@@ -1,6 +1,6 @@
 ### Welcome
 
-Hi, and welcome to the contribution guideline page. Thanks for taking the effort to get here.
+Hi, and welcome to the contribution guideline page. Thanks for taking the effort to get here. Consider taking a look at the [project architecture](https://github.com/ziord/cxml/blob/master/docs/ARCHITECTURE.md) if you haven't already.
 Below are the steps that needs to be followed in order to contribute to this project.
 
 ### Fork the Project
