@@ -1,0 +1,25 @@
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<breakfast_menu>
+    Hi there, roo!
+
+    <food1>
+
+<name class="pooh">winnie the pooh bear...!</name>
+
+
+        <price>$5.95</price>
+
+<description>
+<br/>
+<br/>   100 acre wood ::)
+        </description>
+
+</food1>
+
+
+            </breakfast_menu>

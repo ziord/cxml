@@ -1,0 +1,16 @@
+<thesaurus xmlns="http://www.w3.org/2007/xqftts/thesaurus">
+    <entry>
+        <term>successful</term>
+        <synonym>
+            <term>sucessful</term>
+            <relationship>misspelling of</relationship>
+        </synonym>
+    </entry>
+    <entry>
+        <term>sucessful</term>
+        <synonym>
+            <term>successful</term>
+            <relationship>misspelling of xyz</relationship>
+        </synonym>
+    </entry>
+</thesaurus>
