@@ -1,0 +1,34 @@
+<rss version="2.0" class="hidden">
+    <?processor my-proc ?>
+    <link type="text/css" id="dark-mode" rel="stylesheet" href=""/>
+    <style type="text/css" id="dark-mode-custom-style"/>
+    <style type="text/css" id="dark-mode-theme-changer-style"/>
+    <channel>
+        <title>PyPI recent updates for switches.py</title>
+        <link>https://pypi.org/project/switches-py/</link>
+        <comment>Recent updates to the Python Package Index for switches.py</comment>
+        <comment><!--Recent updates to the Python Package Index for switches.py--></comment>
+        <description/>
+        <language>en</language>
+        <!--my comment-->
+        <item>
+            <?ext xml stuff?>
+            <language>en</language>
+            https://pypi.org/project/switches-py/0.1.0/
+            <title>0.1.0</title>
+            <!--my comment-->
+            <link>https://pypi.org/project/switches-py/0.1.0/</link>
+            <description>Use C-like switch construct (and more!) in Python</description>
+            <pubDate>Mon, 24 Aug 2020 01:52:04 GMT</pubDate>
+            Mon, 24 Aug 2020 01:52:04 GMT
+        </item>
+        <item>
+            <?language python thingy?>
+            <title>0.0.1</title>
+            <link>https://pypi.org/project/switches-py/0.0.1/</link>
+            <description>Use C-like switch construct (and more!) in Python</description>
+            <pubDate>Mon, 24 Aug 2020 01:07:08 GMT</pubDate>
+            <x>Testing things</x>
+        </item>
+    </channel>
+</rss>

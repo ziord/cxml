@@ -1,0 +1,8 @@
+<description>
+    assorted fresh berries and whipped cream
+    <![CDATA[Testing cdata stuff]]>
+    <![CDATA["just testing this & that />]]>
+    Okay cool stuff...
+    <![CDATA[for(int i=0; i<10; i++){printf("foobar!");}]]>
+    <or mod="63" van="'40'" hex="0xdeadbeef">1</or>
+</description>

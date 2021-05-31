@@ -1,0 +1,5 @@
+<f:table xmlns:f="https://www.w3schools.com/furniture">
+        <f:name>African Coffee Table<![CDATA[Testing cdata stuff]]></f:name>
+        <f:width>80</f:width>
+        <f:length>120</f:length>
+ </f:table>

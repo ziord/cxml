@@ -1,0 +1,11 @@
+<thesaurus xmlns:xy="http://www.w3.org/2007/xqftts/thesaurus">
+    <entry>
+        <!--foobar-->
+        <term>computers</term>
+        <synonym>
+            <xy:term>hardware</xy:term>
+            <relationship>NT</relationship>
+        </synonym>
+        <!--cimple-->
+    </entry>
+</thesaurus>

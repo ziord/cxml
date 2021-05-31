@@ -1,0 +1,6 @@
+<!DOCTYPE person SYSTEM "example.dtd">
+<person fish="kote">
+        <gender>female</gender>
+        <firstname>Anna</firstname>
+        <lastname>Smith</lastname>
+</person>
