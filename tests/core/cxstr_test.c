@@ -5,47 +5,42 @@
 
 #include "cxfixture.h"
 
-
-int empty_str_asserts(cxml_string *str){
+void empty_str_asserts(cxml_string *str){
     CHECK_EQ(str->_len, 0);
     CHECK_EQ(str->_cap, 0);
     CHECK_EQ(str->_raw_chars, NULL);
-    return 1;
 }
 
-int non_empty_str_asserts(cxml_string *str, const char *raw, unsigned len){
+void non_empty_str_asserts(cxml_string *str, const char *raw, unsigned len){
     CHECK_NE(str->_cap, 0);
     CHECK_EQ(str->_len, len);
     CHECK_NE(str->_raw_chars, NULL);
     CHECK_EQ(strncmp(raw, str->_raw_chars, len), 0);
-    return 1;
 }
 
-int str_str_asserts(cxml_string *str1, cxml_string *str2, unsigned len){
+void str_str_asserts(cxml_string *str1, cxml_string *str2, unsigned len){
     CHECK_EQ(str1->_len, len);
     CHECK_EQ(str2->_len, len);
     CHECK_EQ(str1->_len, str1->_len);
     CHECK_EQ(str1->_cap, str1->_cap);
     CHECK_EQ(strncmp(str1->_raw_chars, str2->_raw_chars, len), 0);
-    return 1;
 }
 
-cts test_cxml_string_init(){
+TEST(cxstr, cxml_string_init){
     cxml_string str;
     cxml_string_init(&str);
-    CHECK_EQ(empty_str_asserts(&str), 1);
+    empty_str_asserts(&str);
     // should not seg-fault
     cxml_string_init(NULL);
-    cxml_pass()
 }
 
 extern void cxml_string_from_alloc(cxml_string *str, char **raw, int len);
 
-cts test_cxml_string_from_alloc(){
+TEST(cxstr, cxml_string_from_alloc){
     int len = 50;
     char *alloc = malloc(len);
     if (!alloc){
-        cxml_skip()
+        exit(1);
     }
     memcpy(alloc, "this is a simple cxml string test", 33);
     cxml_string str = new_cxml_string();
@@ -70,23 +65,20 @@ cts test_cxml_string_from_alloc(){
     // since alloc is freed above (from the call to cxml_string_from_alloc())
     // and freeing str2, also frees alloc, since alloc points to the chars in str2+
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_new_cxml_string(){
+TEST(cxstr, new_cxml_string){
     cxml_string str = new_cxml_string();
-    CHECK_EQ(empty_str_asserts(&str), 1);
-    cxml_pass()
+    empty_str_asserts(&str);
 }
 
-cts test_new_alloc_cxml_string(){
+TEST(cxstr, new_alloc_cxml_string){
     cxml_string *str = new_alloc_cxml_string();
-    CHECK_EQ(empty_str_asserts(str), 1);
+    empty_str_asserts(str);
     FREE(str);
-    cxml_pass()
 }
 
-cts test_new_cxml_string_s(){
+TEST(cxstr, new_cxml_string_s){
     char *ch = "foobar";
     cxml_string str = new_cxml_string_s(ch);
     CHECK_NE(str._raw_chars, NULL);
@@ -104,10 +96,9 @@ cts test_new_cxml_string_s(){
     CHECK_EQ(str3._raw_chars, NULL);
 
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_append(){
+TEST(cxstr, cxml_string_append){
     cxml_string str = new_cxml_string();
 
     cxml_string_append(&str, "this is foo", 11);
@@ -115,13 +106,12 @@ cts test_cxml_string_append(){
 
     cxml_string str2 = new_cxml_string();
     cxml_string_append(&str2, NULL, 50);
-    CHECK_EQ(empty_str_asserts(&str2)), 1;;
+    empty_str_asserts(&str2));
 
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_raw_append(){
+TEST(cxstr, cxml_string_raw_append){
     cxml_string str = new_cxml_string();
     cxml_string str2 = new_cxml_string();
 
@@ -129,13 +119,12 @@ cts test_cxml_string_raw_append(){
     CHECK_EQ(non_empty_str_asserts(&str, "this is foo", 11), 1);
 
     cxml_string_raw_append(&str2, NULL);
-    CHECK_EQ(empty_str_asserts(&str2), 1);
+    empty_str_asserts(&str2);
 
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_str_append(){
+TEST(cxstr, cxml_string_str_append){
     char *d = "this is foo";
     cxml_string str = new_cxml_string_s(d),
                 str2 = new_cxml_string(),
@@ -145,14 +134,13 @@ cts test_cxml_string_str_append(){
     CHECK_EQ(str_str_asserts(&str, &str2, strlen(d)), 1);
 
     cxml_string_append(&str3, NULL, 50);
-    CHECK_EQ(empty_str_asserts(&str3)), 1;;
+    empty_str_asserts(&str3));
 
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_n_append(){
+TEST(cxstr, cxml_string_n_append){
     char ch = 'a';
     cxml_string str = new_cxml_string();
 
@@ -161,14 +149,13 @@ cts test_cxml_string_n_append(){
 
     cxml_string_free(&str);
     cxml_string_n_append(&str, ch, 0);
-    CHECK_EQ(empty_str_asserts(&str), 1);
+    empty_str_asserts(&str);
 
     cxml_string_n_append(NULL, ch, 10);
-    CHECK_EQ(empty_str_asserts(&str), 1);
-    cxml_pass()
+    empty_str_asserts(&str);
 }
 
-cts test_cxml_string_dcopy(){
+TEST(cxstr, cxml_string_dcopy){
     char *d = "this is foo";
     cxml_string str = new_cxml_string_s(d),
                 str2 = new_cxml_string(),
@@ -178,14 +165,13 @@ cts test_cxml_string_dcopy(){
     CHECK_EQ(str_str_asserts(&str, &str2, strlen(d)), 1);
 
     cxml_string_dcopy(&str3, NULL);
-    CHECK_EQ(empty_str_asserts(&str3), 1);
+    empty_str_asserts(&str3);
 
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_raw_equals(){
+TEST(cxstr, cxml_string_raw_equals){
     char *d = "this is foo", *d2 = "not a bar";
     cxml_string str = new_cxml_string_s(d),
                 str2 = new_cxml_string_s(d2);
@@ -197,10 +183,9 @@ cts test_cxml_string_raw_equals(){
     CHECK_FALSE(cxml_string_raw_equals(&str2, d));
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_cmp_raw_equals(){
+TEST(cxstr, cxml_string_cmp_raw_equals){
     char *d = "this is foo", *d2 = "not a bar";
     cxml_string str = new_cxml_string_s(d),
             str2 = new_cxml_string_s(d2);
@@ -212,10 +197,9 @@ cts test_cxml_string_cmp_raw_equals(){
     CHECK_FALSE(cxml_string_cmp_raw_equals(&str2, d));
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_lraw_equals(){
+TEST(cxstr, cxml_string_lraw_equals){
     char *d = "this is foo yet again";
     int len = strlen(d);
     cxml_string str = new_cxml_string_s("this is foo");
@@ -225,10 +209,9 @@ cts test_cxml_string_lraw_equals(){
     CHECK_FALSE(cxml_string_lraw_equals(&str, NULL, 0));
     CHECK_FALSE(cxml_string_lraw_equals(NULL, d, 0));
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_equals(){
+TEST(cxstr, cxml_string_equals){
     char *d = "this is foo yet again";
     cxml_string str = new_cxml_string_s(d),
                 str2 = new_cxml_string_s(d),
@@ -241,10 +224,9 @@ cts test_cxml_string_equals(){
     CHECK_FALSE(cxml_string_equals(NULL, &str));
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_llraw_equals(){
+TEST(cxstr, cxml_string_llraw_equals){
     char *d = "this is foo yet again", *d2 = "this is foo";
     int len1 = strlen(d), len2 = strlen(d2);
     CHECK_FALSE(cxml_string_llraw_equals(d, d2, len1, len2));
@@ -254,10 +236,9 @@ cts test_cxml_string_llraw_equals(){
     CHECK_FALSE(cxml_string_llraw_equals(d, d2, 0, len2));
     CHECK_FALSE(cxml_string_llraw_equals(d, NULL, len1, len2));
     CHECK_FALSE(cxml_string_llraw_equals(NULL, d2, len1, len2));
-    cxml_pass()
 }
 
-cts test_cxml_string_replace(){
+TEST(cxstr, cxml_string_replace){
     char *d = "this is foo yet again";
     cxml_string str = new_cxml_string_s(d),
                 str2 = new_cxml_string();
@@ -283,10 +264,9 @@ cts test_cxml_string_replace(){
 
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_strip_space(){
+TEST(cxstr, cxml_string_strip_space){
     char *d = "\t\r\nthis is foo yet again       ",
          *d2 = " this is foo yet again\r\r\t\n",
          *d3 = "\r\n\t this is foo yet again",
@@ -302,11 +282,11 @@ cts test_cxml_string_strip_space(){
     cxml_string_free(&str2);
 
     cxml_string_strip_space(&str, &str2);
-    CHECK_EQ(empty_str_asserts(&str), 1);
-    CHECK_EQ(empty_str_asserts(&str2), 1);
+    empty_str_asserts(&str);
+    empty_str_asserts(&str2);
 
     cxml_string_strip_space(NULL, &str2);
-    CHECK_EQ(empty_str_asserts(&str2), 1);
+    empty_str_asserts(&str2);
 
     str2 = new_cxml_string_s(d2);
     cxml_string_strip_space(&str2, &str);
@@ -336,10 +316,9 @@ cts test_cxml_string_strip_space(){
     CHECK_EQ(str2._cap, 0);
     cxml_string_free(&str);
     cxml_string_free(&str2);
-    cxml_pass()
 }
 
-cts test_cxml_string_startswith(){
+TEST(cxstr, cxml_string_startswith){
     char *d = "this is foo yet again";
     cxml_string str = new_cxml_string_s(d);
     CHECK_TRUE(cxml_string_startswith(&str, "this"));;
@@ -349,10 +328,9 @@ cts test_cxml_string_startswith(){
     CHECK_TRUE(cxml_string_startswith(&str, ""));;
     cxml_string_free(&str);
     CHECK_TRUE(cxml_string_startswith(&str, ""));;
-    cxml_pass()
 }
 
-cts test_cxml_string_str_startswith(){
+TEST(cxstr, cxml_string_str_startswith){
     char *d = "this is foo yet again",
          *d2 = "t",
          *d3 = "this is f00";
@@ -371,10 +349,9 @@ cts test_cxml_string_str_startswith(){
     cxml_string_free(&str2);
     CHECK_TRUE(cxml_string_str_startswith(&str, &str2))  // empty "";
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_endswith(){
+TEST(cxstr, cxml_string_endswith){
     char *d = "this is foo yet again";
     cxml_string str = new_cxml_string_s(d);
     CHECK_TRUE(cxml_string_endswith(&str, "again"));;
@@ -384,10 +361,9 @@ cts test_cxml_string_endswith(){
     CHECK_TRUE(cxml_string_endswith(&str, ""));;
     cxml_string_free(&str);
     CHECK_TRUE(cxml_string_endswith(&str, ""));;
-    cxml_pass()
 }
 
-cts test_cxml_string_str_endswith(){
+TEST(cxstr, cxml_string_str_endswith){
     char *d = "this is foo yet again",
             *d2 = "n",
             *d3 = "this is f00";
@@ -406,10 +382,9 @@ cts test_cxml_string_str_endswith(){
     cxml_string_free(&str2);
     CHECK_TRUE(cxml_string_str_endswith(&str, &str2))  // empty "";
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_contains(){
+TEST(cxstr, cxml_string_contains){
     char *d = "this is foo yet again",
          *d2 = "n",
          *d3 = "this is f00";
@@ -436,10 +411,9 @@ cts test_cxml_string_contains(){
     CHECK_TRUE(cxml_string_contains(&str, &str));
     CHECK_TRUE(cxml_string_contains(&str2, &str2));
 
-    cxml_pass()
 }
 
-cts test_cxml_string_raw_contains(){
+TEST(cxstr, cxml_string_raw_contains){
     char *d = "this is foo yet again",
          *d3 = "this is f00";
     cxml_string str = new_cxml_string_s(d);
@@ -459,10 +433,9 @@ cts test_cxml_string_raw_contains(){
     CHECK_TRUE(cxml_string_raw_contains(&str, d3));
     cxml_string_free(&str);
 
-    cxml_pass()
 }
 
-cts test_cxml_string_raw_index(){
+TEST(cxstr, cxml_string_raw_index){
     cxml_string str = new_cxml_string_s("this is foo yet again");
     CHECK_EQ(cxml_string_raw_index(&str, "is"), 2);
     CHECK_EQ(cxml_string_raw_index(&str, "oo"), 9);
@@ -473,10 +446,9 @@ cts test_cxml_string_raw_index(){
     CHECK_EQ(cxml_string_raw_index(NULL, "a"), -1);
     CHECK_EQ(cxml_string_raw_index(&str, NULL), -1);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_char_index(){
+TEST(cxstr, cxml_string_char_index){
     cxml_string str = new_cxml_string_s("this is foo yet again");
     CHECK_EQ(cxml_string_char_index(&str, 'y'), 12);
     CHECK_EQ(cxml_string_char_index(&str, 'i'), 2);
@@ -487,10 +459,9 @@ cts test_cxml_string_char_index(){
     CHECK_EQ(cxml_string_char_index(NULL, 'a'), -1);
     CHECK_EQ(cxml_string_char_index(&str, 0), -1);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_as_raw(){
+TEST(cxstr, cxml_string_as_raw){
     char *d = "this is foo yet again";
     cxml_string str = new_cxml_string_s(d);
     CHECK_EQ(strncmp(d, cxml_string_as_raw(&str), strlen(d)), 0);
@@ -498,10 +469,9 @@ cts test_cxml_string_as_raw(){
     cxml_string_free(&str);
     // returns null for empty strings, to prevent freeing stack allocated strings.
     CHECK_EQ(cxml_string_as_raw(&str), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_string_len(){
+TEST(cxstr, cxml_string_len){
     char *d = "this is foo yet again",
          *d2 = "";
 
@@ -510,15 +480,14 @@ cts test_cxml_string_len(){
     cxml_string_free(&str);
 
     str = new_cxml_string_s(d2);
-    CHECK_EQ(empty_str_asserts(&str), 1);
+    empty_str_asserts(&str);
     CHECK_EQ(cxml_string_len(&str), strlen(d2));
 
     CHECK_EQ(cxml_string_len(NULL), 0);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_free(){
+TEST(cxstr, cxml_string_free){
     char *d = "this is foo yet again";
     cxml_string str = new_cxml_string_s(d);
     CHECK_TRUE(non_empty_str_asserts(&str, d, strlen(d)));;
@@ -526,11 +495,10 @@ cts test_cxml_string_free(){
 
     CHECK_TRUE(empty_str_asserts(&str));;
     cxml_string_free(&str);
-    cxml_pass()
 }
 
 /** utf-8 hook **/
-cts test_cxml_string_mb_contains(){
+TEST(cxstr, cxml_string_mb_contains){
     char *d = "इस नए साल खुशियों की बरसातें हों",
          *d2 = "साल",
          *d3 = "बरसातें this is f00";
@@ -549,10 +517,9 @@ cts test_cxml_string_mb_contains(){
     CHECK_TRUE(cxml_string_mb_contains(&str, ""))  // "" in d;
     cxml_string_free(&str);
 
-    cxml_pass()
 }
 
-cts test_cxml_string_mb_str_index(){
+TEST(cxstr, cxml_string_mb_str_index){
     cxml_string str = new_cxml_string_s("thisनए isबरसातेंfoo yet होंagain");
     CHECK_EQ(cxml_string_mb_str_index(&str, "नए"), 4);
     CHECK_EQ(cxml_string_mb_str_index(&str, "हों"), 24);
@@ -563,10 +530,9 @@ cts test_cxml_string_mb_str_index(){
     CHECK_EQ(cxml_string_mb_str_index(NULL, "a"), -1);
     CHECK_EQ(cxml_string_mb_str_index(&str, NULL), -1);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_mb_index(){
+TEST(cxstr, cxml_string_mb_index){
     cxml_string str = new_cxml_string_s("Ģğhķăls åâv än băåå");
     CHECK_EQ(cxml_string_mb_index(&str, L'å'), 8);
     CHECK_EQ(cxml_string_mb_index(&str, L'ğ'), 1);
@@ -576,10 +542,9 @@ cts test_cxml_string_mb_index(){
     CHECK_EQ(cxml_string_mb_index(&str, L'\0'), -1);
     CHECK_EQ(cxml_string_mb_index(NULL, L'a'), -1);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_mb_len(){
+TEST(cxstr, cxml_string_mb_len){
     char *d = "इस नए साल खुशियों की बरसातें हों";
     cxml_string str = new_cxml_string_s(d);
     CHECK_TRUE(non_empty_str_asserts(&str, d, strlen(d)));
@@ -587,10 +552,9 @@ cts test_cxml_string_mb_len(){
     CHECK_NE(cxml_string_mb_len(&str), (int)strlen(d));
     CHECK_EQ(cxml_string_mb_len(NULL), 0);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_string_mb_strstr(){
+TEST(cxstr, cxml_string_mb_strstr){
     char *d = "इस नए साल खुशियों की बरसातें हों";
     cxml_string str = new_cxml_string_s(d);
     CHECK_NE(cxml_string_mb_strstr(&str, d), NULL);
@@ -599,48 +563,4 @@ cts test_cxml_string_mb_strstr(){
     CHECK_EQ(cxml_string_mb_strstr(&str, NULL), NULL);
     CHECK_EQ(cxml_string_mb_strstr(&str, "शुरू"), NULL);
     cxml_string_free(&str);
-    cxml_pass()
-}
-
-void suite_cxstr() {
-    cxml_suite(cxstr)
-    {
-        cxml_add_m_test(33,
-                        test_cxml_string_init,
-                        test_cxml_string_from_alloc,
-                        test_new_cxml_string,
-                        test_new_alloc_cxml_string,
-                        test_new_cxml_string_s,
-                        test_cxml_string_append,
-                        test_cxml_string_raw_append,
-                        test_cxml_string_str_append,
-                        test_cxml_string_n_append,
-                        test_cxml_string_dcopy,
-                        test_cxml_string_raw_equals,
-                        test_cxml_string_cmp_raw_equals,
-                        test_cxml_string_lraw_equals,
-                        test_cxml_string_equals,
-                        test_cxml_string_llraw_equals,
-                        test_cxml_string_replace,
-                        test_cxml_string_strip_space,
-                        test_cxml_string_startswith,
-                        test_cxml_string_str_startswith,
-                        test_cxml_string_endswith,
-                        test_cxml_string_str_endswith,
-                        test_cxml_string_contains,
-                        test_cxml_string_raw_contains,
-                        test_cxml_string_raw_index,
-                        test_cxml_string_char_index,
-                        test_cxml_string_as_raw,
-                        test_cxml_string_len,
-                        test_cxml_string_free,
-                        test_cxml_string_mb_contains,
-                        test_cxml_string_mb_str_index,
-                        test_cxml_string_mb_index,
-                        test_cxml_string_mb_len,
-                        test_cxml_string_mb_strstr
-        )
-        cxml_run_suite()
-//        cxml_suite_report()
-    }
 }

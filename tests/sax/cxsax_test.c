@@ -6,7 +6,7 @@
 #include <utils/cxutf8hook.h>
 #include "cxfixture.h"
 
-int reader_init_asserts(cxml_sax_event_reader *reader, bool auto_close){
+void reader_init_asserts(cxml_sax_event_reader *reader, bool auto_close){
     CHECK_EQ(reader->auto_close, auto_close);
     CHECK_EQ(reader->prev_event.type, CXML_SAX_INIT_STATE_EVENT);
     CHECK_EQ(reader->curr_event.type, CXML_SAX_INIT_STATE_EVENT);
@@ -24,14 +24,13 @@ int reader_init_asserts(cxml_sax_event_reader *reader, bool auto_close){
     CHECK_FALSE(reader->xml_parser->is_root_wrapped);
     CHECK_FALSE(reader->xml_parser->is_root_wrapped);
     CHECK_EQ(reader->xml_parser->pos_c, 0);
-    return 1;
 }
-cts test_cxml_sax_init(){
+
+TEST(cxsax, cxml_sax_init){
     char *fp = get_file_path("foo.xml");
     cxml_sax_event_reader reader = cxml_sax_init(fp, true);
     FREE(fp);
-    CHECK(reader_init_asserts(&reader, true));
-    cxml_pass()
+    reader_init_asserts(&reader, true);
 }
 
 cxml_sax_event_reader get_event_reader(char *file_name, bool auto_close){
@@ -41,7 +40,7 @@ cxml_sax_event_reader get_event_reader(char *file_name, bool auto_close){
     return reader;
 }
 
-cts test_cxml_sax_has_event(){
+TEST(cxsax, cxml_sax_has_event){
     deb()
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", true);
     // at the initialization state, cxml_sax_has_event() will always report true
@@ -52,10 +51,9 @@ cts test_cxml_sax_has_event(){
     // there should be more events.
     CHECK_TRUE(cxml_sax_has_event(&reader));
     cxml_sax_close_event_reader(&reader);
-    cxml_pass()
 }
 
-cts test_cxml_sax_get_event(){
+TEST(cxsax, cxml_sax_get_event){
     deb()
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", true);
     CHECK_EQ(cxml_sax_get_event(&reader), CXML_SAX_BEGIN_DOCUMENT_EVENT);
@@ -66,10 +64,9 @@ cts test_cxml_sax_get_event(){
     CHECK_EQ(cxml_sax_get_event(&reader), CXML_SAX_BEGIN_ELEMENT_EVENT);
     CHECK_EQ(cxml_sax_get_event(NULL), CXML_SAX_NIL_EVENT);
     cxml_sax_close_event_reader(&reader);
-    cxml_pass()
 }
 
-cts test_cxml_sax_is_well_formed(){
+TEST(cxsax, cxml_sax_is_well_formed){
     deb()
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", true);
     // we can't tell if the document is well formed until the entire
@@ -83,14 +80,13 @@ cts test_cxml_sax_is_well_formed(){
     CHECK_NE(reader.is_open, 1);
     CHECK_TRUE(cxml_sax_is_well_formed(&reader));
     // event reader is automatically close when all events has been consumed
-    cxml_pass()
 }
 
-cts test_cxml_stream_file(){
+TEST(cxsax, cxml_stream_file){
     char *fp = get_file_path("foo.xml");
     cxml_sax_event_reader reader = cxml_stream_file(fp, false);
     FREE(fp);
-    CHECK(reader_init_asserts(&reader, false));
+    reader_init_asserts(&reader, false);
     while (cxml_sax_has_event(&reader)){
         cxml_sax_get_event(&reader);
     }
@@ -98,14 +94,13 @@ cts test_cxml_stream_file(){
     CHECK_EQ(reader.is_open, 1);
     cxml_sax_close_event_reader(&reader);
     CHECK_NE(reader.is_open, 1);
-    cxml_pass()
 }
 
 
 /****object getters*****/
 
 
-cts test_cxml_sax_as_comment_node(){
+TEST(cxsax, cxml_sax_as_comment_node){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_3.xml", true);
     cxml_comment_node *comment;
     cxml_list comments = new_cxml_list();
@@ -127,10 +122,9 @@ cts test_cxml_sax_as_comment_node(){
     cxml_list_free(&comments);
     CHECK_EQ(cxml_sax_as_comment_node(&reader), NULL);
     CHECK_EQ(cxml_sax_as_comment_node(NULL), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_pi_node(){
+TEST(cxsax, cxml_sax_as_pi_node){
     cxml_sax_event_reader reader = get_event_reader("foo.xml", true);
     cxml_pi_node *pi;
     cxml_list pis = new_cxml_list();
@@ -154,10 +148,9 @@ cts test_cxml_sax_as_pi_node(){
     cxml_list_free(&pis);
     CHECK_EQ(cxml_sax_as_pi_node(&reader), NULL);
     CHECK_EQ(cxml_sax_as_pi_node(NULL), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_text_node(){
+TEST(cxsax, cxml_sax_as_text_node){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("wf_xml_3.xml", true);
@@ -183,10 +176,9 @@ cts test_cxml_sax_as_text_node(){
     cxml_set_config(cfg);
     CHECK_EQ(cxml_sax_as_text_node(&reader), NULL);
     CHECK_EQ(cxml_sax_as_text_node(NULL), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_cdsect_node(){
+TEST(cxsax, cxml_sax_as_cdsect_node){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", true);
@@ -215,10 +207,9 @@ cts test_cxml_sax_as_cdsect_node(){
     cxml_set_config(cfg);
     CHECK_EQ(cxml_sax_as_cdsect_node(&reader)) // reader is close, NULLd;
     CHECK_EQ(cxml_sax_as_cdsect_node(NULL), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_namespace_list(){
+TEST(cxsax, cxml_sax_as_namespace_list){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_4.xml", false);
     cxml_list namespaces = new_cxml_list();
 
@@ -246,10 +237,9 @@ cts test_cxml_sax_as_namespace_list(){
     cxml_sax_as_namespace_list(&reader, NULL);
     cxml_sax_as_namespace_list(&reader, &namespaces);
     CHECK_EQ(cxml_list_size(&namespaces), 0);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_attribute_list(){
+TEST(cxsax, cxml_sax_as_attribute_list){
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
     cxml_attr_node *attr;
     cxml_list attrs = new_cxml_list();
@@ -286,10 +276,9 @@ cts test_cxml_sax_as_attribute_list(){
     CHECK_EQ(cxml_sax_as_attribute_node(NULL, keys[0]), NULL);
     CHECK_EQ(cxml_sax_as_attribute_node(&reader, NULL), NULL);
     CHECK_EQ(cxml_sax_as_attribute_node(&reader, keys[i]), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_attribute_node(){
+TEST(cxsax, cxml_sax_as_attribute_node){
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
     cxml_attr_node *attr;
     cxml_list attrs = new_cxml_list();
@@ -328,10 +317,9 @@ cts test_cxml_sax_as_attribute_node(){
     CHECK_EQ(cxml_sax_as_attribute_node(NULL, keys[0]), NULL);
     CHECK_EQ(cxml_sax_as_attribute_node(&reader, NULL), NULL);
     CHECK_EQ(cxml_sax_as_attribute_node(&reader, keys[i]), NULL);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_dtd_node(){
+TEST(cxsax, cxml_sax_as_dtd_node){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_5.xml", false);
     cxml_dtd_node *dtd = NULL;
     while (cxml_sax_has_event(&reader))
@@ -346,10 +334,9 @@ cts test_cxml_sax_as_dtd_node(){
     CHECK_TRUE(cxml_string_raw_equals(&dtd->value, "<!DOCTYPE person>"));
     CHECK_EQ(cxml_sax_as_dtd_node(NULL), NULL);
     cxml_free_dtd_node(dtd);
-    cxml_pass()
 }
 
-cts test_cxml_sax_as_xml_hdr_node(){
+TEST(cxsax, cxml_sax_as_xml_hdr_node){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
     cxml_xhdr_node *xh = NULL;
 
@@ -376,13 +363,12 @@ cts test_cxml_sax_as_xml_hdr_node(){
     }
     cxml_free_xhdr_node(xh);
     CHECK_EQ(cxml_sax_as_xml_hdr_node(NULL), NULL);
-    cxml_pass()
 }
 
 
 /****data getters*****/
 
-cts test_cxml_sax_get_element_name(){
+TEST(cxsax, cxml_sax_get_element_name){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
     cxml_string name = new_cxml_string();
 
@@ -404,10 +390,9 @@ cts test_cxml_sax_get_element_name(){
     cxml_sax_get_element_name(NULL, &name);
     CHECK_EQ(cxml_string_len(&name), 0);
 
-    cxml_pass()
 }
 
-cts test_cxml_sax_get_comment_data(){
+TEST(cxsax, cxml_sax_get_comment_data){
     cxml_sax_event_reader reader = get_event_reader("foo.xml", false);
     cxml_string data = new_cxml_string();
 
@@ -430,10 +415,9 @@ cts test_cxml_sax_get_comment_data(){
     cxml_sax_get_comment_data(NULL, &data);
     CHECK_EQ(cxml_string_len(&data), 0);
 
-    cxml_pass()
 }
 
-cts test_cxml_sax_get_text_data(){
+TEST(cxsax, cxml_sax_get_text_data){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("foo.xml", false);
@@ -458,10 +442,9 @@ cts test_cxml_sax_get_text_data(){
     cxml_sax_get_text_data(NULL, &data);
     CHECK_EQ(cxml_string_len(&data), 0);
     cxml_set_config(cfg);
-    cxml_pass()
 }
 
-cts test_cxml_sax_get_cdsect_data(){
+TEST(cxsax, cxml_sax_get_cdsect_data){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
@@ -485,10 +468,9 @@ cts test_cxml_sax_get_cdsect_data(){
     cxml_sax_get_cdsect_data(NULL, &data);
     CHECK_EQ(cxml_string_len(&data), 0);
     cxml_set_config(cfg);
-    cxml_pass()
 }
 
-cts test_cxml_sax_get_pi_data(){
+TEST(cxsax, cxml_sax_get_pi_data){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("foo.xml", false);
@@ -525,10 +507,9 @@ cts test_cxml_sax_get_pi_data(){
     cxml_sax_get_pi_data(NULL, "ext", &data);
     CHECK_EQ(cxml_string_len(&data), 0);
     cxml_set_config(cfg);
-    cxml_pass()
 }
 
-cts test_cxml_sax_get_attribute_data(){
+TEST(cxsax, cxml_sax_get_attribute_data){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
@@ -559,55 +540,20 @@ cts test_cxml_sax_get_attribute_data(){
     cxml_sax_get_attribute_data(NULL, "mod", &data);
     CHECK_EQ(cxml_string_len(&data), 0);
     cxml_set_config(cfg);
-    cxml_pass()
 }
 
-cts test_cxml_sax_close_event_reader(){
+TEST(cxsax, cxml_sax_close_event_reader){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
     cxml_sax_close_event_reader(&reader);
     CHECK_NE(reader.is_open, 1);
     CHECK_EQ(reader.is_open, ((1 << 6) | 3735928559));
-    cxml_pass()
 }
 
-cts test_cxml_sax_open_event_reader(){
+TEST(cxsax, cxml_sax_open_event_reader){
     char *fp = get_file_path("wf_xml_1.xml");
     cxml_sax_event_reader reader;
     cxml_sax_open_event_reader(&reader, fp, false);
     FREE(fp);
     CHECK_EQ(reader.is_open, 1);
     cxml_sax_close_event_reader(&reader);
-    cxml_pass()
-}
-
-
-void suite_cxsax() {
-    cxml_suite(cxsax)
-    {
-        cxml_add_m_test(22,
-                        test_cxml_sax_init,
-                        test_cxml_sax_has_event,
-                        test_cxml_sax_get_event,
-                        test_cxml_sax_is_well_formed,
-                        test_cxml_stream_file,
-                        test_cxml_sax_as_comment_node,
-                        test_cxml_sax_as_pi_node,
-                        test_cxml_sax_as_text_node,
-                        test_cxml_sax_as_cdsect_node,
-                        test_cxml_sax_as_namespace_list,
-                        test_cxml_sax_as_attribute_list,
-                        test_cxml_sax_as_attribute_node,
-                        test_cxml_sax_as_dtd_node,
-                        test_cxml_sax_as_xml_hdr_node,
-                        test_cxml_sax_get_element_name,
-                        test_cxml_sax_get_comment_data,
-                        test_cxml_sax_get_text_data,
-                        test_cxml_sax_get_cdsect_data,
-                        test_cxml_sax_get_pi_data,
-                        test_cxml_sax_get_attribute_data,
-                        test_cxml_sax_close_event_reader,
-                        test_cxml_sax_open_event_reader
-        )
-        cxml_run_suite()
-    }
 }

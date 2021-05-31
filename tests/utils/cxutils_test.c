@@ -5,7 +5,7 @@
 
 #include "cxfixture.h"
 
-cts test__cxml_read_file(){
+TEST(cxutils, cxml_read_file){
     char *fp = get_file_path("wf_xml_1.xml");
     char *dest;
     CHECK_EQ(_cxml_read_file(fp, NULL), 0);
@@ -14,13 +14,4 @@ cts test__cxml_read_file(){
     CHECK_NE(dest, NULL);
     FREE(dest);
     FREE(fp);
-    cxml_pass()
-}
-
-void suite_cxutils(){
-    cxml_suite(cxutils)
-    {
-        cxml_add_test(test__cxml_read_file)
-        cxml_run_suite()
-    }
 }

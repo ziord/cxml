@@ -6,31 +6,28 @@
 #include "cxfixture.h"
 
 
-int empty_list_asserts(cxml_list *list){
+void empty_list_asserts(cxml_list *list){
     CHECK_EQ(list->len, 0);
     CHECK_EQ(list->head, NULL);
     CHECK_EQ(list->tail, NULL);
     CHECK_EQ(list->head, list->tail);
-    return 1;
 }
 
-cts test_new_cxml_list(){
+TEST(cxlist, new_cxml_list){
     cxml_list list = new_cxml_list();
-    CHECK_EQ(empty_list_asserts(&list), 1);
-    cxml_pass()
+    empty_list_asserts(&list);
 }
 
-cts test_cxml_list_init(){
+TEST(cxlist, cxml_list_init){
     cxml_list list;
     cxml_list_init(&list);
-    CHECK_EQ(empty_list_asserts(&list), 1);
+    empty_list_asserts(&list);
     // should not seg-fault
     cxml_list_init(NULL);
-    cxml_pass()
 }
 
 
-cts test_cxml_list_insert(){
+TEST(cxlist, cxml_list_insert){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -54,10 +51,9 @@ cts test_cxml_list_insert(){
     CHECK_EQ(list.len, 3);
 
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_insert_at_index(){
+TEST(cxlist, cxml_list_insert_at_index){
     cxml_list list = new_cxml_list();
     struct Data data1, data2, data3, data4;
 
@@ -83,10 +79,9 @@ cts test_cxml_list_insert_at_index(){
     cxml_list_insert_at_index(NULL, &data4, 2);
     CHECK_EQ(list.len, 4);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_append(){
+TEST(cxlist, cxml_list_append){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -101,10 +96,9 @@ cts test_cxml_list_append(){
     CHECK_EQ(list.len, 2);
 
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_extend(){
+TEST(cxlist, cxml_list_extend){
     cxml_list list1 = new_cxml_list(),
               list2 = new_cxml_list();
     CHECK_EQ(list1.len, 0);
@@ -129,10 +123,9 @@ cts test_cxml_list_extend(){
 
     cxml_list_free(&list1);
     cxml_list_free(&list2);
-    cxml_pass()
 }
 
-cts test_cxml_list_init_with(){
+TEST(cxlist, cxml_list_init_with){
     cxml_list list1 = new_cxml_list(),
             list2 = new_cxml_list();
 
@@ -154,10 +147,9 @@ cts test_cxml_list_init_with(){
     CHECK_EQ(list2.tail, NULL);
     cxml_list_free(&list1);
     cxml_list_free(&list2);
-    cxml_pass()
 }
 
-cts test_cxml_list_qextend(){
+TEST(cxlist, cxml_list_qextend){
     cxml_list list1 = new_cxml_list(),
             list2 = new_cxml_list();
 
@@ -179,10 +171,9 @@ cts test_cxml_list_qextend(){
     CHECK_EQ(list2.tail, NULL);
     cxml_list_free(&list1);
     cxml_list_free(&list2);
-    cxml_pass()
 }
 
-cts test_cxml_list_add(){
+TEST(cxlist, cxml_list_add){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -200,10 +191,9 @@ cts test_cxml_list_add(){
     CHECK_EQ(list.len, 2);
 
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_search(){
+TEST(cxlist, cxml_list_search){
     cxml_list list = new_cxml_list();
     struct Data data1, data2, data3;
 
@@ -225,10 +215,9 @@ cts test_cxml_list_search(){
     index = cxml_list_search(&list, cxml_list_cmp_raw_items, &data2);
     CHECK_EQ(index, 1);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_search_delete(){
+TEST(cxlist, cxml_list_search_delete){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -267,23 +256,20 @@ cts test_cxml_list_search_delete(){
     CHECK_EQ(list.head, NULL);
     CHECK_EQ(list.tail, NULL);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_cmp_str_items(){
+TEST(cxlist, cxml_list_cmp_str_items){
     char *data1 = "foo", *data2 = "bar", *data3 = "foo";
     CHECK_FALSE( cxml_list_cmp_str_items(&data1, &data2));
     CHECK_TRUE(cxml_list_cmp_str_items(&data1, &data1));
     CHECK_TRUE(cxml_list_cmp_str_items(&data1, &data3));
     CHECK_FALSE(cxml_list_cmp_str_items(&data2, &data3));
-    cxml_pass()
 }
 
-cts test_cxml_list_cmp_raw_items(){
+TEST(cxlist, cxml_list_cmp_raw_items){
     struct Data data1, data2;
     CHECK_FALSE(cxml_list_cmp_raw_items(&data1, &data2));
     CHECK_TRUE(cxml_list_cmp_raw_items(&data1, &data1));;
-    cxml_pass()
 }
 
 int assert_list(cxml_list *list){
@@ -294,7 +280,7 @@ int assert_list(cxml_list *list){
     return 1;
 }
 
-cts test_new_alloc_cxml_list(){
+TEST(cxlist, new_alloc_cxml_list){
     cxml_list *list1 = new_alloc_cxml_list();
     cxml_list *list2 = new_alloc_cxml_list();
     CHECK_EQ(assert_list(list1)), 1;;
@@ -303,10 +289,9 @@ cts test_new_alloc_cxml_list(){
     cxml_list_free(list2);
     FREE(list1);
     FREE(list2);
-    cxml_pass()
 }
 
-cts test_cxml_list_size(){
+TEST(cxlist, cxml_list_size){
     struct Data data;
     cxml_list list = new_cxml_list();
     CHECK_EQ(cxml_list_size(&list), 0);
@@ -314,10 +299,9 @@ cts test_cxml_list_size(){
     CHECK_EQ(cxml_list_size(&list), 1);
     CHECK_EQ(cxml_list_size(NULL), 0);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_get(){
+TEST(cxlist, cxml_list_get){
     struct Data data;
     cxml_list list = new_cxml_list();
     cxml_list_append(&list, &data);
@@ -327,10 +311,9 @@ cts test_cxml_list_get(){
     CHECK_EQ(cxml_list_get(&list, -1), NULL);
     CHECK_EQ(cxml_list_get(&list, 5), NULL);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_last(){
+TEST(cxlist, cxml_list_last){
     struct Data data1, data2;
     cxml_list list = new_cxml_list();
     CHECK_EQ(cxml_list_last(&list)), NULL;;
@@ -340,10 +323,9 @@ cts test_cxml_list_last(){
     CHECK_EQ(cxml_list_last(&list), &data2);;
     CHECK_EQ(cxml_list_last(NULL)), NULL;;
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_first(){
+TEST(cxlist, cxml_list_first){
     struct Data data1, data2;
     cxml_list list = new_cxml_list();
     CHECK_EQ(cxml_list_first(&list)), NULL;;
@@ -353,10 +335,9 @@ cts test_cxml_list_first(){
     CHECK_EQ(cxml_list_first(&list), &data1);;
     CHECK_EQ(cxml_list_first(NULL)), NULL;;
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_is_empty(){
+TEST(cxlist, cxml_list_is_empty){
     struct Data data;
     cxml_list list = new_cxml_list();
     CHECK_TRUE(cxml_list_is_empty(&list));;
@@ -364,10 +345,9 @@ cts test_cxml_list_is_empty(){
     CHECK_FALSE(cxml_list_is_empty(&list));;
     CHECK_TRUE(cxml_list_is_empty(NULL));;
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_safe_delete(){
+TEST(cxlist, cxml_list_safe_delete){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -396,10 +376,9 @@ cts test_cxml_list_safe_delete(){
     tmp = cxml_list_safe_delete(&list, 1);
     CHECK_EQ(tmp, NULL);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_safe_delete_at_pos(){
+TEST(cxlist, cxml_list_safe_delete_at_pos){
     cxml_list list = new_cxml_list();
     struct Data data1, data2, data3;
 
@@ -438,10 +417,9 @@ cts test_cxml_list_safe_delete_at_pos(){
     // delete from empty list
     CHECK_EQ(cxml_list_safe_delete_at_pos(&list, 0), NULL);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_delete(){
+TEST(cxlist, cxml_list_delete){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -468,10 +446,9 @@ cts test_cxml_list_delete(){
     cxml_list_safe_delete(&list, 0);
     CHECK_EQ(list.len, 0);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_list_copy(){
+TEST(cxlist, cxml_list_copy){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -491,7 +468,6 @@ cts test_cxml_list_copy(){
 
     cxml_list_free(&list);
     cxml_list_free(&list2);
-    cxml_pass()
 }
 
 int test_cxml_list_delete_at_position(void (*fn)(cxml_list *, int)){
@@ -536,17 +512,15 @@ int test_cxml_list_delete_at_position(void (*fn)(cxml_list *, int)){
     return 1;
 }
 
-cts test_cxml_list_delete_at_pos(){
+TEST(cxlist, cxml_list_delete_at_pos){
     CHECK_EQ(test_cxml_list_delete_at_position(cxml_list_delete_at_pos), 1);
-    cxml_pass()
 }
 
-cts test_cxml_list_delete_at_index(){
+TEST(cxlist, cxml_list_delete_at_index){
     CHECK_EQ(test_cxml_list_delete_at_position(cxml_list_delete_at_index), 1);
-    cxml_pass()
 }
 
-cts test_cxml_list_free(){
+TEST(cxlist, cxml_list_free){
     cxml_list list = new_cxml_list();
     cxml_list *list2 = new_alloc_cxml_list();
     struct Data data1, data2;
@@ -571,10 +545,9 @@ cts test_cxml_list_free(){
     // should not seg-fault
     cxml_list_free(NULL);
     FREE(list2);
-    cxml_pass()
 }
 
-cts test_cxml_for_each(){
+TEST(cxlist, cxml_for_each){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
     struct Data *ds[] = {&data1, &data2, &data1, &data2};
@@ -588,45 +561,4 @@ cts test_cxml_for_each(){
         i++;
     }
     cxml_list_free(&list);
-    cxml_pass()
-}
-
-
-/*
- * cxlist.c suite
- */
-void suite_cxlist(){
-    cxml_suite(cxlist)
-    {
-        cxml_add_m_test(27,
-                        test_new_cxml_list,
-                        test_cxml_list_init,
-                        test_cxml_list_insert,
-                        test_cxml_list_insert_at_index,
-                        test_cxml_list_append,
-                        test_cxml_list_extend,
-                        test_cxml_list_init_with,
-                        test_cxml_list_qextend,
-                        test_cxml_list_add,
-                        test_cxml_list_search,
-                        test_cxml_list_search_delete,
-                        test_cxml_list_cmp_str_items,
-                        test_cxml_list_cmp_raw_items,
-                        test_new_alloc_cxml_list,
-                        test_cxml_list_size,
-                        test_cxml_list_get,
-                        test_cxml_list_last,
-                        test_cxml_list_first,
-                        test_cxml_list_is_empty,
-                        test_cxml_list_safe_delete,
-                        test_cxml_list_safe_delete_at_pos,
-                        test_cxml_list_delete,
-                        test_cxml_list_copy,
-                        test_cxml_list_delete_at_pos,
-                        test_cxml_list_delete_at_index,
-                        test_cxml_list_free,
-                        test_cxml_for_each
-                        )
-        cxml_run_suite()
-    }
 }

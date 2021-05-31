@@ -6,32 +6,17 @@
 #include "cxfixture.h"
 #include "core/cxgrptable.h"
 
-int empty_grp_table_asserts(cxml_grp_table *table){
+TEST(empty_grp_table_asserts, cxml_grp_table){
+    cxml_grp_table *table;
     CHECK_EQ(table->count, 0);
     CHECK_EQ(table->capacity, 0);
     CHECK_EQ(table->entries, NULL);
     CHECK_EQ(table->keys.len, 0);
     CHECK_EQ(table->keys.head, NULL);
     CHECK_EQ(table->keys.tail, NULL);
-    return 1;
 }
 
-cts test_cxml_grp_table_init(){
-    cxml_grp_table table;
-    cxml_grp_table_init(&table);
-    CHECK_EQ(empty_grp_table_asserts(&table), 1);
-    // should not seg-fault
-    cxml_grp_table_init(NULL);
-    cxml_pass()
-}
-
-cts test_new_cxml_grp_table(){
-    cxml_grp_table table = new_cxml_grp_table();
-    CHECK_EQ(empty_grp_table_asserts(&table), 1);
-    cxml_pass()
-}
-
-cts test_cxml_grp_table_put(){
+TEST(cxgrptable, cxml_grp_table_put){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, parent3, child1, child2;
 
@@ -63,12 +48,11 @@ cts test_cxml_grp_table_put(){
     CHECK_NE(cxml_list_first(&table.keys), NULL);
     CHECK_NE(cxml_list_last(&table.keys), NULL);
     cxml_grp_table_free(&table);
-    cxml_pass()
 }
 
 extern int empty_list_asserts(cxml_list *list);
 
-cts test_cxml_grp_table_get(){
+TEST(cxgrptable, cxml_grp_table_get){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, parent3,
             parent4, parent5, parent6, child1, child2;
@@ -137,10 +121,9 @@ cts test_cxml_grp_table_get(){
     cxml_list_free(&value);
     cxml_grp_table_free(&table);
 
-    cxml_pass()
 }
 
-cts test_cxml_grp_table_remove(){
+TEST(cxgrptable, cxml_grp_table_remove){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, parent3,
             parent4, parent5, parent6, parent7, child1, child2;
@@ -231,10 +214,9 @@ cts test_cxml_grp_table_remove(){
     CHECK_EQ(table.capacity, 16);
     CHECK_EQ(cxml_grp_table_size(&table), 5);
     cxml_grp_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_grp_table_is_empty(){
+TEST(cxgrptable, cxml_grp_table_is_empty){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent, child1, child2;
 
@@ -246,10 +228,9 @@ cts test_cxml_grp_table_is_empty(){
     CHECK_TRUE(cxml_grp_table_is_empty(NULL));
 
     cxml_grp_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_grp_table_size(){
+TEST(cxgrptable, cxml_grp_table_size){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, child1, child2;
 
@@ -267,10 +248,9 @@ cts test_cxml_grp_table_size(){
     CHECK_EQ(cxml_grp_table_size(&table), 2);
 
     cxml_grp_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_grp_table_free(){
+TEST(cxgrptable, cxml_grp_table_free){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent, child1, child2;
 
@@ -282,23 +262,4 @@ cts test_cxml_grp_table_free(){
 
     cxml_grp_table_free(&table);
     CHECK_EQ(empty_grp_table_asserts(&table), 1);
-    cxml_pass()
-}
-
-
-void suite_cxgrptable() {
-    cxml_suite(cxgrptable)
-    {
-        cxml_add_m_test(8,
-                        test_cxml_grp_table_init,
-                        test_new_cxml_grp_table,
-                        test_cxml_grp_table_put,
-                        test_cxml_grp_table_get,
-                        test_cxml_grp_table_remove,
-                        test_cxml_grp_table_is_empty,
-                        test_cxml_grp_table_size,
-                        test_cxml_grp_table_free
-        )
-        cxml_run_suite()
-    }
 }

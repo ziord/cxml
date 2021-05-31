@@ -5,18 +5,17 @@
 
 #include "cxfixture.h"
 
-cts test__cxml_allocate(){
+TEST(cxmem, cxml_allocate){
     char *foo = _cxml_allocate(10);
     CHECK_NE(foo, NULL);
     free(foo);
 
     foo = ALLOC(char, 10);
     CHECK_NE(foo, NULL);
-    free(foo);
-    cxml_pass()
+    free(foo)
 }
 
-cts test__cxml_callocate(){
+TEST(cxmem, cxml_callocate){
     char *foo = _cxml_callocate(1, 10);
     CHECK_NE(foo, NULL);
     free(foo);
@@ -24,11 +23,9 @@ cts test__cxml_callocate(){
     foo = CALLOC(char, 10);
     CHECK_NE(foo, NULL);
     free(foo);
-
-    cxml_pass()
 }
 
-cts test__cxml_rallocate(){
+TEST(cxmem, cxml_rallocate){
     char *foo = malloc(3);
     foo = _cxml_rallocate(foo, 10);
     CHECK_NE(foo, NULL);
@@ -36,11 +33,9 @@ cts test__cxml_rallocate(){
     foo = RALLOC(char, foo, 13);
     CHECK_NE(foo, NULL);
     free(foo);
-
-    cxml_pass()
 }
 
-cts test__cxml_allocate_r(){
+TEST(cxmem, cxml_allocate_r){
     char *foo = _cxml_allocate_r(10, "not enough memory");
     CHECK_NE(foo, NULL);
     free(foo);
@@ -48,12 +43,10 @@ cts test__cxml_allocate_r(){
     foo = ALLOCR(char, 10, "not enough memory");
     CHECK_NE(foo, NULL);
     free(foo);
-
-    cxml_pass()
 }
 
 
-cts test__cxml_callocate_r(){
+TEST(cxmem, cxml_callocate_r){
     char *foo = _cxml_callocate_r(1, 10, "not enough memory");
     CHECK_NE(foo, NULL);
     free(foo);
@@ -61,11 +54,9 @@ cts test__cxml_callocate_r(){
     foo = CALLOCR(char, 10, "not enough memory");
     CHECK_NE(foo, NULL);
     free(foo);
-
-    cxml_pass()
 }
 
-cts test__cxml_rallocate_r(){
+TEST(cxmem, cxml_rallocate_r){
     char *foo = malloc(3);
     if (!foo){
         cxml_skip()
@@ -76,22 +67,4 @@ cts test__cxml_rallocate_r(){
     foo = RALLOCR(char, foo, 13, "not enough memory");
     CHECK_NE(foo, NULL);
     free(foo);
-
-    cxml_pass()
-}
-
-
-void suite_cxmem() {
-    cxml_suite(cxmem)
-    {
-        cxml_add_m_test(6,
-                        test__cxml_allocate,
-                        test__cxml_callocate,
-                        test__cxml_rallocate,
-                        test__cxml_allocate_r,
-                        test__cxml_callocate_r,
-                        test__cxml_rallocate_r
-        )
-        cxml_run_suite()
-    }
 }

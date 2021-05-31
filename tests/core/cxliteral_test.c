@@ -11,26 +11,23 @@
 // are to be used, care must be taken by the user, as none of the functions exposed adds extra safety.,
 // or is written with extreme care to be used by external users.
 
-int empty_literal_asserts(cxml_number *number){
+void empty_literal_asserts(cxml_number *number){
     CHECK_EQ(number->type, CXML_NUMERIC_NAN_T);
     CHECK_EQ(number->dec_val, 0);
-    return 1;
 }
 
-cts test_cxml_number_init(){
+TEST(cxliteral, cxml_number_init){
     cxml_number number;
     cxml_number_init(&number);
-    CHECK_EQ(empty_literal_asserts(&number), 1);
-    cxml_pass()
+    empty_literal_asserts(&number);
 }
 
-cts test_new_cxml_number(){
+TEST(cxliteral, new_cxml_number){
     cxml_number number = new_cxml_number();
-    CHECK_EQ(empty_literal_asserts(&number), 1);
-    cxml_pass()
+    empty_literal_asserts(&number);
 }
 
-cts test_cxml_literal_to_long(){
+TEST(cxliteral, cxml_literal_to_long){
     cxml_string str = new_cxml_string_s("123456");
     long number = cxml_literal_to_long(&str);
     CHECK_EQ(number, 123456);
@@ -45,10 +42,9 @@ cts test_cxml_literal_to_long(){
     number = cxml_literal_to_long(&str);
     CHECK_EQ(number, 0);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_literal_to_double(){
+TEST(cxliteral, cxml_literal_to_double){
     cxml_string str = new_cxml_string_s("1234.564");
     double number = cxml_literal_to_double(&str);
     CHECK_EQ(number, 1234.564);
@@ -68,10 +64,9 @@ cts test_cxml_literal_to_double(){
     number = cxml_literal_to_double(&str);
     CHECK_EQ(number, 0);
     cxml_string_free(&str);
-    cxml_pass()
 }
 
-cts test_cxml_set_literal(){
+TEST(cxliteral, cxml_set_literal){
     cxml_number number = new_cxml_number();
     CHECK_EQ(empty_literal_asserts(&number), 1);
 
@@ -93,10 +88,9 @@ cts test_cxml_set_literal(){
     CHECK_EQ(number.dec_val, 3.142);
     cxml_string_free(&str);
 
-    cxml_pass()
 }
 
-cts test__cxml_is_integer(){
+TEST(cxliteral, _cxml_is_integer){
     CHECK_TRUE(_cxml_is_integer("234", 3));
     CHECK_TRUE(_cxml_is_integer("  \"234  \"  ", 11));
     CHECK_FALSE(_cxml_is_integer("  \"234", 6));
@@ -108,10 +102,9 @@ cts test__cxml_is_integer(){
     CHECK_FALSE(_cxml_is_integer("0xac eface", 10));
     CHECK_FALSE(_cxml_is_integer("1234.534", 8));
     CHECK_FALSE(_cxml_is_integer("1004e-5", 7));
-    cxml_pass()
 }
 
-cts test__cxml_is_double(){
+TEST(cxliteral, _cxml_is_double){
     CHECK_FALSE(_cxml_is_double("234", 3));
     CHECK_FALSE(_cxml_is_double("0xdeadbeef", 10));
     CHECK_FALSE(_cxml_is_double("0xaceface", 9));
@@ -126,10 +119,9 @@ cts test__cxml_is_double(){
     CHECK_TRUE(_cxml_is_double("1.004e+5", 8));
     CHECK_FALSE(_cxml_is_double("1.004e-5.4", 10));
     CHECK_FALSE(_cxml_is_double("1.00.54", 7));
-    cxml_pass()
 }
 
-cts test_cxml_literal_to_num(){
+TEST(cxliteral, cxml_literal_to_num){
     cxml_string str = new_cxml_string_s("123.321");
     cxml_number number = cxml_literal_to_num(&str);
     CHECK_EQ(number.dec_val, 123.321);
@@ -154,18 +146,16 @@ cts test_cxml_literal_to_num(){
     CHECK_EQ(number.type, CXML_NUMERIC_DOUBLE_T);
     cxml_string_free(&str);
 
-    cxml_pass()
 }
 
-cts test_cxml_number_is_d_equal(){
+TEST(cxliteral, cxml_number_is_d_equal){
     CHECK_TRUE(cxml_number_is_d_equal(1.234, 1.234));
     CHECK_TRUE(cxml_number_is_d_equal(1.234, 1.2340));
     CHECK_FALSE(cxml_number_is_d_equal(1.234, 12340));
     CHECK_FALSE(cxml_number_is_d_equal(0, 12340));
-    cxml_pass()
 }
 
-cts test_cxml_number_is_equal(){
+TEST(cxliteral, cxml_number_is_equal){
     cxml_number num1 = new_cxml_number(),
                 num2 = new_cxml_number();
 
@@ -190,10 +180,9 @@ cts test_cxml_number_is_equal(){
     num2.dec_val = 0;
     CHECK_TRUE(cxml_number_is_equal(&num2, &num1));
     CHECK_TRUE(cxml_number_is_equal(&num2, &num2));
-    cxml_pass()
 }
 
-cts test_cxml_number_is_greater(){
+TEST(cxliteral, cxml_number_is_greater){
     cxml_number num1 = new_cxml_number(),
             num2 = new_cxml_number();
 
@@ -217,10 +206,9 @@ cts test_cxml_number_is_greater(){
     num1.dec_val = 0;
     num2.dec_val = 0;
     CHECK_FALSE(cxml_number_is_greater(&num2, &num1));
-    cxml_pass()
 }
 
-cts test_cxml_number_is_less(){
+TEST(cxliteral, cxml_number_is_less){
     cxml_number num1 = new_cxml_number(),
             num2 = new_cxml_number();
 
@@ -246,10 +234,9 @@ cts test_cxml_number_is_less(){
     num1.dec_val = 0;
     num2.dec_val = 0;
     CHECK_FALSE(cxml_number_is_less(&num2, &num1));
-    cxml_pass()
 }
 
-cts test_cxml_number_is_not_equal(){
+TEST(cxliteral, cxml_number_is_not_equal){
     cxml_number num1 = new_cxml_number(),
             num2 = new_cxml_number();
 
@@ -276,28 +263,4 @@ cts test_cxml_number_is_not_equal(){
     num1.dec_val = 0;
     num2.dec_val = 0;
     CHECK_FALSE(cxml_number_is_not_equal(&num2, &num1));
-    cxml_pass()
-}
-
-
-void suite_cxliteral(){
-    cxml_suite(cxliteral)
-    {
-        cxml_add_m_test(13,
-                        test_cxml_number_init,
-                        test_new_cxml_number,
-                        test_cxml_literal_to_long,
-                        test_cxml_literal_to_double,
-                        test_cxml_set_literal,
-                        test__cxml_is_integer,
-                        test__cxml_is_double,
-                        test_cxml_literal_to_num,
-                        test_cxml_number_is_d_equal,
-                        test_cxml_number_is_equal,
-                        test_cxml_number_is_greater,
-                        test_cxml_number_is_less,
-                        test_cxml_number_is_not_equal
-        )
-        cxml_run_suite()
-    }
 }

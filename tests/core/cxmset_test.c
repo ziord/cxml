@@ -5,40 +5,36 @@
 
 #include "cxfixture.h"
 
-int empty_set_asserts(cxml_set *set){
+void empty_set_asserts(cxml_set *set){
     CHECK_EQ(set->size, 0);
     CHECK_EQ(set->capacity, 0);
     CHECK_EQ(set->entries, NULL);
     CHECK_EQ(set->items.head, NULL);
     CHECK_EQ(set->items.tail, NULL);
     CHECK_EQ(set->items.len, 0);
-    return 1;
 }
 
 
-cts test_new_cxml_set(){
+TEST(cxmset, new_cxml_set){
     cxml_set set = new_cxml_set();
-    CHECK_EQ(empty_set_asserts(&set), 1);
-    cxml_pass()
+    empty_set_asserts(&set);
 }
 
-cts test_new_alloc_cxml_set(){
+TEST(cxmset, new_alloc_cxml_set){
     cxml_set *set = new_alloc_cxml_set();
-    CHECK_EQ(empty_set_asserts(set), 1);
+    empty_set_asserts(set);
     FREE(set);
-    cxml_pass()
 }
 
-cts test_cxml_set_init(){
+TEST(cxmset, cxml_set_init){
     cxml_set set;
     cxml_set_init(&set);
-    CHECK_EQ(empty_set_asserts(&set), 1);
+    empty_set_asserts(&set);
     // should not seg-fault
     cxml_set_init(NULL);
-    cxml_pass()
 }
 
-cts test_cxml_set_add(){
+TEST(cxmset, cxml_set_add){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d5, d6;
     struct Data *d4 = ALLOC(struct Data, 1);
@@ -77,11 +73,9 @@ cts test_cxml_set_add(){
     CHECK_NE(set.items.tail, NULL);
     FREE(d4);
     cxml_set_free(&set);
-
-    cxml_pass()
 }
 
-cts test_cxml_set_get(){
+TEST(cxmset, cxml_set_get){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7;
     struct Data *ds[] = {&d1, &d2, &d3, &d4, &d5, &d6, &d7};
@@ -107,10 +101,9 @@ cts test_cxml_set_get(){
     CHECK_EQ(cxml_set_get(NULL, 0), NULL);
 
     cxml_set_free(&set);
-    cxml_pass()
 }
 
-cts test_cxml_set_remove(){
+TEST(cxmset, cxml_set_remove){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     cxml_set_add(&set, &d1);
@@ -183,10 +176,9 @@ cts test_cxml_set_remove(){
     CHECK_EQ(set.capacity, 16);
     CHECK_EQ(cxml_set_size(&set), 6);
     cxml_set_free(&set);
-    cxml_pass()
 }
 
-cts test_cxml_set_copy(){
+TEST(cxmset, cxml_set_copy){
     cxml_set set = new_cxml_set(),
              set2 = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
@@ -199,7 +191,7 @@ cts test_cxml_set_copy(){
     cxml_set_add(&set, &d7);
     cxml_set_add(&set, &d8);
     CHECK_EQ(cxml_set_size(&set), 8);
-    CHECK_EQ(empty_set_asserts(&set2), 1);
+    empty_set_asserts(&set2);
     cxml_set_copy(&set2, &set);
     for (int i=0; i<cxml_set_size(&set2); i++){
         CHECK_EQ(cxml_list_get(&set.items, i), cxml_list_get(&set2.items, i));
@@ -212,10 +204,9 @@ cts test_cxml_set_copy(){
     cxml_set_free(&set);
     cxml_set_free(&set2);
 
-    cxml_pass()
 }
 
-cts test_cxml_set_extend(){
+TEST(cxmset, cxml_set_extend){
     cxml_set set = new_cxml_set(),
              set2 = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
@@ -228,7 +219,7 @@ cts test_cxml_set_extend(){
     cxml_set_add(&set, &d7);
     cxml_set_add(&set, &d8);
     CHECK_EQ(cxml_set_size(&set), 8);
-    CHECK_EQ(empty_set_asserts(&set2), 1);
+    empty_set_asserts(&set2);
     cxml_set_extend(&set2, &set);
     for (int i=0; i<cxml_set_size(&set2); i++){
         CHECK_EQ(cxml_list_get(&set.items, i), cxml_list_get(&set2.items, i));
@@ -272,10 +263,9 @@ cts test_cxml_set_extend(){
     CHECK_EQ(cxml_set_size(&set2), 7);
     cxml_set_free(&set);
     cxml_set_free(&set2);
-    cxml_pass()
 }
 
-cts test_cxml_set_extend_list(){
+TEST(cxmset, cxml_set_extend_list){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     struct Data *ds[] = {&d1, &d2, &d3, &d4, &d5, &d6, &d7, &d8};
@@ -283,7 +273,7 @@ cts test_cxml_set_extend_list(){
     for (int i = 0; i < 8; i++){
         cxml_list_append(&list, ds[i]);
     }
-    CHECK_EQ(empty_set_asserts(&set), 1);
+    empty_set_asserts(&set);
 
     cxml_set_extend_list(&set, &list);
     CHECK_EQ(cxml_set_size(&set), 8);
@@ -308,10 +298,9 @@ cts test_cxml_set_extend_list(){
 
     cxml_set_free(&set);
     cxml_list_free(&list);
-    cxml_pass()
 }
 
-cts test_cxml_set_size(){
+TEST(cxmset, cxml_set_size){
     cxml_set set = new_cxml_set();
     CHECK_EQ(cxml_set_size(&set), 0);
     struct Data d1, d2, d3;
@@ -322,10 +311,9 @@ cts test_cxml_set_size(){
     CHECK_EQ(cxml_set_size(NULL), 0);
     cxml_set_free(&set);
     CHECK_EQ(cxml_set_size(&set), 0);
-    cxml_pass()
 }
 
-cts test_cxml_set_is_empty(){
+TEST(cxmset, cxml_set_is_empty){
     cxml_set set = new_cxml_set();
     CHECK_TRUE(cxml_set_is_empty(&set));
     struct Data d1, d2, d3;
@@ -336,12 +324,11 @@ cts test_cxml_set_is_empty(){
     CHECK_TRUE(cxml_set_is_empty(NULL));
     cxml_set_free(&set);
     CHECK_TRUE(cxml_set_is_empty(&set));
-    cxml_pass()
 }
 
-cts test_cxml_set_free(){
+TEST(cxmset, cxml_set_free){
     cxml_set set = new_cxml_set();
-    CHECK_EQ(empty_set_asserts(&set), 1);
+    empty_set_asserts(&set);
     struct Data d1, d2, d3;
     cxml_set_add(&set, &d1);
     cxml_set_add(&set, &d2);
@@ -351,14 +338,13 @@ cts test_cxml_set_free(){
     CHECK_EQ(set.capacity, 8);
     CHECK_EQ(cxml_set_size(NULL), 0);
     cxml_set_free(&set);
-    CHECK_EQ(empty_set_asserts(&set), 1);
+    empty_set_asserts(&set);
     CHECK_EQ(set.size, 0);
     CHECK_EQ(set.capacity, 0);
     CHECK_EQ(set.entries, NULL);
-    cxml_pass()
 }
 
-cts test_cxml_set__init_with(){
+TEST(cxmset, cxml_set__init_with){
     cxml_set set = new_cxml_set(), set2 = new_cxml_set();
     cxml_set_add(&set2, "foo");
     cxml_set_add(&set2, "bar");
@@ -368,7 +354,7 @@ cts test_cxml_set__init_with(){
     CHECK_NE(set2.items.head, NULL);
     CHECK_NE(set2.items.tail, NULL);
 
-    CHECK_EQ(empty_set_asserts(&set), 1);
+    empty_set_asserts(&set);
     cxml_set_init_with(&set, &set2);
     CHECK_EQ(set2.capacity, 0);
     CHECK_EQ(set2.size, 0);
@@ -383,10 +369,9 @@ cts test_cxml_set__init_with(){
     CHECK_NE(set.items.tail, NULL);
 
     cxml_set_free(&set);
-    cxml_pass()
 }
 
-cts test_cxml_set_init_with(){
+TEST(cxmset, cxml_set_init_with){
     cxml_set set = new_cxml_set(), set2 = new_cxml_set();
     cxml_set_add(&set2, "foo");
     cxml_set_add(&set2, "bar");
@@ -396,7 +381,7 @@ cts test_cxml_set_init_with(){
     CHECK_NE(set2.items.head, NULL);
     CHECK_NE(set2.items.tail, NULL);
 
-    CHECK_EQ(empty_set_asserts(&set), 1);
+    empty_set_asserts(&set);
     cxml_set_init_with(&set, &set2);
     CHECK_EQ(set2.capacity, 0);
     CHECK_EQ(set2.size, 0);
@@ -415,28 +400,4 @@ cts test_cxml_set_init_with(){
     cxml_set_init_with(NULL, &set2);
 
     cxml_set_free(&set);
-    cxml_pass()
-}
-
-void suite_cxmset() {
-    cxml_suite(cxmset)
-    {
-        cxml_add_m_test(14,
-                        test_new_cxml_set,
-                        test_new_alloc_cxml_set,
-                        test_cxml_set_init,
-                        test_cxml_set_add,
-                        test_cxml_set_get,
-                        test_cxml_set_remove,
-                        test_cxml_set_copy,
-                        test_cxml_set_extend,
-                        test_cxml_set_extend_list,
-                        test_cxml_set_size,
-                        test_cxml_set_is_empty,
-                        test_cxml_set_free,
-                        test_cxml_set__init_with,
-                        test_cxml_set_init_with
-                )
-        cxml_run_suite()
-    }
 }

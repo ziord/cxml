@@ -7,7 +7,7 @@
 
 // todo: more comprehensive tests
 
-cts test_cxml_xpath(){
+TEST(cxxpath, cxml_xpath){
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     CHECK(root);
     cxml_set *nodeset = cxml_xpath(root, "//*");
@@ -19,8 +19,8 @@ cts test_cxml_xpath(){
     cxml_for_each(node, &nodeset->items)
     {
         CHECK_EQ(_cxml_node_type(node), CXML_ELEM_NODE);
-        CHECK_TRUE(cxml_string_raw_equals(;
-                &_unwrap__cxnode(elem, node)->name.qname, expected[i]))
+        CHECK_TRUE(cxml_string_raw_equals(
+                &_unwrap__cxnode(elem, node)->name.qname, expected[i]));
         i++;
     }
 
@@ -30,13 +30,4 @@ cts test_cxml_xpath(){
     cxml_destroy(root);
     cxml_set_free(nodeset);
     FREE(nodeset);
-    cxml_pass()
-}
-
-void suite_cxxpath(){
-    cxml_suite(cxxpath)
-    {
-        cxml_add_test(test_cxml_xpath)
-        cxml_run_suite()
-    }
 }

@@ -5,7 +5,7 @@
 
 #include "cxfixture.h"
 
-cts test__cxml_lexer_init(){
+TEST(cxlexer, cxml_lexer_init){
     _cxml_lexer lexer;
     cxml_config cfg = cxml_get_config();
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
@@ -20,28 +20,25 @@ cts test__cxml_lexer_init(){
     CHECK_EQ(lexer.preserve_sp, cfg.preserve_space);
     CHECK_EQ(lexer.preserve_cm, cfg.preserve_comment);
     CHECK_EQ(lexer.preserve_cd, cfg.preserve_cdata);
-    cxml_pass()
 }
 
-cts test__cxml_token_init(){
+TEST(cxlexer, cxml_token_init){
     _cxml_token tok;
     _cxml_token_init(&tok);
     CHECK_EQ(tok.literal_type, CXML_NON_LITERAL);
-    cxml_pass()
 }
 
-cts test__cxml_lexer_close(){
+TEST(cxlexer, cxml_lexer_close){
     _cxml_lexer lexer;
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
     _cxml_lexer_close(&lexer);
     CHECK_EQ(lexer.start, NULL);
     CHECK_EQ(lexer.current, NULL);
-    cxml_pass()
 }
 
 extern _cxml_token cxml_get_token(_cxml_lexer *cxlexer);
 
-cts test_cxml_get_token(){
+TEST(cxlexer, cxml_get_token){
     cxml_cfg_preserve_space(0);
     _cxml_lexer lexer;
     // <fruit><name>apple</name><name>banana</name></fruit>
@@ -211,20 +208,4 @@ cts test_cxml_get_token(){
     // error tokens are allocated
     FREE(tok.start);
     _cxml_lexer_close(&lexer);
-
-    cxml_pass()
-}
-
-
-void suite_cxlexer(){
-    cxml_suite(cxlexer)
-    {
-        cxml_add_m_test(4,
-                        test__cxml_lexer_init,
-                        test__cxml_token_init,
-                        test__cxml_lexer_close,
-                        test_cxml_get_token
-        )
-        cxml_run_suite()
-    }
 }

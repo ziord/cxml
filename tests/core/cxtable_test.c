@@ -5,51 +5,46 @@
 
 #include "cxfixture.h"
 
-int empty_table_asserts(cxml_table *table){
+void empty_table_asserts(cxml_table *table){
     CHECK_EQ(table->count, 0);
     CHECK_EQ(table->capacity, 0);
     CHECK_EQ(table->entries, NULL);
     CHECK_EQ(table->keys.len, 0);
     CHECK_EQ(table->keys.head, NULL);
     CHECK_EQ(table->keys.tail, NULL);
-    return 1;
 }
 
-cts test_cxml_table_free(){
+TEST(cxtable, cxml_table_free){
     cxml_table table = new_cxml_table();
     cxml_table_put(&table, "foo", "bar");
     CHECK_EQ(table.count, 1);
     CHECK_EQ(table.capacity, 8);
     for (int i=0; i < 3; i++){
         cxml_table_free(&table);
-        CHECK_EQ(empty_table_asserts(&table), 1);
+        empty_table_asserts(&table);
     }
-    cxml_pass()
 }
 
-cts test_new_cxml_table(){
+TEST(cxtable, new_cxml_table){
     cxml_table table = new_cxml_table();
-    CHECK_EQ(empty_table_asserts(&table), 1);
-    cxml_pass()
+    empty_table_asserts(&table);
 }
 
-cts test_new_alloc_cxml_table(){
+TEST(cxtable, new_alloc_cxml_table){
     cxml_table *table = new_alloc_cxml_table();
-    CHECK_EQ(empty_table_asserts(table), 1);
+    empty_table_asserts(table);
     FREE(table);
-    cxml_pass()
 }
 
-cts test_cxml_table_init(){
+TEST(cxtable, cxml_table_init){
     cxml_table table;
     cxml_table_init(&table);
-    CHECK_EQ(empty_table_asserts(&table), 1);
+    empty_table_asserts(&table);
     // should not seg-fault
     cxml_table_init(NULL);
-    cxml_pass()
 }
 
-cts test_cxml_table_put(){
+TEST(cxtable, cxml_table_put){
     cxml_table table = new_cxml_table();
     // put
     CHECK_EQ(cxml_table_put(&table, "project-1", "cxml test"), 1);
@@ -85,10 +80,9 @@ cts test_cxml_table_put(){
     CHECK_NE(cxml_list_first(&table.keys), NULL);
     CHECK_NE(cxml_list_last(&table.keys), NULL);
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_put_raw(){
+TEST(cxtable, cxml_table_put_raw){
     cxml_table table = new_cxml_table();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     // put
@@ -119,10 +113,9 @@ cts test_cxml_table_put_raw(){
 
     CHECK_EQ(cxml_table_size(&table), 11);
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_remove(){
+TEST(cxtable, cxml_table_remove){
     cxml_table table = new_cxml_table();
     CHECK_EQ(cxml_table_put(&table, "simple", "bug fixes"), 1);
     CHECK_EQ(cxml_table_put(&table, "lorem ipsum", "dolor sit amet"), 1);
@@ -197,10 +190,9 @@ cts test_cxml_table_remove(){
     CHECK_EQ(table.capacity, 16);
     CHECK_EQ(cxml_table_size(&table), 5);
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_remove_raw(){
+TEST(cxtable, cxml_table_remove_raw){
     cxml_table table = new_cxml_table();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     CHECK_EQ(cxml_table_put_raw(&table, &d1, "bug fixes"), 1);
@@ -280,10 +272,9 @@ cts test_cxml_table_remove_raw(){
     CHECK_EQ(table.capacity, 16);
     CHECK_EQ(cxml_table_size(&table), 5);
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_get(){
+TEST(cxtable, cxml_table_get){
     cxml_table table = new_cxml_table();
     char *v;
     // put
@@ -345,10 +336,9 @@ cts test_cxml_table_get(){
     CHECK_EQ(strcmp(v, "Jerry"), 0);
 
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_get_raw(){
+TEST(cxtable, cxml_table_get_raw){
     cxml_table table = new_cxml_table();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     char *k1 = "abc", *k2 = "step-up", *k3 = "\0", *k4 = "";
@@ -417,46 +407,22 @@ cts test_cxml_table_get_raw(){
     CHECK_EQ(cxml_table_get_raw(NULL, "  in iaculis"), NULL);
     CHECK_EQ(cxml_table_get_raw(&table, &d8), NULL);
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_is_empty(){
+TEST(cxtable, cxml_table_is_empty){
     cxml_table table = new_cxml_table();
     CHECK_TRUE(cxml_table_is_empty(&table));
     CHECK_TRUE(cxml_table_is_empty(NULL));
     cxml_table_put(&table, "--cxml--", "C XML Minimalistic Library");
     CHECK_FALSE(cxml_table_is_empty(&table));;
     cxml_table_free(&table);
-    cxml_pass()
 }
 
-cts test_cxml_table_size(){
+TEST(cxtable, cxml_table_size){
     cxml_table table = new_cxml_table();
     CHECK_EQ(cxml_table_size(&table), 0);
     CHECK_EQ(cxml_table_size(NULL), 0);
     cxml_table_put(&table, "cxml", "xml library for C");
     CHECK_EQ(cxml_table_size(&table)), 1;;
     cxml_table_free(&table);
-    cxml_pass()
-}
-
-void suite_cxtable(){
-    cxml_suite(cxtable)
-    {
-        cxml_add_m_test(12,
-                        test_cxml_table_free,
-                        test_new_cxml_table,
-                        test_new_alloc_cxml_table,
-                        test_cxml_table_init,
-                        test_cxml_table_put,
-                        test_cxml_table_put_raw,
-                        test_cxml_table_remove,
-                        test_cxml_table_remove_raw,
-                        test_cxml_table_get,
-                        test_cxml_table_get_raw,
-                        test_cxml_table_is_empty,
-                        test_cxml_table_size
-                )
-        cxml_run_suite()
-    }
 }
