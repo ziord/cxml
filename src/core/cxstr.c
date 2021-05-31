@@ -4,6 +4,7 @@
  */
 
 #include "core/cxstr.h"
+#include "utils/cxutf8hook.h"
 
 #define GROW_CXSTR_CAP(v1, v2)     (v1 && v1 > v2 ? (v1 << 1u) : (v2 << 1u))
 

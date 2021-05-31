@@ -6,7 +6,7 @@
 
 #include "utils/cxutf8hook.h"
 
-static const u_int32_t offsetsFromUTF8[6] = {
+static const uint32_t offsetsFromUTF8[6] = {
         0x00000000UL, 0x00003080UL, 0x000E2080UL,
         0x03C82080UL, 0xFA082080UL, 0x82082080UL
 };
@@ -58,8 +58,8 @@ int u8_strlen(char *s) {
 }
 
 /* reads the next utf-8 sequence out of a string, updating an index */
-u_int32_t u8_nextchar(const char *s, int *i) {
-    u_int32_t ch = 0;
+uint32_t u8_nextchar(const char *s, int *i) {
+    uint32_t ch = 0;
     int sz = 0;
 
     do {
@@ -72,9 +72,9 @@ u_int32_t u8_nextchar(const char *s, int *i) {
     return ch;
 }
 
-char *u8_strchr(char *s, u_int32_t ch, int *charn) {
+char *u8_strchr(char *s, uint32_t ch, int *charn) {
     int i = 0, lasti = 0;
-    u_int32_t c;
+    uint32_t c;
 
     *charn = 0;
     while (s[i]) {

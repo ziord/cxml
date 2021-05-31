@@ -17,11 +17,11 @@
 int u8_offset(const char *str, int charnum);
 
 /* return next character, updating an index variable */
-u_int32_t u8_nextchar(const char *s, int *i);
+uint32_t u8_nextchar(const char *s, int *i);
 
 /* return a pointer to the first occurrence of ch in s, or NULL if not
    found. character index of found character returned in *charn. */
-char *u8_strchr(char *s, u_int32_t ch, int *charn);
+char *u8_strchr(char *s, uint32_t ch, int *charn);
 
 /* count the number of characters in a UTF-8 string */
 int u8_strlen(char *s);
