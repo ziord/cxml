@@ -8,10 +8,10 @@
 cts test__cxml_read_file(){
     char *fp = get_file_path("wf_xml_1.xml");
     char *dest;
-    cxml_assert__zero(_cxml_read_file(fp, NULL))
-    cxml_assert__zero(_cxml_read_file(NULL, &dest))
-    cxml_assert__one(_cxml_read_file(fp, &dest))
-    cxml_assert__not_null(dest)
+    CHECK_EQ(_cxml_read_file(fp, NULL), 0)
+    CHECK_EQ(_cxml_read_file(NULL, &dest), 0)
+    CHECK_EQ(_cxml_read_file(fp, &dest), 1)
+    CHECK_NE(dest, NULL)
     FREE(dest);
     FREE(fp);
     cxml_pass()

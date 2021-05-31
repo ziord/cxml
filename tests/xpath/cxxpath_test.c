@@ -9,23 +9,23 @@
 
 cts test_cxml_xpath(){
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    cxml_assert(root)
+    CHECK(root)
     cxml_set *nodeset = cxml_xpath(root, "//*");
-    cxml_assert__not_null(nodeset)
-    cxml_assert__two(cxml_set_size(nodeset))
+    CHECK_NE(nodeset, NULL)
+    CHECK_EQ(cxml_set_size(nodeset), 2)
 
     int i = 0;
     char *expected[] = {"fruit", "name"};
     cxml_for_each(node, &nodeset->items)
     {
-        cxml_assert__eq(_cxml_node_type(node), CXML_ELEM_NODE)
-        cxml_assert__true(cxml_string_raw_equals(
+        CHECK_EQ(_cxml_node_type(node), CXML_ELEM_NODE)
+        CHECK_TRUE(cxml_string_raw_equals(
                 &_unwrap__cxnode(elem, node)->name.qname, expected[i]))
         i++;
     }
 
-    cxml_assert__null(cxml_xpath(root, NULL))
-    cxml_assert__null(cxml_xpath(NULL, "//*"))
+    CHECK_EQ(cxml_xpath(root, NULL), NULL)
+    CHECK_EQ(cxml_xpath(NULL, "//*"), NULL)
     // automatically cleans up all nodes, including in the nodeset
     cxml_destroy(root);
     cxml_set_free(nodeset);

@@ -9,24 +9,24 @@ cts test__cxml_lexer_init(){
     _cxml_lexer lexer;
     cxml_config cfg = cxml_get_config();
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
-    cxml_assert__eq(lexer.start, wf_xml_6)
-    cxml_assert__eq(lexer.current, wf_xml_6)
-    cxml_assert__one(lexer.line)
-    cxml_assert__false(lexer.error)
-    cxml_assert__false(lexer._stream)
-    cxml_assert__false(lexer._should_stream)
-    cxml_assert__false(lexer._returned)
-    cxml_assert__zero(lexer.vflag)
-    cxml_assert__eq(lexer.preserve_sp, cfg.preserve_space)
-    cxml_assert__eq(lexer.preserve_cm, cfg.preserve_comment)
-    cxml_assert__eq(lexer.preserve_cd, cfg.preserve_cdata)
+    CHECK_EQ(lexer.start, wf_xml_6)
+    CHECK_EQ(lexer.current, wf_xml_6)
+    CHECK_EQ(lexer.line, 1)
+    CHECK_FALSE(lexer.error)
+    CHECK_FALSE(lexer._stream)
+    CHECK_FALSE(lexer._should_stream)
+    CHECK_FALSE(lexer._returned)
+    CHECK_EQ(lexer.vflag, 0)
+    CHECK_EQ(lexer.preserve_sp, cfg.preserve_space)
+    CHECK_EQ(lexer.preserve_cm, cfg.preserve_comment)
+    CHECK_EQ(lexer.preserve_cd, cfg.preserve_cdata)
     cxml_pass()
 }
 
 cts test__cxml_token_init(){
     _cxml_token tok;
     _cxml_token_init(&tok);
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
     cxml_pass()
 }
 
@@ -34,8 +34,8 @@ cts test__cxml_lexer_close(){
     _cxml_lexer lexer;
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
     _cxml_lexer_close(&lexer);
-    cxml_assert__null(lexer.start)
-    cxml_assert__null(lexer.current)
+    CHECK_EQ(lexer.start, NULL)
+    CHECK_EQ(lexer.current, NULL)
     cxml_pass()
 }
 
@@ -47,125 +47,125 @@ cts test_cxml_get_token(){
     // <fruit><name>apple</name><name>banana</name></fruit>
     _cxml_lexer_init(&lexer, wf_xml_10, NULL, false);
     _cxml_token tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_L_THAN)
-    cxml_assert__eq(tok.start, wf_xml_10)
-    cxml_assert__eq(lexer.start, wf_xml_10)
-    cxml_assert__eq(lexer.current, (wf_xml_10+1))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__one(tok.length)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_L_THAN)
+    CHECK_EQ(tok.start, wf_xml_10)
+    CHECK_EQ(lexer.start, wf_xml_10)
+    CHECK_EQ(lexer.current, (wf_xml_10+1))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.length, 1)
+    CHECK_EQ(tok.line, 1)
 
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_IDENTIFIER)
-    cxml_assert__eq(tok.start, (wf_xml_10+1))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__eq(tok.length, 5)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_IDENTIFIER)
+    CHECK_EQ(tok.start, (wf_xml_10+1))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.length, 5)
+    CHECK_EQ(tok.line, 1)
 
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_G_THAN)
-    cxml_assert__eq(tok.start, (wf_xml_10+6))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__eq(lexer.vflag, '>')
-    cxml_assert__one(tok.length)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_G_THAN)
+    CHECK_EQ(tok.start, (wf_xml_10+6))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(lexer.vflag, '>')
+    CHECK_EQ(tok.length, 1)
+    CHECK_EQ(tok.line, 1)
     _cxml_lexer_close(&lexer);
 
     char *src = "'\n0x12345\t'";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_STRING)
-    cxml_assert__eq(tok.start, (src + 1))
-    cxml_assert__eq(tok.literal_type, CXML_XINTEGER_LITERAL)
-    cxml_assert__eq(tok.length, 9)
-    cxml_assert__two(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_STRING)
+    CHECK_EQ(tok.start, (src + 1))
+    CHECK_EQ(tok.literal_type, CXML_XINTEGER_LITERAL)
+    CHECK_EQ(tok.length, 9)
+    CHECK_EQ(tok.line, 2)
     _cxml_lexer_close(&lexer);
 
     src = "' 12.1e-1 '";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_STRING)
-    cxml_assert__eq(tok.start, (src + 1))
-    cxml_assert__eq(tok.literal_type, CXML_DOUBLE_LITERAL)
-    cxml_assert__eq(tok.length, 9)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_STRING)
+    CHECK_EQ(tok.start, (src + 1))
+    CHECK_EQ(tok.literal_type, CXML_DOUBLE_LITERAL)
+    CHECK_EQ(tok.length, 9)
+    CHECK_EQ(tok.line, 1)
     _cxml_lexer_close(&lexer);
 
     src = "\n12345";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_TEXT)
-    cxml_assert__eq(tok.start, (src + 1))
-    cxml_assert__eq(tok.literal_type, CXML_INTEGER_LITERAL)
-    cxml_assert__eq(tok.length, 5)
-    cxml_assert__two(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_TEXT)
+    CHECK_EQ(tok.start, (src + 1))
+    CHECK_EQ(tok.literal_type, CXML_INTEGER_LITERAL)
+    CHECK_EQ(tok.length, 5)
+    CHECK_EQ(tok.line, 2)
     _cxml_lexer_close(&lexer);
 
     src = " = \r\n<!--foo--> \n: <![CDATA[abc]]>";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_EQUAL)
-    cxml_assert__eq(tok.start, (src + 1))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__eq(tok.length, 1)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_EQUAL)
+    CHECK_EQ(tok.start, (src + 1))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.length, 1)
+    CHECK_EQ(tok.line, 1)
 
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_COMMENT)
-    cxml_assert__eq(tok.start, (src + 5))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__eq(tok.length, 10)
-    cxml_assert__eq(tok.line, 2)
+    CHECK_EQ(tok.type, CXML_TOKEN_COMMENT)
+    CHECK_EQ(tok.start, (src + 5))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.length, 10)
+    CHECK_EQ(tok.line, 2)
 
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_COLON)
-    cxml_assert__eq(tok.start, (src + 17))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__eq(tok.length, 1)
-    cxml_assert__eq(tok.line, 3)
+    CHECK_EQ(tok.type, CXML_TOKEN_COLON)
+    CHECK_EQ(tok.start, (src + 17))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.length, 1)
+    CHECK_EQ(tok.line, 3)
 
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_CDATA)
-    cxml_assert__eq(tok.start, (src + 19))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__eq(tok.length, 15)
-    cxml_assert__eq(tok.line, 3)
+    CHECK_EQ(tok.type, CXML_TOKEN_CDATA)
+    CHECK_EQ(tok.start, (src + 19))
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.length, 15)
+    CHECK_EQ(tok.line, 3)
     _cxml_lexer_close(&lexer);
 
     src = "<!DOCTYPE note SYSTEM \"example.dtd\">";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_DOCTYPE)
-    cxml_assert__eq(lexer.start, tok.start)
-    cxml_assert__eq(lexer.current, (tok.start + 26)) // at eof
-    cxml_assert__neq(tok.start, src)
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_EQ(tok.type, CXML_TOKEN_DOCTYPE)
+    CHECK_EQ(lexer.start, tok.start)
+    CHECK_EQ(lexer.current, (tok.start + 26)) // at eof
+    CHECK_NE(tok.start, src)
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
     // under trim_dtd configuration, only the dtd name is preserved
-    cxml_assert__eq(tok.length, 4)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.length, 4)
+    CHECK_EQ(tok.line, 1)
     _cxml_lexer_close(&lexer);
 
     src = "<!DOCTYPE note SYSTEM \"example.dtd\">";
     cxml_cfg_trim_dtd(0);
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_DOCTYPE)
-    cxml_assert__eq(tok.start, (src + 10))
+    CHECK_EQ(tok.type, CXML_TOKEN_DOCTYPE)
+    CHECK_EQ(tok.start, (src + 10))
     // (stars from 'note)
     // 25 because the '>' at the end of the dtd structure isn't included
-    cxml_assert__eq(tok.length, 25)
+    CHECK_EQ(tok.length, 25)
     _cxml_lexer_close(&lexer);
 
     src = "'foo";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_ERROR)
-    cxml_assert__true(lexer.error)
-    cxml_assert__neq(tok.start, (src + 1))
-    cxml_assert__zero(strncmp(tok.start, "Unterminated string -> ", 23))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__gt(tok.length, 23)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_ERROR)
+    CHECK_TRUE(lexer.error)
+    CHECK_NE(tok.start, (src + 1))
+    CHECK_EQ(strncmp(tok.start, "Unterminated string -> ", 23), 0)
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_GT(tok.length, 23)
+    CHECK_EQ(tok.line, 1)
     // error tokens are allocated
     FREE(tok.start);
     _cxml_lexer_close(&lexer);
@@ -173,13 +173,13 @@ cts test_cxml_get_token(){
     src = "<!-bad comment->";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_ERROR)
-    cxml_assert__true(lexer.error)
-    cxml_assert__neq(tok.start, src)
-    cxml_assert__zero(strncmp(tok.start, "Invalid token -> ", 17))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__gt(tok.length, 17)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_ERROR)
+    CHECK_TRUE(lexer.error)
+    CHECK_NE(tok.start, src)
+    CHECK_EQ(strncmp(tok.start, "Invalid token -> ", 17), 0)
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_GT(tok.length, 17)
+    CHECK_EQ(tok.line, 1)
     // error tokens are allocated
     FREE(tok.start);
     _cxml_lexer_close(&lexer);
@@ -187,13 +187,13 @@ cts test_cxml_get_token(){
     src = "<!--bad comment2->";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_ERROR)
-    cxml_assert__true(lexer.error)
-    cxml_assert__neq(tok.start, src)
-    cxml_assert__zero(strncmp(tok.start, "Comment not properly closed! -> ", 32))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__gt(tok.length, 32)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_ERROR)
+    CHECK_TRUE(lexer.error)
+    CHECK_NE(tok.start, src)
+    CHECK_EQ(strncmp(tok.start, "Comment not properly closed! -> ", 32), 0)
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_GT(tok.length, 32)
+    CHECK_EQ(tok.line, 1)
     // error tokens are allocated
     FREE(tok.start);
     _cxml_lexer_close(&lexer);
@@ -201,13 +201,13 @@ cts test_cxml_get_token(){
     src = "<!--bad --comment3->";
     _cxml_lexer_init(&lexer, src, NULL, false);
     tok = cxml_get_token(&lexer);
-    cxml_assert__eq(tok.type, CXML_TOKEN_ERROR)
-    cxml_assert__true(lexer.error)
-    cxml_assert__neq(tok.start, src)
-    cxml_assert__zero(strncmp(tok.start, "Comment not properly closed! -> ", 32))
-    cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
-    cxml_assert__gt(tok.length, 32)
-    cxml_assert__one(tok.line)
+    CHECK_EQ(tok.type, CXML_TOKEN_ERROR)
+    CHECK_TRUE(lexer.error)
+    CHECK_NE(tok.start, src)
+    CHECK_EQ(strncmp(tok.start, "Comment not properly closed! -> ", 32), 0)
+    CHECK_EQ(tok.literal_type, CXML_NON_LITERAL)
+    CHECK_GT(tok.length, 32)
+    CHECK_EQ(tok.line, 1)
     // error tokens are allocated
     FREE(tok.start);
     _cxml_lexer_close(&lexer);

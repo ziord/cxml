@@ -5,7 +5,6 @@
 
 #ifndef CXMLTESTS_CXFIXTURE_H
 #define CXMLTESTS_CXFIXTURE_H
-#include "cxtest.h"
 #include <cxml/cxml.h>
 
 #define deb()

@@ -17,7 +17,7 @@ cts test_cxml_prettify(){
     cxml_cfg_preserve_space(0);
     cxml_cfg_show_doc_as_top_level(0);
     cxml_root_node *root = get_root("ugly.xml", false);
-    cxml_assert__not_null(root)
+    CHECK_NE(root, NULL)
     char *got = cxml_prettify(root);
     char *expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                      "<breakfast_menu>\n"
@@ -36,9 +36,9 @@ cts test_cxml_prettify(){
                      "    </description>\n"
                      "  </food1>\n"
                      "</breakfast_menu>";
-    cxml_assert__not_null(got)
-    cxml_assert__true(cxml_string_llraw_equals(expected, got, strlen(expected), strlen(got)))
-    cxml_assert__null(cxml_prettify(NULL))
+    CHECK_NE(got, NULL)
+    CHECK_TRUE(cxml_string_llraw_equals(expected, got, strlen(expected), strlen(got)))
+    CHECK_NE(cxml_prettify(NULL), NULL)
     FREE(got);
     cxml_destroy(root);
     cxml_pass()
