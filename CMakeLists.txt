@@ -114,7 +114,7 @@ if (MSVC)
 else()
         # -Wno-unused-variable -> helps with cxml_for_each(){} loop macro construct,
         # since the compiler assumes that the inner variables driving the loop isn't used, which is wrong.
-        list(APPEND CXML_WARN_FLAGS "-Wall" "-Wextra" "-Wno-unused-but-set-variable" "-pedantic" "-Werror")
+        list(APPEND CXML_WARN_FLAGS "-Wall" "-Wextra" "-Wno-unused-but-set-variable" "-pedantic")
 endif()
 
 include(CheckLibraryExists)
