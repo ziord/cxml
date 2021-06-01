@@ -55,9 +55,7 @@ cxml_set_literal(cxml_number* literal, cxml_literal_t literal_type, cxml_string 
     {
         case CXML_XINTEGER_LITERAL:
             literal->type = CXML_NUMERIC_DOUBLE_T;
-            printf("LONG VERSION: %ld\n", _cxml_literal_r2l(cxml_string_as_raw(str), 16));
             literal->dec_val = (double)_cxml_literal_r2l(cxml_string_as_raw(str), 16);
-            printf("DOUBLE VERSION: %lf\n", (double)_cxml_literal_r2l(cxml_string_as_raw(str), 16));
             break;
         case CXML_INTEGER_LITERAL:
         case CXML_DOUBLE_LITERAL:
