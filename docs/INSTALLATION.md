@@ -48,7 +48,7 @@ This builds cxml as a static library in release mode, along with all its interfa
 
 ```
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCXML_USE_QUERY_MOD=ON -DCXML_USE_SAX_MOD=ON -DCXML_USE_XPATH_MOD=ON -DCXML_BUILD_TESTS=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCXML_USE_QUERY_MOD=ON -DCXML_USE_SAX_MOD=ON -DCXML_USE_XPATH_MOD=ON -DCXML_BUILD_TESTS=ON -DCMAKE_C_STANDARD=11 ..
 cmake --build .
 ```
 
@@ -56,7 +56,7 @@ Alternatively, you can build the library in debug mode by specifying the build t
 
 ```
 cd build
-cmake -DCMAKE_BUILD_TYPE=Debug -DCXML_USE_QUERY_MOD=ON -DCXML_USE_SAX_MOD=ON -DCXML_USE_XPATH_MOD=ON -DCXML_BUILD_TESTS=ON ..
+cmake -DCMAKE_BUILD_TYPE=Debug -DCXML_USE_QUERY_MOD=ON -DCXML_USE_SAX_MOD=ON -DCXML_USE_XPATH_MOD=ON -DCXML_BUILD_TESTS=ON -DCMAKE_C_STANDARD=11 ..
 cmake --build .
 ```
 <br/>
