@@ -179,7 +179,7 @@ static _cxml_token new_cxml_err_token(_cxml_lexer *cxlexer, const char *msg) {
     int msg_len = _cxml_int_cast strlen(msg);
     int len =  msg_len + token.length + 2;
     char *temp = CALLOC(char, len);
-    strncpy(temp, msg, msg_len);
+    memcpy(temp, msg, msg_len);
     strncat(temp + msg_len, token.start, token.length);
     token.start = temp;
     token.length = len;
