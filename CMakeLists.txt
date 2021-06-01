@@ -112,9 +112,59 @@ endif()
 if (MSVC)
         list(APPEND CXML_WARN_FLAGS "/W4")
 else()
-        # -Wno-unused-variable -> helps with cxml_for_each(){} loop macro construct,
-        # since the compiler assumes that the inner variables driving the loop isn't used, which is wrong.
-        list(APPEND CXML_WARN_FLAGS "-Wall" "-Wextra" "-Wno-unused-but-set-variable" "-pedantic")
+# # -Wno-unused-variable -> helps with cxml_for_each(){} loop macro construct,
+# # since the compiler assumes that the inner variables driving the loop isn't used, which is wrong.
+# list(APPEND CXML_WARN_FLAGS "-std=c11" "-Wno-format" "-Wall" "-Wextra" "-Wno-unused-but-set-variable" "-pedantic")
+    if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+        string(APPEND CMAKE_C_FLAGS " -std=gnu11")
+    else()
+        string(APPEND CMAKE_C_FLAGS " -std=c11")
+    endif()
+
+    string(APPEND COMPILE_FLAGS " -Wall")
+    string(APPEND COMPILE_FLAGS " -Wextra")
+    string(APPEND COMPILE_FLAGS " -Wno-unknown-pragmas")
+    string(APPEND COMPILE_FLAGS " -Wno-sign-compare")
+    string(APPEND COMPILE_FLAGS " -Wno-unused-parameter")
+    # string(APPEND COMPILE_FLAGS " -Wno-unused-variable")
+    # string(APPEND COMPILE_FLAGS " -Wno-unused-function")
+    string(APPEND COMPILE_FLAGS " -Wno-unused-result")
+    string(APPEND COMPILE_FLAGS " -Wno-unused-local-typedefs")
+    string(APPEND COMPILE_FLAGS " -Wno-strict-overflow")
+    string(APPEND COMPILE_FLAGS " -Wno-strict-aliasing")
+    string(APPEND COMPILE_FLAGS " -Werror=return-type")
+    string(APPEND COMPILE_FLAGS " -Wno-error=deprecated-declarations")
+
+    if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+        # A hack for Clang on Ubuntu
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            string(APPEND CMAKE_CXX_FLAGS " -fPIE")
+        endif() 
+
+        string(APPEND COMPILE_FLAGS " -fPIE")
+        string(APPEND COMPILE_FLAGS " -Wno-ignored-qualifiers")
+        string(APPEND COMPILE_FLAGS " -Wno-uninitialized")
+        string(APPEND COMPILE_FLAGS " -Wno-unused-const-variable")
+        string(APPEND COMPILE_FLAGS " -Wno-newline-eof")
+    else()
+        string(APPEND COMPILE_FLAGS " -fPIC")
+        string(APPEND COMPILE_FLAGS " -Wno-discarded-qualifiers")
+        string(APPEND COMPILE_FLAGS " -Wno-multistatement-macros")
+
+        if(NOT APPLE)
+            string(APPEND COMPILE_FLAGS " -Wno-unused-but-set-variable")
+            string(APPEND COMPILE_FLAGS " -Wno-maybe-uninitialized")
+        endif()
+    endif() # Clang
+
+    if(WERROR)
+        check_cxx_compiler_flag("-Werror" COMPILER_SUPPORT_WERROR)
+        if(NOT COMPILER_SUPPORT_WERROR)
+            set(WERROR FALSE)
+        else()
+            string(APPEND COMPILE_FLAGS " -Werror")   
+        endif()
+    endif(WERROR)
 endif()
 
 include(CheckLibraryExists)
@@ -137,6 +187,14 @@ endif()
 
 message(STATUS "BUILD options:" "${CXML_BUILD_OPTIONS}")
 if (CXML_BUILD_TESTS)
+        message("--------- [INFO] Fetching Muon from GitHub")
+        include(FetchContent)
+        FetchContent_Declare(
+                Muon
+                URL https://github.com/jasmcaus/Muon/archive/dev.zip
+        )
+        FetchContent_MakeAvailable(Muon)
+
         # get the minimum required test source files for the tests to be performed
         file(GLOB CORE_TEST CONFIGURE_DEPENDS "tests/core/*.c")
         file(GLOB UTILS_TEST CONFIGURE_DEPENDS "tests/utils/*.c")
@@ -162,6 +220,7 @@ if (CXML_BUILD_TESTS)
         target_compile_options(cxml_tests PRIVATE ${CXML_WARN_FLAGS} "-Wno-unused-function")
         target_compile_definitions(cxml_tests PRIVATE ${CXML_BUILD_OPTIONS})
         target_link_libraries(cxml_tests PRIVATE cxml)
+        target_link_libraries(cxml_tests PRIVATE Muon)
         # Add include directories (tests) to a target (cxml_tests).
         target_include_directories(cxml_tests PRIVATE tests)
         add_custom_target(
