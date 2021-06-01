@@ -4,6 +4,7 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 // no seg-fault tests, because lru-cache is an internal structure with
 // very precise use-case, and not meant to be used by external users.
@@ -11,7 +12,7 @@
 void empty_lrucache_asserts(_cxml_lru_cache *cache){
     CHECK_EQ(cache->cache.capacity, 0);
     CHECK_EQ(cache->cache.count, 0);
-    CHECK_EQ(cache->cache.entries, NULL);
+    CHECK_NULL(cache->cache.entries);
     CHECK_TRUE(cxml_list_is_empty(&cache->cache.keys));
 }
 

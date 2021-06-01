@@ -4,12 +4,13 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 
 void empty_list_asserts(cxml_list *list){
     CHECK_EQ(list->len, 0);
-    CHECK_EQ(list->head, NULL);
-    CHECK_EQ(list->tail, NULL);
+    CHECK_NULL(list->head);
+    CHECK_NULL(list->tail);
     CHECK_EQ(list->head, list->tail);
 }
 
@@ -37,7 +38,7 @@ TEST(cxlist, cxml_list_insert){
     CHECK_EQ(list.head->item, (&data2));
     CHECK_EQ(list.tail->item, (&data1));
     CHECK_EQ(list.len, 2);
-    CHECK_NE(list.head, NULL);
+    CHECK_NOT_NULL(list.head);
     CHECK_NE(list.head->item, list.tail->item);
     CHECK_NE(list.head, list.tail);
 
@@ -63,7 +64,7 @@ TEST(cxlist, cxml_list_insert_at_index){
     cxml_list_insert_at_index(&list, &data3, 1);
     cxml_list_insert_at_index(&list, &data4, 2);
 
-    CHECK_NE(list.head, NULL);
+    CHECK_NOT_NULL(list.head);
     CHECK_EQ(list.head->item, ((void*)&data2));
     CHECK_EQ(list.tail->item, ((void*)&data1));
     CHECK_EQ(list.head->next->item, ((void*)&data3));
@@ -139,12 +140,12 @@ TEST(cxlist, cxml_list_init_with){
     cxml_list_init_with(&list1, &list2);
     CHECK_EQ(list2.len, 0);
     CHECK_EQ(list1.len, 2);
-    CHECK_NE(list1.head, NULL);
-    CHECK_NE(list1.tail, NULL);
+    CHECK_NOT_NULL(list1.head);
+    CHECK_NOT_NULL(list1.tail);
     CHECK_EQ(list1.head->item, &data1);
     CHECK_EQ(list1.tail->item, &data2);
-    CHECK_EQ(list2.head, NULL);
-    CHECK_EQ(list2.tail, NULL);
+    CHECK_NULL(list2.head);
+    CHECK_NULL(list2.tail);
     cxml_list_free(&list1);
     cxml_list_free(&list2);
 }
@@ -163,12 +164,12 @@ TEST(cxlist, cxml_list_qextend){
     cxml_list_qextend(&list1, &list2);
     CHECK_EQ(list2.len, 0);
     CHECK_EQ(list1.len, 2);
-    CHECK_NE(list1.head, NULL);
-    CHECK_NE(list1.tail, NULL);
+    CHECK_NOT_NULL(list1.head);
+    CHECK_NOT_NULL(list1.tail);
     CHECK_EQ(list1.head->item, &data1);
     CHECK_EQ(list1.tail->item, &data2);
-    CHECK_EQ(list2.head, NULL);
-    CHECK_EQ(list2.tail, NULL);
+    CHECK_NULL(list2.head);
+    CHECK_NULL(list2.tail);
     cxml_list_free(&list1);
     cxml_list_free(&list2);
 }
@@ -253,8 +254,8 @@ TEST(cxlist, cxml_list_search_delete){
     index = cxml_list_search(&list, cxml_list_cmp_raw_items, &data2);
     CHECK_EQ(index, -1);
     CHECK_EQ(list.len, 0);
-    CHECK_EQ(list.head, NULL);
-    CHECK_EQ(list.tail, NULL);
+    CHECK_NULL(list.head);
+    CHECK_NULL(list.tail);
     cxml_list_free(&list);
 }
 
@@ -269,13 +270,13 @@ TEST(cxlist, cxml_list_cmp_str_items){
 TEST(cxlist, cxml_list_cmp_raw_items){
     struct Data data1, data2;
     CHECK_FALSE(cxml_list_cmp_raw_items(&data1, &data2));
-    CHECK_TRUE(cxml_list_cmp_raw_items(&data1, &data1));;
+    CHECK_TRUE(cxml_list_cmp_raw_items(&data1, &data1));
 }
 
 int assert_list(cxml_list *list){
     CHECK_EQ(list->len, 0);
-    CHECK_EQ(list->head, NULL);
-    CHECK_EQ(list->tail, NULL);
+    CHECK_NULL(list->head);
+    CHECK_NULL(list->tail);
     CHECK_EQ(list->head, list->tail);
     return 1;
 }
@@ -283,8 +284,8 @@ int assert_list(cxml_list *list){
 TEST(cxlist, new_alloc_cxml_list){
     cxml_list *list1 = new_alloc_cxml_list();
     cxml_list *list2 = new_alloc_cxml_list();
-    CHECK_EQ(assert_list(list1)), 1;;
-    CHECK_EQ(assert_list(list2)), 1;;
+    CHECK_EQ(assert_list(list1), 1);
+    CHECK_EQ(assert_list(list2), 1);
     cxml_list_free(list1);
     cxml_list_free(list2);
     FREE(list1);
@@ -307,43 +308,43 @@ TEST(cxlist, cxml_list_get){
     cxml_list_append(&list, &data);
     CHECK_EQ(list.len, 1);
     CHECK_EQ(cxml_list_get(&list, 0), &data);
-    CHECK_EQ(cxml_list_get(&list, 1), NULL);
-    CHECK_EQ(cxml_list_get(&list, -1), NULL);
-    CHECK_EQ(cxml_list_get(&list, 5), NULL);
+    CHECK_NULL(cxml_list_get(&list, 1));
+    CHECK_NULL(cxml_list_get(&list, -1));
+    CHECK_NULL(cxml_list_get(&list, 5));
     cxml_list_free(&list);
 }
 
 TEST(cxlist, cxml_list_last){
     struct Data data1, data2;
     cxml_list list = new_cxml_list();
-    CHECK_EQ(cxml_list_last(&list)), NULL;;
+    CHECK_NULL(cxml_list_last(&list));
     cxml_list_append(&list, &data1);
-    CHECK_EQ(cxml_list_last(&list), &data1);;
+    CHECK_EQ(cxml_list_last(&list), &data1);
     cxml_list_append(&list, &data2);
-    CHECK_EQ(cxml_list_last(&list), &data2);;
-    CHECK_EQ(cxml_list_last(NULL)), NULL;;
+    CHECK_EQ(cxml_list_last(&list), &data2);
+    CHECK_NULL(cxml_list_last(NULL));
     cxml_list_free(&list);
 }
 
 TEST(cxlist, cxml_list_first){
     struct Data data1, data2;
     cxml_list list = new_cxml_list();
-    CHECK_EQ(cxml_list_first(&list)), NULL;;
+    CHECK_NULL(cxml_list_first(&list));
     cxml_list_append(&list, &data1);
-    CHECK_EQ(cxml_list_first(&list), &data1);;
+    CHECK_EQ(cxml_list_first(&list), &data1);
     cxml_list_append(&list, &data2);
-    CHECK_EQ(cxml_list_first(&list), &data1);;
-    CHECK_EQ(cxml_list_first(NULL)), NULL;;
+    CHECK_EQ(cxml_list_first(&list), &data1);
+    CHECK_NULL(cxml_list_first(NULL));
     cxml_list_free(&list);
 }
 
 TEST(cxlist, cxml_list_is_empty){
     struct Data data;
     cxml_list list = new_cxml_list();
-    CHECK_TRUE(cxml_list_is_empty(&list));;
+    CHECK_TRUE(cxml_list_is_empty(&list));
     cxml_list_append(&list, &data);
-    CHECK_FALSE(cxml_list_is_empty(&list));;
-    CHECK_TRUE(cxml_list_is_empty(NULL));;
+    CHECK_FALSE(cxml_list_is_empty(&list));
+    CHECK_TRUE(cxml_list_is_empty(NULL));
     cxml_list_free(&list);
 }
 
@@ -355,26 +356,26 @@ TEST(cxlist, cxml_list_safe_delete){
     cxml_list_append(&list, &data2);
     CHECK_EQ(list.len, 2);
 
-    CHECK_EQ(cxml_list_safe_delete(NULL, 0), NULL);
+    CHECK_NULL(cxml_list_safe_delete(NULL, 0));
 
     // delete at front
     void *tmp = cxml_list_safe_delete(&list, 0);
-    CHECK_NE(tmp, NULL);
+    CHECK_NOT_NULL(tmp);
     CHECK_EQ(list.len, 1);
     CHECK_EQ(tmp, &data1);
     CHECK_EQ(list.head, list.tail);
 
     // search for data1 in list
     tmp = cxml_list_safe_delete(&list, 1);
-    CHECK_NE(tmp, NULL);
+    CHECK_NOT_NULL(tmp);
     CHECK_EQ(list.len, 0);
     CHECK_EQ(tmp, &data2);
-    CHECK_EQ(list.head, NULL);
-    CHECK_EQ(list.tail, NULL);
+    CHECK_NULL(list.head);
+    CHECK_NULL(list.tail);
     CHECK_EQ(list.len, 0);
 
     tmp = cxml_list_safe_delete(&list, 1);
-    CHECK_EQ(tmp, NULL);
+    CHECK_NULL(tmp);
     cxml_list_free(&list);
 }
 
@@ -387,35 +388,35 @@ TEST(cxlist, cxml_list_safe_delete_at_pos){
     cxml_list_append(&list, &data3);
     CHECK_EQ(list.len, 3);
 
-    CHECK_EQ(cxml_list_safe_delete_at_pos(NULL, 0), NULL);
+    CHECK_NULL(cxml_list_safe_delete_at_pos(NULL, 0));
 
     // delete at front
     void *tmp = cxml_list_safe_delete_at_pos(&list, 2);
-    CHECK_NE(tmp, NULL);
+    CHECK_NOT_NULL(tmp);
     CHECK_EQ(list.len, 2);
     CHECK_EQ(tmp, &data3);
     CHECK_NE(list.head, list.tail);
 
-    CHECK_EQ(cxml_list_safe_delete_at_pos(&list, 2), NULL);
-    CHECK_EQ(cxml_list_safe_delete_at_pos(&list, 5), NULL);
-    CHECK_EQ(cxml_list_safe_delete_at_pos(&list, -1), NULL);
+    CHECK_NULL(cxml_list_safe_delete_at_pos(&list, 2));
+    CHECK_NULL(cxml_list_safe_delete_at_pos(&list, 5));
+    CHECK_NULL(cxml_list_safe_delete_at_pos(&list, -1));
 
     // search for data1 in list
     tmp = cxml_list_safe_delete_at_pos(&list, 0);
-    CHECK_NE(tmp, NULL);
+    CHECK_NOT_NULL(tmp);
     CHECK_EQ(list.len, 1);
     CHECK_EQ(tmp, &data1);
 
-    CHECK_EQ(cxml_list_safe_delete_at_pos(&list, 1), NULL);
+    CHECK_NULL(cxml_list_safe_delete_at_pos(&list, 1));
     tmp = cxml_list_safe_delete_at_pos(&list, 0);
-    CHECK_NE(tmp, NULL);
+    CHECK_NOT_NULL(tmp);
     CHECK_EQ(list.len, 0);
     CHECK_EQ(tmp, &data2);
-    CHECK_EQ(list.head, NULL);
-    CHECK_EQ(list.tail, NULL);
+    CHECK_NULL(list.head);
+    CHECK_NULL(list.tail);
     CHECK_EQ(list.len, 0);
     // delete from empty list
-    CHECK_EQ(cxml_list_safe_delete_at_pos(&list, 0), NULL);
+    CHECK_NULL(cxml_list_safe_delete_at_pos(&list, 0));
     cxml_list_free(&list);
 }
 
@@ -439,8 +440,8 @@ TEST(cxlist, cxml_list_delete){
 
     cxml_list_delete(&list, 1);
     CHECK_EQ(list.len, 0);
-    CHECK_EQ(list.head, NULL);
-    CHECK_EQ(list.tail, NULL);
+    CHECK_NULL(list.head);
+    CHECK_NULL(list.tail);
     CHECK_EQ(list.len, 0);
 
     cxml_list_safe_delete(&list, 0);
@@ -502,8 +503,8 @@ int test_cxml_list_delete_at_position(void (*fn)(cxml_list *, int)){
     CHECK_EQ(list.len, 1);
     fn(&list, 0);
     CHECK_EQ(list.len, 0);
-    CHECK_EQ(list.head, NULL);
-    CHECK_EQ(list.tail, NULL);
+    CHECK_NULL(list.head);
+    CHECK_NULL(list.tail);
     CHECK_EQ(list.len, 0);
 
     fn(&list, 0);
@@ -530,18 +531,18 @@ TEST(cxlist, cxml_list_free){
     cxml_list_append(list2, &data2);
     CHECK_EQ(list.len, 2);
     CHECK_EQ(list2->len, 2);
-    CHECK_NE(list.head, NULL);
-    CHECK_NE(list.tail, NULL);
-    CHECK_NE(list2->head, NULL);
-    CHECK_NE(list2->tail, NULL);
+    CHECK_NOT_NULL(list.head);
+    CHECK_NOT_NULL(list.tail);
+    CHECK_NOT_NULL(list2->head);
+    CHECK_NOT_NULL(list2->tail);
     cxml_list_free(&list);
     CHECK_EQ(list.len, 0);
-    CHECK_EQ(list.head, NULL);
-    CHECK_EQ(list.tail, NULL);
+    CHECK_NULL(list.head);
+    CHECK_NULL(list.tail);
     cxml_list_free(list2);
     CHECK_EQ(list2->len, 0);
-    CHECK_EQ(list2->head, NULL);
-    CHECK_EQ(list2->tail, NULL);
+    CHECK_NULL(list2->head);
+    CHECK_NULL(list2->tail);
     // should not seg-fault
     cxml_list_free(NULL);
     FREE(list2);

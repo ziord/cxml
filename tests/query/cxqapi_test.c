@@ -5,6 +5,7 @@
 
 //#define CXML_T_NO_SUITE_TEST_SHUFFLE
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 /*
  * Test for the major functions exported by cxqapi.c
@@ -15,9 +16,8 @@
 
 // General functions
 TEST(cxqapi, cxml_is_well_formed){
-    deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(cxml_is_well_formed(root));
     cxml_destroy(root);
     root = cxml_load_string(df_xml_1);
@@ -27,7 +27,6 @@ TEST(cxqapi, cxml_is_well_formed){
 }
 
 TEST(cxqapi, cxml_get_node_type){
-    deb()
     cxml_root_node root;
     cxml_root_node_init(&root);
     CHECK_EQ(cxml_get_node_type(&root), CXML_ROOT_NODE);
@@ -38,44 +37,41 @@ TEST(cxqapi, cxml_get_node_type){
 }
 
 TEST(cxqapi, cxml_get_dtd_node){
-    deb()
     cxml_root_node *root = get_root("wf_xml_5.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_dtd_node *node = cxml_get_dtd_node(root);
-    CHECK_NE(node, NULL);
+    CHECK_NOT_NULL(node);
     CHECK_EQ(cxml_get_node_type(node), CXML_DTD_NODE);
     cxml_destroy(root);
 
     root = get_root("wf_xml_1.xml", true);
-    CHECK_EQ(cxml_get_dtd_node(root), NULL);
-    CHECK_EQ(cxml_get_dtd_node(NULL), NULL);
+    CHECK_NULL(cxml_get_dtd_node(root));
+    CHECK_NULL(cxml_get_dtd_node(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_get_xml_hdr_node){
-    deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", false);
 
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_xhdr_node *node = cxml_get_xml_hdr_node(root);
-    CHECK_NE(node, NULL);
+    CHECK_NOT_NULL(node);
     CHECK_EQ(cxml_get_node_type(node), CXML_XHDR_NODE);
     cxml_destroy(root);
 
     root = get_root("wf_xml_5.xml", true);
 
-    CHECK_EQ(cxml_get_xml_hdr_node(root), NULL);
-    CHECK_EQ(cxml_get_xml_hdr_node(NULL), NULL);
+    CHECK_NULL(cxml_get_xml_hdr_node(root));
+    CHECK_NULL(cxml_get_xml_hdr_node(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_get_root_element){
-    deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_elem_node *elem = cxml_get_root_element(root);
     CHECK_NE(elem), NULL;;
-    CHECK_EQ(cxml_get_root_element(NULL), NULL);
+    CHECK_NULL(cxml_get_root_element(NULL));
     cxml_destroy(root);
 }
 
@@ -98,10 +94,10 @@ int name_asserts(
         const char *qname)
 {
     if (pname){
-        CHECK_EQ(strncmp(name->pname, pname, name->pname_len), NULL);
+        CHECK_NULL(strncmp(name->pname, pname, name->pname_len));
     }
     if (lname){
-        CHECK_EQ(strncmp(name->lname, lname, name->lname_len), NULL);
+        CHECK_NULL(strncmp(name->lname, lname, name->lname_len));
     }
     if (qname){
         CHECK_TRUE(cxml_string_raw_equals(&name->qname, qname));
@@ -110,11 +106,10 @@ int name_asserts(
 }
 
 TEST(cxqapi, cxml_find){
-    deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_elem_node *elem = cxml_find(root, "<div>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "div", "div"), 1);
     cxml_elem_node *elem2 = cxml_find(root, "<div>/@mod/[@section]/");
     CHECK_EQ(elem, elem2);
@@ -123,9 +118,8 @@ TEST(cxqapi, cxml_find){
 }
 
 TEST(cxqapi, cxml_find_all){
-    deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_list list = new_cxml_list();
     cxml_find_all(root, "<term>/$text/", &list);
     CHECK_EQ(cxml_list_size(&list), 4);
@@ -137,21 +131,20 @@ TEST(cxqapi, cxml_find_all){
     cxml_list_free(&list);
 
     cxml_find_all(root, "<term>/", NULL);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
     cxml_find_all(root, NULL, &list);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
     cxml_find_all(NULL, "<term>/$text/", &list);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
     cxml_find_all(root, "<term>/#comment='foobar'/", &list);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_children){
-    deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list list = new_cxml_list();
     cxml_find_children(root, "<synonym>/", &list);
@@ -164,20 +157,19 @@ TEST(cxqapi, cxml_find_children){
     cxml_list_free(&list);
 
     cxml_find_children(elem, NULL, &list);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
 
     cxml_find_children(NULL, "<relationship>/", &list);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
 
     cxml_find_children(elem, "<relationship>/", NULL);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_children){
-    deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list list = new_cxml_list();
     cxml_children(root, &list);
@@ -190,61 +182,58 @@ TEST(cxqapi, cxml_children){
     cxml_list_free(&list);
 
     cxml_children(elem, NULL);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
 
     cxml_children(NULL, &list);
-    CHECK_EQ(cxml_list_size(&list), NULL);
+    CHECK_NULL(cxml_list_size(&list));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_next_element){
-    deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<f:width>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, "f", "width", "f:width"), 1);
-    CHECK_NE(elem->namespace, NULL);
+    CHECK_NOT_NULL(elem->namespace);
     CHECK_TRUE(cxml_string_raw_equals(&elem->namespace->prefix, "f"));
 
     cxml_element_node *next = cxml_next_element(elem);
-    CHECK_NE(next, NULL);
+    CHECK_NOT_NULL(next);
     CHECK_EQ(name_asserts(&next->name, "f", "length", "f:length"), 1);
-    CHECK_NE(next->namespace, NULL);
+    CHECK_NOT_NULL(next->namespace);
     CHECK_TRUE(cxml_string_raw_equals(&next->namespace->prefix, "f"));
 
-    CHECK_EQ(cxml_next_element(NULL), NULL);
+    CHECK_NULL(cxml_next_element(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_previous_element){
-    deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<f:width>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, "f", "width", "f:width"), 1);
-    CHECK_NE(elem->namespace, NULL);
+    CHECK_NOT_NULL(elem->namespace);
     CHECK_TRUE(cxml_string_raw_equals(&elem->namespace->prefix, "f"));
 
     cxml_element_node *previous = cxml_previous_element(elem);
-    CHECK_NE(previous, NULL);
+    CHECK_NOT_NULL(previous);
     CHECK_EQ(name_asserts(&previous->name, "f", "name", "f:name"), 1);
-    CHECK_NE(previous->namespace, NULL);
+    CHECK_NOT_NULL(previous->namespace);
     CHECK_TRUE(cxml_string_raw_equals(&previous->namespace->prefix, "f"));
 
-    CHECK_EQ(cxml_previous_element(NULL), NULL);
+    CHECK_NULL(cxml_previous_element(NULL));
     cxml_destroy(root);
 }
 
 // cimple
 TEST(cxqapi, cxml_next_comment){
-    deb()
     cxml_root_node *root = get_root("wf_xml_3.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<entry>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "entry", "entry"), 1);
     cxml_comment_node *comm = NULL;
     cxml_for_each(n, &elem->children)
@@ -257,19 +246,18 @@ TEST(cxqapi, cxml_next_comment){
     CHECK_TRUE(cxml_string_raw_equals(&comm->value, "foobar"));
 
     cxml_comment_node *next = cxml_next_comment(comm);
-    CHECK_NE(next, NULL);
+    CHECK_NOT_NULL(next);
     CHECK_TRUE(cxml_string_raw_equals(&next->value, "cimple"));
 
-    CHECK_EQ(cxml_next_comment(NULL), NULL);
+    CHECK_NULL(cxml_next_comment(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_previous_comment){
-    deb()
     cxml_root_node *root = get_root("wf_xml_3.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<entry>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "entry", "entry"), 1);
     cxml_comment_node *comm = NULL;
     // obtain the last comment
@@ -286,19 +274,18 @@ TEST(cxqapi, cxml_previous_comment){
     CHECK_TRUE(cxml_string_raw_equals(&comm->value, "cimple"));
 
     cxml_comment_node *previous = cxml_previous_comment(comm);
-    CHECK_NE(previous, NULL);
+    CHECK_NOT_NULL(previous);
     CHECK_TRUE(cxml_string_raw_equals(&previous->value, "foobar"));
 
-    CHECK_EQ(cxml_previous_comment(NULL), NULL);
+    CHECK_NULL(cxml_previous_comment(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_next_text){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<noodles>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "noodles", "noodles"), 1);
     cxml_text_node *text = NULL;
     cxml_for_each(n, &elem->children)
@@ -311,19 +298,18 @@ TEST(cxqapi, cxml_next_text){
     CHECK_TRUE(cxml_string_raw_equals(&text->value, "indomie"));
 
     cxml_text_node *next = cxml_next_text(text);
-    CHECK_NE(next, NULL);
+    CHECK_NOT_NULL(next);
     CHECK_TRUE(cxml_string_raw_equals(&next->value, "super-pack"));
 
-    CHECK_EQ(cxml_next_text(NULL), NULL);
+    CHECK_NULL(cxml_next_text(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_previous_text){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<noodles>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "noodles", "noodles"), 1);
     cxml_text_node *text = NULL;
     cxml_for_each(n, &elem->children)
@@ -339,90 +325,85 @@ TEST(cxqapi, cxml_previous_text){
     CHECK_TRUE(cxml_string_raw_equals(&text->value, "super-pack"));
 
     cxml_text_node *previous = cxml_previous_text(text);
-    CHECK_NE(previous, NULL);
+    CHECK_NOT_NULL(previous);
     CHECK_TRUE(cxml_string_raw_equals(&previous->value, "indomie"));
 
-    CHECK_EQ(cxml_previous_text(NULL), NULL);
+    CHECK_NULL(cxml_previous_text(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_first_child){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *elem = cxml_find(root, "<noodles>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     cxml_text_node *first = cxml_first_child(elem);
-    CHECK_NE(first, NULL);
+    CHECK_NOT_NULL(first);
     CHECK_TRUE(cxml_string_raw_equals(&first->value, "indomie"));
-    CHECK_EQ(cxml_first_child(NULL), NULL);
+    CHECK_NULL(cxml_first_child(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_first_child){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_text_node *first = cxml_find_first_child(root, "<noodles>/");
-    CHECK_NE(first, NULL);
+    CHECK_NOT_NULL(first);
     CHECK_TRUE(cxml_string_raw_equals(&first->value, "indomie"));
-    CHECK_EQ(cxml_find_first_child(NULL, "<entry>/"), NULL);
-    CHECK_EQ(cxml_find_first_child(root, "<foobar>/"), NULL);
-    CHECK_EQ(cxml_find_first_child(root, NULL), NULL);
+    CHECK_NULL(cxml_find_first_child(NULL, "<entry>/"));
+    CHECK_NULL(cxml_find_first_child(root, "<foobar>/"));
+    CHECK_NULL(cxml_find_first_child(root, NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_parent){
-    deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // finds first element
     cxml_element_node *elem = cxml_find(root, "<relationship>/");
     cxml_element_node *par = cxml_find(root, "<synonym>/");
-    CHECK_NE(elem, NULL);
-    CHECK_NE(par, NULL);
+    CHECK_NOT_NULL(elem);
+    CHECK_NOT_NULL(par);
 
     cxml_element_node *parent = cxml_parent(elem);
-    CHECK_NE(par, NULL);
+    CHECK_NOT_NULL(par);
     CHECK_EQ(par, parent);
     CHECK_EQ(name_asserts(&parent->name, NULL, "synonym", "synonym"), 1);
 
-    CHECK_EQ(cxml_parent(root), NULL);
-    CHECK_EQ(cxml_parent(NULL), NULL);
+    CHECK_NULL(cxml_parent(root));
+    CHECK_NULL(cxml_parent(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_parent){
-    deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // finds first element
     cxml_element_node *elem = cxml_find(root, "<f:width>/");
     cxml_element_node *par = cxml_find(root, "<f:table>/");
-    CHECK_NE(elem, NULL);
-    CHECK_NE(par, NULL);
+    CHECK_NOT_NULL(elem);
+    CHECK_NOT_NULL(par);
 
     cxml_element_node *parent = cxml_find_parent(root, "<f:width>/");
-    CHECK_NE(parent, NULL);
+    CHECK_NOT_NULL(parent);
     CHECK_EQ(par, parent);
     CHECK_EQ(name_asserts(&parent->name, "f", "table", "f:table"), 1);
 
-    CHECK_EQ(cxml_find_parent(root, "<xyz>/"), NULL);
-    CHECK_EQ(cxml_find_parent(root, NULL), NULL);
-    CHECK_EQ(cxml_find_parent(NULL, "<f:width>/"), NULL);
+    CHECK_NULL(cxml_find_parent(root, "<xyz>/"));
+    CHECK_NULL(cxml_find_parent(root, NULL));
+    CHECK_NULL(cxml_find_parent(NULL, "<f:width>/"));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_ancestors){
-    deb()
     cxml_cfg_set_doc_name("ancestor");
     cxml_root_node *root = get_root("wf_xml_2.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<relationship>/$text|='xyz'/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     cxml_list ancestors = new_cxml_list();
     char *ancestor_names[] = {"synonym", "entry", "thesaurus", "ancestor"};
@@ -442,15 +423,14 @@ TEST(cxqapi, cxml_ancestors){
     }
     cxml_list_free(&ancestors);
     cxml_ancestors(NULL, &ancestors);
-    CHECK_EQ(cxml_list_size(&ancestors), NULL);
+    CHECK_NULL(cxml_list_size(&ancestors));
     cxml_ancestors(elem, NULL);
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_ancestors){
-    deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list ancestors = new_cxml_list();
     char *ancestor_names[] = {"synonym", "entry", "thesaurus", "XMLDocument"};
@@ -471,26 +451,25 @@ TEST(cxqapi, cxml_find_ancestors){
     cxml_list_free(&ancestors);
 
     cxml_ancestors(NULL, &ancestors);
-    CHECK_EQ(cxml_list_size(&ancestors), NULL);
+    CHECK_NULL(cxml_list_size(&ancestors));
 
     cxml_find_ancestors(root, NULL, &ancestors);
-    CHECK_EQ(cxml_list_size(&ancestors), NULL);
+    CHECK_NULL(cxml_list_size(&ancestors));
 
     cxml_find_ancestors(NULL, "<relationship>/$text|='abc'/", &ancestors);
-    CHECK_EQ(cxml_list_size(&ancestors), NULL);
+    CHECK_NULL(cxml_list_size(&ancestors));
 
     cxml_find_ancestors(root, "<relationship>/$text|='abc'/", NULL);
-    CHECK_EQ(cxml_list_size(&ancestors), NULL);
+    CHECK_NULL(cxml_list_size(&ancestors));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_descendants){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<noodles>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     cxml_list descendants = new_cxml_list();
     char *ancestor_names_v[] = {
@@ -515,18 +494,17 @@ TEST(cxqapi, cxml_descendants){
     cxml_list_free(&descendants);
 
     cxml_descendants(NULL, &descendants);
-    CHECK_EQ(cxml_list_size(&descendants), NULL);
+    CHECK_NULL(cxml_list_size(&descendants));
 
     cxml_descendants(elem, NULL);
-    CHECK_EQ(cxml_list_size(&descendants), NULL);
+    CHECK_NULL(cxml_list_size(&descendants));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_descendants){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list descendants = new_cxml_list();
     char *ancestor_names_v[] = {
@@ -550,84 +528,79 @@ TEST(cxqapi, cxml_find_descendants){
     }
     cxml_list_free(&descendants);
     cxml_find_descendants(NULL, "<noodles>/", &descendants);
-    CHECK_EQ(cxml_list_size(&descendants), NULL);
+    CHECK_NULL(cxml_list_size(&descendants));
 
     cxml_find_descendants(root, NULL, &descendants);
-    CHECK_EQ(cxml_list_size(&descendants), NULL);
+    CHECK_NULL(cxml_list_size(&descendants));
 
     cxml_find_descendants(root, "<noodles>/", NULL);
-    CHECK_EQ(cxml_list_size(&descendants), NULL);
+    CHECK_NULL(cxml_list_size(&descendants));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_next_sibling){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<name>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "name", "name"), 1);
 
     cxml_element_node *next = cxml_next_sibling(elem);
-    CHECK_NE(next, NULL);
+    CHECK_NOT_NULL(next);
     CHECK_EQ(name_asserts(&next->name, NULL, "color", "color"), 1);
-    CHECK_EQ(next->namespace, NULL);
+    CHECK_NULL(next->namespace);
 
-    CHECK_EQ(cxml_next_sibling(NULL), NULL);
+    CHECK_NULL(cxml_next_sibling(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_previous_sibling){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<br>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(name_asserts(&elem->name, NULL, "br", "br"), 1);
 
     cxml_text_node *previous = cxml_previous_sibling(elem);
-    CHECK_NE(previous, NULL);
+    CHECK_NOT_NULL(previous);
     CHECK_TRUE(cxml_string_raw_equals(&previous->value, "red"));
-    CHECK_EQ(cxml_previous_sibling(NULL), NULL);
+    CHECK_NULL(cxml_previous_sibling(NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_next_sibling){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *next = cxml_find_next_sibling(root, "<color>/");
-    CHECK_NE(next, NULL);
+    CHECK_NOT_NULL(next);
     CHECK_EQ(name_asserts(&next->name, NULL, "shape", "shape"), 1);
-    CHECK_EQ(next->namespace, NULL);
+    CHECK_NULL(next->namespace);
 
-    CHECK_EQ(cxml_find_next_sibling(root, NULL), NULL);
-    CHECK_EQ(cxml_find_next_sibling(NULL, "<br>/"), NULL);
+    CHECK_NULL(cxml_find_next_sibling(root, NULL));
+    CHECK_NULL(cxml_find_next_sibling(NULL, "<br>/"));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_previous_sibling){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *previous = cxml_find_previous_sibling(root, "<shape>/");
-    CHECK_NE(previous, NULL);
+    CHECK_NOT_NULL(previous);
     CHECK_EQ(name_asserts(&previous->name, NULL, "color", "color"), 1);
-    CHECK_EQ(previous->namespace, NULL);
+    CHECK_NULL(previous->namespace);
 
-    CHECK_EQ(cxml_find_next_sibling(root, NULL), NULL);
-    CHECK_EQ(cxml_find_next_sibling(NULL, "<br>/"), NULL);
+    CHECK_NULL(cxml_find_next_sibling(root, NULL));
+    CHECK_NULL(cxml_find_next_sibling(NULL, "<br>/"));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_siblings){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = cxml_find(root, "<seasoning>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     cxml_list siblings = new_cxml_list();
     char *sibling_names_v[] = {
@@ -651,18 +624,17 @@ TEST(cxqapi, cxml_siblings){
     cxml_list_free(&siblings);
 
     cxml_siblings(NULL, &siblings);
-    CHECK_EQ(cxml_list_size(&siblings), NULL);
+    CHECK_NULL(cxml_list_size(&siblings));
 
     cxml_siblings(elem, NULL);
-    CHECK_EQ(cxml_list_size(&siblings), NULL);
+    CHECK_NULL(cxml_list_size(&siblings));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_siblings){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list siblings = new_cxml_list();
     char *sibling_names_v[] = {
@@ -685,43 +657,41 @@ TEST(cxqapi, cxml_find_siblings){
     cxml_list_free(&siblings);
 
     cxml_siblings(NULL, &siblings);
-    CHECK_EQ(cxml_list_size(&siblings), NULL);
+    CHECK_NULL(cxml_list_size(&siblings));
 
     cxml_find_siblings(root, NULL, &siblings);
-    CHECK_EQ(cxml_list_size(&siblings), NULL);
+    CHECK_NULL(cxml_list_size(&siblings));
 
     cxml_find_siblings(NULL, "<seasoning>/", &siblings);
-    CHECK_EQ(cxml_list_size(&siblings), NULL);
+    CHECK_NULL(cxml_list_size(&siblings));
 
     cxml_find_siblings(root, "<seasoning>/", NULL);
-    CHECK_EQ(cxml_list_size(&siblings), NULL);
+    CHECK_NULL(cxml_list_size(&siblings));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_get_attribute){
-    deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *elem = cxml_get_root_element(root);
     cxml_attribute_node *attr = cxml_get_attribute(elem, "fish");
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     CHECK_EQ(name_asserts(&attr->name, NULL, "fish", "fish"), 1);
     CHECK_TRUE(cxml_string_raw_equals(&attr->value, "mackerel"));
 
-    CHECK_EQ(cxml_get_attribute(NULL, "fish"), NULL);
-    CHECK_EQ(cxml_get_attribute(elem, NULL), NULL);
+    CHECK_NULL(cxml_get_attribute(NULL, "fish"));
+    CHECK_NULL(cxml_get_attribute(elem, NULL));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_attribute){
-    deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_attribute_node *attr = cxml_find_attribute(root, "<mod>/", "section");
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     CHECK_EQ(name_asserts(&attr->name, NULL, "section", "section"), 1);
     CHECK_TRUE(cxml_string_raw_equals(&attr->value, "converter"));
 
@@ -734,12 +704,11 @@ TEST(cxqapi, cxml_find_attribute){
 }
 
 TEST(cxqapi, cxml_attributes){
-    deb()
     cxml_root_node *root = get_root("wf_xml_8.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *elem = cxml_find(root, "<or>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     cxml_list attributes = new_cxml_list();
     cxml_attributes(elem, &attributes);
@@ -761,18 +730,17 @@ TEST(cxqapi, cxml_attributes){
     cxml_list_free(&attributes);
 
     cxml_attributes(NULL, &attributes);
-    CHECK_EQ(cxml_list_size(&attributes), NULL);
+    CHECK_NULL(cxml_list_size(&attributes));
 
     cxml_attributes(elem, NULL);
-    CHECK_EQ(cxml_list_size(&attributes), NULL);
+    CHECK_NULL(cxml_list_size(&attributes));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_find_attributes){
-    deb()
     cxml_root_node *root = get_root("wf_xml_8.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list attributes = new_cxml_list();
     cxml_find_attributes(root, "<or>/", &attributes);
@@ -794,27 +762,26 @@ TEST(cxqapi, cxml_find_attributes){
     cxml_list_free(&attributes);
 
     cxml_find_attributes(root, NULL, &attributes);
-    CHECK_EQ(cxml_list_size(&attributes), NULL);
+    CHECK_NULL(cxml_list_size(&attributes));
 
     cxml_find_attributes(root, "<and>/", NULL);
-    CHECK_EQ(cxml_list_size(&attributes), NULL);
+    CHECK_NULL(cxml_list_size(&attributes));
 
     cxml_find_attributes(NULL, "<div>/", &attributes);
-    CHECK_EQ(cxml_list_size(&attributes), NULL);
+    CHECK_NULL(cxml_list_size(&attributes));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_text_as_cxml_string){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     //text
     cxml_string text = new_cxml_string_s("indomiemaggimr-chefsuper-pack");
     cxml_string *str = cxml_text_as_cxml_string(root, NULL);
     CHECK_TRUE(cxml_string_equals(&text, str));
-    CHECK_EQ(cxml_text(NULL, NULL), NULL);
+    CHECK_NULL(cxml_text(NULL, NULL));
     cxml_string_free(&text);
     cxml_string_free(str);
     FREE(str);
@@ -840,21 +807,20 @@ TEST(cxqapi, cxml_text_as_cxml_string){
     cxml_string_free(str);
     FREE(str);
 
-    CHECK_EQ(cxml_text_as_cxml_string(NULL, "foobar"), NULL);
+    CHECK_NULL(cxml_text_as_cxml_string(NULL, "foobar"));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_text){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     //text
     cxml_string text = new_cxml_string_s("appleredblueroundish");
     char *str = cxml_text(root, NULL);
     CHECK_TRUE(cxml_string_lraw_equals(&text, str, strlen(str)));
-    CHECK_EQ(cxml_text(NULL, NULL), NULL);
+    CHECK_NULL(cxml_text(NULL, NULL));
     cxml_string_free(&text);
     FREE(str);
 
@@ -876,15 +842,14 @@ TEST(cxqapi, cxml_text){
     cxml_string_free(&text);
     FREE(str);
 
-    CHECK_EQ(cxml_text(NULL, "foobar"), NULL);
+    CHECK_NULL(cxml_text(NULL, "foobar"));
 
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_get_name){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // returned name must be freed by us
     char *name = cxml_get_name(root);
     // default document name is XMLDocument
@@ -902,7 +867,6 @@ TEST(cxqapi, cxml_get_name){
 }
 
 TEST(cxqapi, cxml_get_bound_namespace){
-    deb()
     /*
      * "<f:table xmlns:f=\"https://www.w3schools.com/furniture\">\n"
 "        <f:name>African Coffee Table<![CDATA[Testing cdata stuff]]></f:name>\n"
@@ -911,18 +875,18 @@ TEST(cxqapi, cxml_get_bound_namespace){
 " </f:table>";
      */
     cxml_root_node *root = get_root("wf_xml_4.xml", true);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *elem = cxml_find(root, "<f:width>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     cxml_element_node *root_elem = root->root_element; // 'f:table'
-    CHECK_NE(root_elem, NULL);
-    CHECK_NE(root_elem->namespaces, NULL);
+    CHECK_NOT_NULL(root_elem);
+    CHECK_NOT_NULL(root_elem->namespaces);
 
     // obtain the namespace the element elem is bound to
     cxml_namespace_node *ns = cxml_get_bound_namespace(elem);
-    CHECK_NE(ns, NULL);
+    CHECK_NOT_NULL(ns);
 
     // find the namespace node from where it was declared in its parent element (root_elem)
     cxml_namespace_node *target = cxml_list_get(root_elem->namespaces, 0);
@@ -932,16 +896,15 @@ TEST(cxqapi, cxml_get_bound_namespace){
     CHECK_TRUE(cxml_string_equals(&ns->prefix, &target->prefix));
     CHECK_TRUE(cxml_string_equals(&ns->uri, &target->uri));
 
-    CHECK_EQ(cxml_get_bound_namespace(NULL), NULL);
+    CHECK_NULL(cxml_get_bound_namespace(NULL));
 
     cxml_destroy(root);
 
 }
 
 TEST(cxqapi, cxml_get_comments){
-    deb()
     cxml_root_node *root = get_root("wf_xml_3.xml", false);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list comments = new_cxml_list();
     cxml_get_comments(root, &comments, 1);
@@ -959,7 +922,7 @@ TEST(cxqapi, cxml_get_comments){
     cxml_list_free(&comments);
 
     cxml_get_comments(root, &comments, 0);
-    CHECK_EQ(cxml_list_size(&comments), NULL);
+    CHECK_NULL(cxml_list_size(&comments));
 
     cxml_element_node *elem = cxml_find(root, "<entry>/");
     cxml_get_comments(elem, &comments, 1);
@@ -968,10 +931,10 @@ TEST(cxqapi, cxml_get_comments){
     cxml_list_free(&comments);
 
     cxml_get_comments(root, NULL, 0);
-    CHECK_EQ(cxml_list_size(&comments), NULL);
+    CHECK_NULL(cxml_list_size(&comments));
 
     cxml_get_comments(NULL, &comments, 0);
-    CHECK_EQ(cxml_list_size(&comments), NULL);
+    CHECK_NULL(cxml_list_size(&comments));
 
     cxml_destroy(root);
 }
@@ -984,19 +947,17 @@ TEST(cxqapi, cxml_get_comments){
  */
 /**General**/
 TEST(cxqapi, cxml_create_node){
-    deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_EQ(elem->_type, CXML_ELEM_NODE);
 
-    CHECK_EQ(cxml_create_node(100), NULL);
+    CHECK_NULL(cxml_create_node(100));
     cxml_destroy(elem);
 }
 
 TEST(cxqapi, cxml_set_name){
-    deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     // cannot use xmlns as prefix name of element
     CHECK_FALSE(cxml_set_name(elem, "xmlns", "bar"));
@@ -1021,7 +982,7 @@ TEST(cxqapi, cxml_set_name){
 
 
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
 
     CHECK_TRUE(cxml_set_name(attr, "foo", "bar"));;
     CHECK_EQ(name_asserts(&attr->name, "foo", "bar", "foo:bar"), 1);
@@ -1060,37 +1021,36 @@ TEST(cxqapi, cxml_set_name){
 }
 
 TEST(cxqapi, cxml_add_child){
-    deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_TRUE(cxml_set_name(elem, NULL, "abc"));
     CHECK_EQ(name_asserts(&elem->name, NULL, "abc", "abc"), 1);
-    CHECK_EQ(cxml_list_size(&elem->children), NULL);
+    CHECK_NULL(cxml_list_size(&elem->children));
     CHECK_FALSE(elem->has_text);
     CHECK_FALSE(elem->has_child);
 
     char *got = cxml_element_to_rstring(elem);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     char *expected = "<abc/>";
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     FREE(got);
     got = NULL;
 
     cxml_text_node *text = cxml_create_node(CXML_TEXT_NODE);
-    CHECK_NE(text, NULL);
-    CHECK_EQ(text->parent, NULL);
+    CHECK_NOT_NULL(text);
+    CHECK_NULL(text->parent);
 
     cxml_set_text_value(text, "this is some text", false);
     CHECK_TRUE(cxml_add_child(elem, text));
-    CHECK_NE(text->parent, NULL);
-    CHECK_EQ(text->number_value.dec_val, NULL);
+    CHECK_NOT_NULL(text->parent);
+    CHECK_NULL(text->number_value.dec_val);
     CHECK_EQ(text->parent, elem);
     CHECK_TRUE(elem->has_child);
     CHECK_TRUE(elem->has_text);
     CHECK_EQ(cxml_list_size(&elem->children), 1);
 
     got = cxml_element_to_rstring(elem);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     expected = "<abc>\n"
                "  this is some text\n"
                "</abc>";
@@ -1107,15 +1067,14 @@ TEST(cxqapi, cxml_add_child){
 }
 
 TEST(cxqapi, cxml_set_namespace){
-    deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     CHECK_TRUE(cxml_set_name(elem, "pp", "element"));
     CHECK_TRUE(name_asserts(&elem->name, "pp", "element", "pp:element"));
     // the element becomes namespaced when it is bound to an actual namespace object
     CHECK_FALSE(elem->is_namespaced);
-    CHECK_EQ(elem->namespace, NULL);
+    CHECK_NULL(elem->namespace);
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
-    CHECK_NE(ns, NULL);
+    CHECK_NOT_NULL(ns);
     char *pref = "prefix";
     char *uri = "http://not-a-uri.com/";
     // cannot set xmlns as namespace prefix
@@ -1137,7 +1096,7 @@ TEST(cxqapi, cxml_set_namespace){
     CHECK_TRUE(cxml_set_name(elem, "prefix", NULL));
 
     CHECK_TRUE(cxml_set_namespace(elem, ns));
-    CHECK_NE(elem->namespace, NULL);
+    CHECK_NOT_NULL(elem->namespace);
     // now its bound
     CHECK_TRUE(elem->is_namespaced);
     CHECK_EQ(elem->namespace, ns);
@@ -1148,7 +1107,7 @@ TEST(cxqapi, cxml_set_namespace){
     cxml_destroy(elem);
 
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     // fails, no prefix
     CHECK_FALSE(cxml_set_namespace(attr, ns));
 
@@ -1162,7 +1121,7 @@ TEST(cxqapi, cxml_set_namespace){
     CHECK_TRUE(name_asserts(&attr->name, "prefix", "attribute", "prefix:attribute"));
     // succeeds
     CHECK_TRUE(cxml_set_namespace(attr, ns));
-    CHECK_NE(attr->namespace, NULL);
+    CHECK_NOT_NULL(attr->namespace);
     CHECK_EQ(attr->namespace, ns);
 
     cxml_destroy(attr);
@@ -1172,18 +1131,17 @@ TEST(cxqapi, cxml_set_namespace){
 }
 
 TEST(cxqapi, cxml_add_namespace){
-    deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_TRUE(cxml_set_name(elem, NULL, "element"));
-    CHECK_EQ(elem->namespaces, NULL);
+    CHECK_NULL(elem->namespaces);
     char *str = cxml_element_to_rstring(elem);
-    CHECK_NE(str, NULL);
+    CHECK_NOT_NULL(str);
     CHECK_TRUE(cxml_string_llraw_equals(str, "<element/>", strlen(str), 10));
     FREE(str);
 
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
-    CHECK_NE(ns, NULL);
+    CHECK_NOT_NULL(ns);
     char *pref = "xml";
     char *uri = "http://www.w3.org/XML/1998/namespace";
     // fails: this uri belongs to xmlns
@@ -1192,10 +1150,10 @@ TEST(cxqapi, cxml_add_namespace){
     CHECK_TRUE(cxml_set_namespace_data(ns, pref, uri));
     // elem now owns `ns`
     CHECK_TRUE(cxml_add_namespace(elem, ns));
-    CHECK_NE(elem->namespaces, NULL);
+    CHECK_NOT_NULL(elem->namespaces);
     CHECK_EQ(cxml_list_size(elem->namespaces), 1);
     str = cxml_element_to_rstring(elem);
-    CHECK_NE(str, NULL);
+    CHECK_NOT_NULL(str);
     // global namespaces are not shown
     CHECK_TRUE(cxml_string_llraw_equals(str, "<element/>", strlen(str), 10));
     // cannot set namespace of `elem` to `ns` -> 'xml' since `elem` doesn't have this prefix,
@@ -1215,17 +1173,16 @@ TEST(cxqapi, cxml_add_namespace){
 }
 
 TEST(cxqapi, cxml_add_attribute){
-    deb()
     // "<fruit a=\"boy\"><name>apple</name></fruit>"
     cxml_root_node *root = cxml_load_string(wf_xml_09);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     cxml_element_node *elem = root->root_element;
     CHECK_EQ(cxml_table_size(elem->attributes), 1);
 
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE),
                         *attr2 = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
-    CHECK_NE(attr2, NULL);
+    CHECK_NOT_NULL(attr);
+    CHECK_NOT_NULL(attr2);
     cxml_set_attribute_data(attr, NULL, "soup", "egusi");
     cxml_set_attribute_data(attr2, "xml", "fish", "coté");
 
@@ -1233,7 +1190,7 @@ TEST(cxqapi, cxml_add_attribute){
     CHECK_TRUE(cxml_add_attribute(elem, attr2));
     CHECK_EQ(cxml_table_size(elem->attributes), 3);
     char *got = cxml_element_to_rstring(elem);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     char *expected = "<fruit a=\"boy\" soup=\"egusi\" xml:fish=\"coté\">\n"
                      "  <name>\n"
                      "    apple\n"
@@ -1249,9 +1206,8 @@ TEST(cxqapi, cxml_add_attribute){
 }
 
 TEST(cxqapi, cxml_set_attribute_value){
-    deb()
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     CHECK_TRUE(cxml_set_attribute_value(attr, "sweet"));
     CHECK_TRUE(cxml_string_lraw_equals(&attr->value, "sweet", 5));
     cxml_string_free(&attr->value);
@@ -1266,9 +1222,8 @@ TEST(cxqapi, cxml_set_attribute_value){
 }
 
 TEST(cxqapi, cxml_set_attribute_name){
-    deb()
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     CHECK_TRUE(cxml_set_attribute_name(attr, NULL, "sweet"));
     CHECK_TRUE(cxml_string_lraw_equals(&attr->name.qname, "sweet", 5));
     char *str = cxml_attribute_to_rstring(attr);
@@ -1290,9 +1245,8 @@ TEST(cxqapi, cxml_set_attribute_name){
 }
 
 TEST(cxqapi, cxml_set_attribute_data){
-    deb()
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     CHECK_TRUE(cxml_set_attribute_data(attr, "xml", "food", "rice"));
     char *str = cxml_attribute_to_rstring(attr);
     CHECK_TRUE(cxml_string_llraw_equals(str, "xml:food=\"rice\"", strlen(str), 15));
@@ -1306,9 +1260,8 @@ TEST(cxqapi, cxml_set_attribute_data){
 }
 
 TEST(cxqapi, cxml_set_text_value){
-    deb()
     cxml_text_node *text = cxml_create_node(CXML_TEXT_NODE);
-    CHECK_NE(text, NULL);
+    CHECK_NOT_NULL(text);
     CHECK_TRUE(cxml_set_text_value(text, "this is some text", false));
     CHECK_TRUE(cxml_set_text_value(text, "this is some <![CDATA[stuffy]]>", true));
     CHECK_TRUE(cxml_string_raw_equals(&text->value, "this is some <![CDATA[stuffy]]>"));
@@ -1320,9 +1273,8 @@ TEST(cxqapi, cxml_set_text_value){
 }
 
 TEST(cxqapi, cxml_set_comment_value){
-    deb()
     cxml_comment_node *comment = cxml_create_node(CXML_COMM_NODE);
-    CHECK_NE(comment, NULL);
+    CHECK_NOT_NULL(comment);
     CHECK_TRUE(cxml_set_comment_value(comment, "this is some text"));
     CHECK_FALSE(cxml_set_comment_value(NULL, "this is some text"));
     CHECK_FALSE(cxml_set_comment_value(comment, NULL));
@@ -1330,9 +1282,8 @@ TEST(cxqapi, cxml_set_comment_value){
 }
 
 TEST(cxqapi, cxml_set_pi_target){
-    deb()
     cxml_pi_node *pi = cxml_create_node(CXML_PI_NODE);
-    CHECK_NE(pi, NULL);
+    CHECK_NOT_NULL(pi);
     CHECK_TRUE(cxml_set_pi_target(pi, "abc"));
     CHECK_TRUE(cxml_string_lraw_equals(&pi->target, "abc", 3));
 
@@ -1343,9 +1294,8 @@ TEST(cxqapi, cxml_set_pi_target){
 }
 
 TEST(cxqapi, cxml_set_pi_value){
-    deb()
     cxml_pi_node *pi = cxml_create_node(CXML_PI_NODE);
-    CHECK_NE(pi, NULL);
+    CHECK_NOT_NULL(pi);
     CHECK_TRUE(cxml_set_pi_value(pi, "abc"));
     CHECK_TRUE(cxml_string_lraw_equals(&pi->value, "abc", 3));
 
@@ -1355,9 +1305,8 @@ TEST(cxqapi, cxml_set_pi_value){
 }
 
 TEST(cxqapi, cxml_set_pi_data){
-    deb()
     cxml_pi_node *pi = cxml_create_node(CXML_PI_NODE);
-    CHECK_NE(pi, NULL);
+    CHECK_NOT_NULL(pi);
     CHECK_TRUE(cxml_set_pi_data(pi, "abc", "some value"));
     CHECK_TRUE(cxml_string_lraw_equals(&pi->target, "abc", 3));
     CHECK_TRUE(cxml_string_lraw_equals(&pi->value, "some value", 10));
@@ -1370,9 +1319,8 @@ TEST(cxqapi, cxml_set_pi_data){
 }
 
 TEST(cxqapi, cxml_set_namespace_prefix){
-    deb()
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
-    CHECK_NE(ns, NULL);
+    CHECK_NOT_NULL(ns);
     CHECK_TRUE(cxml_set_namespace_prefix(ns, "abc"));
     CHECK_TRUE(cxml_string_lraw_equals(&ns->prefix, "abc", 3));
 
@@ -1383,9 +1331,8 @@ TEST(cxqapi, cxml_set_namespace_prefix){
 }
 
 TEST(cxqapi, cxml_set_namespace_uri){
-    deb()
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
-    CHECK_NE(ns, NULL);
+    CHECK_NOT_NULL(ns);
     CHECK_TRUE(cxml_set_namespace_uri(ns, "abc"));
     CHECK_TRUE(cxml_string_lraw_equals(&ns->uri, "abc", 3));
 
@@ -1399,9 +1346,8 @@ TEST(cxqapi, cxml_set_namespace_uri){
 }
 
 TEST(cxqapi, cxml_set_namespace_data){
-    deb()
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
-    CHECK_NE(ns, NULL);
+    CHECK_NOT_NULL(ns);
     CHECK_TRUE(cxml_set_namespace_data(ns, "abc", "some value"));
     CHECK_TRUE(cxml_string_lraw_equals(&ns->prefix, "abc", 3));
     CHECK_TRUE(cxml_string_lraw_equals(&ns->uri, "some value", 10));
@@ -1418,9 +1364,8 @@ TEST(cxqapi, cxml_set_namespace_data){
 }
 
 TEST(cxqapi, cxml_set_root_node_name){
-    deb()
     cxml_root_node *root = cxml_create_node(CXML_ROOT_NODE);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(cxml_set_root_node_name(root, "doc"));
     CHECK_TRUE(cxml_string_lraw_equals(&root->name, "doc", 3));
 
@@ -1430,10 +1375,9 @@ TEST(cxqapi, cxml_set_root_node_name){
 }
 
 TEST(cxqapi, cxml_set_root_element){
-    deb()
     cxml_root_node *root = cxml_create_node(CXML_ROOT_NODE);
     CHECK_FALSE(root->has_child);
-    CHECK_EQ(root->root_element, NULL);
+    CHECK_NULL(root->root_element);
 
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     CHECK_TRUE(cxml_set_root_element(root, elem));
@@ -1460,12 +1404,11 @@ TEST(cxqapi, cxml_set_root_element){
  */
 
 TEST(cxqapi, cxml_insert_before){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // create an element to be inserted
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
     CHECK_FALSE(elem->has_parent);
     CHECK_TRUE(cxml_set_name(elem, "xml", "bar"));
 
@@ -1474,7 +1417,7 @@ TEST(cxqapi, cxml_insert_before){
     // insert `elem` before `name`
     CHECK_TRUE(cxml_insert_before(name, elem));
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     char *expected = "<fruit>\n"
                      "  <xml:bar/>\n"
                      "  <name>\n"
@@ -1492,13 +1435,12 @@ TEST(cxqapi, cxml_insert_before){
 }
 
 TEST(cxqapi, cxml_insert_after){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // create a comment to be inserted
     cxml_comment_node *comment = cxml_create_node(CXML_COMM_NODE);
-    CHECK_NE(comment, NULL);
-    CHECK_EQ(comment->parent, NULL);
+    CHECK_NOT_NULL(comment);
+    CHECK_NULL(comment->parent);
     CHECK_TRUE(cxml_set_comment_value(comment, "this is a simple comment"));
 
     // find a place we want to insert `comment` after
@@ -1508,7 +1450,7 @@ TEST(cxqapi, cxml_insert_after){
     // insert `comment` after `text`
     CHECK_TRUE(cxml_insert_after(text, comment));
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     char *expected = "<fruit>\n"
                      "  <name>\n"
                      "    apple\n"
@@ -1517,7 +1459,7 @@ TEST(cxqapi, cxml_insert_after){
                      "</fruit>";
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(comment->parent, name);
-    CHECK_NE(comment->parent, NULL);
+    CHECK_NOT_NULL(comment->parent);
     CHECK_TRUE(name->has_comment);
     CHECK_EQ(cxml_list_size(&name->children), 2);
 
@@ -1535,14 +1477,13 @@ TEST(cxqapi, cxml_insert_after){
  */
 
 int element_repr_asserts(cxml_root_node *root){
-    deb()
     char *expected = "<fruit>\n"
                      "  <name>\n"
                      "    apple\n"
                      "  </name>\n"
                      "</fruit>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     CHECK_TRUE(root->root_element->has_child);
@@ -1552,9 +1493,8 @@ int element_repr_asserts(cxml_root_node *root){
 }
 
 TEST(cxqapi, cxml_delete_element){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(element_repr_asserts(root));
 
     cxml_element_node *name = cxml_find(root, "<name>/");
@@ -1562,7 +1502,7 @@ TEST(cxqapi, cxml_delete_element){
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1573,8 +1513,8 @@ TEST(cxqapi, cxml_delete_element){
     root = cxml_load_string(wf_xml_7);
     cxml_element_node *color = cxml_find(root, "<color>/");
     cxml_element_node *shape = cxml_find(root, "<shape>/");
-    CHECK_NE(color, NULL);
-    CHECK_NE(shape, NULL);
+    CHECK_NOT_NULL(color);
+    CHECK_NOT_NULL(shape);
     CHECK_EQ(cxml_list_size(&root->root_element->children), 3);
 
     CHECK_TRUE(cxml_delete_element(color));
@@ -1585,7 +1525,7 @@ TEST(cxqapi, cxml_delete_element){
                "  </name>\n"
                "</fruit>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -1595,9 +1535,8 @@ TEST(cxqapi, cxml_delete_element){
 }
 
 TEST(cxqapi, cxml_drop_element){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(element_repr_asserts(root));
 
     cxml_element_node *name = cxml_find(root, "<name>/");
@@ -1605,7 +1544,7 @@ TEST(cxqapi, cxml_drop_element){
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1619,8 +1558,8 @@ TEST(cxqapi, cxml_drop_element){
     root = cxml_load_string(wf_xml_7);
     cxml_element_node *color = cxml_find(root, "<color>/");
     cxml_element_node *shape = cxml_find(root, "<shape>/");
-    CHECK_NE(color, NULL);
-    CHECK_NE(shape, NULL);
+    CHECK_NOT_NULL(color);
+    CHECK_NOT_NULL(shape);
     CHECK_EQ(cxml_list_size(&root->root_element->children), 3);
 
     CHECK_TRUE(cxml_drop_element(color));
@@ -1631,7 +1570,7 @@ TEST(cxqapi, cxml_drop_element){
                "  </name>\n"
                "</fruit>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -1645,18 +1584,17 @@ TEST(cxqapi, cxml_drop_element){
 }
 
 TEST(cxqapi, cxml_drop_element_by_query){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(element_repr_asserts(root));
 
     cxml_element_node *name = cxml_drop_element_by_query(root, "<name>/");
-    CHECK_NE(name, NULL);
+    CHECK_NOT_NULL(name);
 
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1672,15 +1610,15 @@ TEST(cxqapi, cxml_drop_element_by_query){
 
     cxml_element_node *color = cxml_drop_element_by_query(root, "<color>/");
     cxml_element_node *shape = cxml_drop_element_by_query(root, "<shape>/");
-    CHECK_NE(color, NULL);
-    CHECK_NE(shape, NULL);
+    CHECK_NOT_NULL(color);
+    CHECK_NOT_NULL(shape);
     expected = "<fruit>\n"
                "  <name>\n"
                "    apple\n"
                "  </name>\n"
                "</fruit>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -1696,9 +1634,8 @@ TEST(cxqapi, cxml_drop_element_by_query){
 }
 
 TEST(cxqapi, cxml_delete_elements){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(element_repr_asserts(root));
 
     // delete all elements in the root element
@@ -1707,7 +1644,7 @@ TEST(cxqapi, cxml_delete_elements){
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1720,8 +1657,8 @@ TEST(cxqapi, cxml_delete_elements){
 
     cxml_element_node *color = cxml_find(root, "<color>/");
     cxml_element_node *shape = cxml_find(root, "<shape>/");
-    CHECK_NE(color, NULL);
-    CHECK_NE(shape, NULL);
+    CHECK_NOT_NULL(color);
+    CHECK_NOT_NULL(shape);
     // `br` gets deleted
     CHECK(cxml_delete_elements(color));
     // there are no elements in `shape`
@@ -1739,7 +1676,7 @@ TEST(cxqapi, cxml_delete_elements){
                "  </shape>\n"
                "</fruit>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 3);
     FREE(got);
@@ -1749,9 +1686,8 @@ TEST(cxqapi, cxml_delete_elements){
 }
 
 TEST(cxqapi, cxml_delete_elements_by_query){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_10);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // "<fruit><name>apple</name><name>banana</name></fruit>"
     char *got = cxml_element_to_rstring(root->root_element);
     char *expected = "<fruit>\n"
@@ -1762,7 +1698,7 @@ TEST(cxqapi, cxml_delete_elements_by_query){
                      "    banana\n"
                      "  </name>\n"
                      "</fruit>";
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 2);
     CHECK_TRUE(root->root_element->has_child);
@@ -1774,9 +1710,9 @@ TEST(cxqapi, cxml_delete_elements_by_query){
 
     expected = "<fruit/>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1796,7 +1732,7 @@ TEST(cxqapi, cxml_delete_elements_by_query){
                "  </name>\n"
                "</fruit>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -1808,9 +1744,8 @@ TEST(cxqapi, cxml_delete_elements_by_query){
 }
 
 TEST(cxqapi, cxml_drop_elements){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(element_repr_asserts(root));
 
     cxml_list list = new_cxml_list();
@@ -1821,7 +1756,7 @@ TEST(cxqapi, cxml_drop_elements){
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1834,10 +1769,9 @@ TEST(cxqapi, cxml_drop_elements){
 }
 
 TEST(cxqapi, cxml_drop_elements_by_query){
-    deb()
     // "<fruit><name>apple</name><name>banana</name></fruit>"
     cxml_root_node *root = cxml_load_string(wf_xml_10);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list list = new_cxml_list();
     // drop all `name` elements in the root element
@@ -1847,7 +1781,7 @@ TEST(cxqapi, cxml_drop_elements_by_query){
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     cxml_destroy(root);
@@ -1861,13 +1795,12 @@ TEST(cxqapi, cxml_drop_elements_by_query){
 }
 
 TEST(cxqapi, cxml_delete_comment){
-    deb()
     // <fruit><!--some comment--><name>apple</name><!--another comment--></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_11);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_comment_node *comm = cxml_first_child(root->root_element);
-    CHECK_NE(comm, NULL);
+    CHECK_NOT_NULL(comm);
     CHECK_TRUE(cxml_delete_comment(comm));
     char *expected = "<fruit>\n"
                      "  <name>\n"
@@ -1886,13 +1819,12 @@ TEST(cxqapi, cxml_delete_comment){
 }
 
 TEST(cxqapi, cxml_drop_comment){
-    deb()
     // <fruit><!--some comment--><name>apple</name><!--another comment--></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_11);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_comment_node *comm = cxml_first_child(root->root_element);
-    CHECK_NE(comm, NULL);
+    CHECK_NOT_NULL(comm);
     CHECK_TRUE(cxml_drop_comment(comm));
     char *expected = "<fruit>\n"
                      "  <name>\n"
@@ -1913,20 +1845,19 @@ TEST(cxqapi, cxml_drop_comment){
 }
 
 TEST(cxqapi, cxml_delete_text){
-    deb()
     // <fruit><name>apple</name></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *name = cxml_find(root, "<name>/");
-    CHECK_NE(name, NULL);
+    CHECK_NOT_NULL(name);
     CHECK_EQ(cxml_list_size(&name->children), 1);
     CHECK_FALSE(name->is_self_enclosing);
     CHECK_TRUE(name->has_text);
 
     CHECK_TRUE(cxml_delete_text(cxml_first_child(name)));
 
-    CHECK_EQ(cxml_list_size(&name->children), NULL);
+    CHECK_NULL(cxml_list_size(&name->children));
     CHECK_TRUE(name->is_self_enclosing);
     CHECK_FALSE(name->has_text);
     CHECK_FALSE(name->has_child);
@@ -1943,13 +1874,12 @@ TEST(cxqapi, cxml_delete_text){
 }
 
 TEST(cxqapi, cxml_drop_text){
-    deb()
     // <fruit><name>apple</name></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_9);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_element_node *name = cxml_find(root, "<name>/");
-    CHECK_NE(name, NULL);
+    CHECK_NOT_NULL(name);
     CHECK_EQ(cxml_list_size(&name->children), 1);
     CHECK_FALSE(name->is_self_enclosing);
     CHECK_TRUE(name->has_text);
@@ -1957,7 +1887,7 @@ TEST(cxqapi, cxml_drop_text){
     cxml_text_node *text = cxml_first_child(name);
     CHECK_TRUE(cxml_drop_text(text));
 
-    CHECK_EQ(cxml_list_size(&name->children), NULL);
+    CHECK_NULL(cxml_list_size(&name->children));
     CHECK_TRUE(name->is_self_enclosing);
     CHECK_FALSE(name->has_text);
     CHECK_FALSE(name->has_child);
@@ -1978,10 +1908,9 @@ TEST(cxqapi, cxml_drop_text){
 }
 
 TEST(cxqapi, cxml_delete_attribute){
-    deb()
     // <x:fruit one="1" two="2" xmlns:x="uri"></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_12);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_table_size(root->root_element->attributes), 2);
 
 
@@ -1989,7 +1918,7 @@ TEST(cxqapi, cxml_delete_attribute){
     CHECK_TRUE(cxml_delete_attribute(attr));
     char *expected = "<x:fruit two=\"2\" xmlns:x=\"uri\"/>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_table_size(root->root_element->attributes), 1);
     FREE(got);
@@ -1999,17 +1928,16 @@ TEST(cxqapi, cxml_delete_attribute){
 }
 
 TEST(cxqapi, cxml_drop_attribute){
-    deb()
     // <x:fruit one="1" two="2" xmlns:x="uri"></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_12);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_table_size(root->root_element->attributes), 2);
 
     cxml_attribute_node *attr = cxml_get_attribute(root->root_element, "two");
     CHECK_TRUE(cxml_drop_attribute(attr));
     char *expected = "<x:fruit one=\"1\" xmlns:x=\"uri\"/>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_table_size(root->root_element->attributes), 1);
     FREE(got);
@@ -2020,19 +1948,18 @@ TEST(cxqapi, cxml_drop_attribute){
 
 
 TEST(cxqapi, cxml_unbound_element){
-    deb()
     // <x:fruit one="1" two="2" xmlns:x="uri"></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_12);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(root->root_element->namespaces), 1);
     CHECK_TRUE(root->root_element->is_namespaced);
 
     CHECK_TRUE(cxml_unbind_element(root->root_element));
     CHECK_FALSE(root->root_element->is_namespaced);
-    CHECK_EQ(root->root_element->namespace, NULL);
+    CHECK_NULL(root->root_element->namespace);
     char *expected = "<fruit one=\"1\" two=\"2\" xmlns:x=\"uri\"/>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(root->root_element->namespaces)) // still exists, but unboun, 1d;
     CHECK_FALSE(root->root_element->is_namespaced);
@@ -2043,24 +1970,23 @@ TEST(cxqapi, cxml_unbound_element){
 }
 
 TEST(cxqapi, cxml_unbound_attribute){
-    deb()
     // "<a xmlns:x=\"uri\"><x:fruit one=\"1\" two=\"2\" x:three=\"3\" four=\"4\"></x:fruit></a>"
     cxml_root_node *root = cxml_load_string(wf_xml_13);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(root->root_element->namespaces), 1);
 
     cxml_attribute_node *attr = cxml_get_attribute(cxml_first_child(root->root_element), "x:three");
-    CHECK_NE(attr, NULL);
-    CHECK_NE(attr->namespace, NULL);
+    CHECK_NOT_NULL(attr);
+    CHECK_NOT_NULL(attr->namespace);
     CHECK_TRUE(cxml_unbind_attribute(attr));
-    CHECK_EQ(attr->namespace, NULL);
+    CHECK_NULL(attr->namespace);
 
     char *expected = "<a xmlns:x=\"uri\">\n  <x:fruit one=\"1\" two=\"2\" three=\"3\" four=\"4\"/>\n</a>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(root->root_element->namespaces), 1);
-    CHECK_EQ(attr->namespace, NULL);
+    CHECK_NULL(attr->namespace);
     FREE(got);
 
     CHECK_FALSE(cxml_unbind_attribute(NULL));
@@ -2068,14 +1994,13 @@ TEST(cxqapi, cxml_unbound_attribute){
 }
 
 TEST(cxqapi, cxml_delete_pi){
-    deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     CHECK_EQ(cxml_list_size(&root->root_element->children), 3);
     cxml_pi_node *pi = cxml_first_child(root->root_element);
-    CHECK_NE(pi, NULL);
+    CHECK_NOT_NULL(pi);
 
     CHECK_TRUE(cxml_delete_pi(pi));
 
@@ -2087,7 +2012,7 @@ TEST(cxqapi, cxml_delete_pi){
                      "  <?pi data2?>\n"
                      "</fruit>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 2);
     FREE(got);
@@ -2097,14 +2022,13 @@ TEST(cxqapi, cxml_delete_pi){
 }
 
 TEST(cxqapi, cxml_drop_pi){
-    deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     CHECK_EQ(cxml_list_size(&root->root_element->children), 3);
     cxml_pi_node *pi = cxml_first_child(root->root_element);
-    CHECK_NE(pi, NULL);
+    CHECK_NOT_NULL(pi);
 
     CHECK_TRUE(cxml_drop_pi(pi));
 
@@ -2116,7 +2040,7 @@ TEST(cxqapi, cxml_drop_pi){
                      "  <?pi data2?>\n"
                      "</fruit>";
     char *got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 2);
     FREE(got);
@@ -2126,14 +2050,13 @@ TEST(cxqapi, cxml_drop_pi){
 }
 
 TEST(cxqapi, cxml_delete_dtd){
-    deb()
     // <!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_dtd);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 2);
 
     cxml_dtd_node *dtd = cxml_get_dtd_node(root);
-    CHECK_NE(dtd, NULL);
+    CHECK_NOT_NULL(dtd);
 
     CHECK_TRUE(cxml_delete_dtd(dtd));
 
@@ -2145,7 +2068,7 @@ TEST(cxqapi, cxml_delete_dtd){
                      "  </start>\n"
                      "</XMLDocument>";
     char *got = cxml_document_to_rstring(root);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -2156,14 +2079,13 @@ TEST(cxqapi, cxml_delete_dtd){
 }
 
 TEST(cxqapi, cxml_drop_dtd){
-    deb()
     // <!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_dtd);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 2);
 
     cxml_dtd_node *dtd = cxml_get_dtd_node(root);
-    CHECK_NE(dtd, NULL);
+    CHECK_NOT_NULL(dtd);
 
     CHECK_TRUE(cxml_drop_dtd(dtd));
 
@@ -2175,7 +2097,7 @@ TEST(cxqapi, cxml_drop_dtd){
                      "  </start>\n"
                      "</XMLDocument>";
     char *got = cxml_document_to_rstring(root);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -2186,14 +2108,13 @@ TEST(cxqapi, cxml_drop_dtd){
 }
 
 TEST(cxqapi, cxml_delete_xml_hdr){
-    deb()
     // "<?xml version=\"1.0\"?><start>testing</start>"
     cxml_root_node *root = cxml_load_string(wf_xml_xhdr);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 2);
 
     cxml_xhdr_node *xhdr = cxml_get_xml_hdr_node(root);
-    CHECK_NE(xhdr, NULL);
+    CHECK_NOT_NULL(xhdr);
 
     CHECK_TRUE(cxml_delete_xml_hdr(xhdr));
 
@@ -2205,7 +2126,7 @@ TEST(cxqapi, cxml_delete_xml_hdr){
                      "  </start>\n"
                      "</XMLDocument>";
     char *got = cxml_document_to_rstring(root);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -2216,14 +2137,13 @@ TEST(cxqapi, cxml_delete_xml_hdr){
 }
 
 TEST(cxqapi, cxml_drop_xml_hdr){
-    deb()
     // "<?xml version=\"1.0\"?><start>testing</start>"
     cxml_root_node *root = cxml_load_string(wf_xml_xhdr);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 2);
 
     cxml_xhdr_node *xhdr = cxml_get_xml_hdr_node(root);
-    CHECK_NE(xhdr, NULL);
+    CHECK_NOT_NULL(xhdr);
 
     CHECK_TRUE(cxml_drop_xml_hdr(xhdr));
 
@@ -2235,7 +2155,7 @@ TEST(cxqapi, cxml_drop_xml_hdr){
                      "  </start>\n"
                      "</XMLDocument>";
     char *got = cxml_document_to_rstring(root);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&root->root_element->children), 1);
     FREE(got);
@@ -2246,16 +2166,15 @@ TEST(cxqapi, cxml_drop_xml_hdr){
 }
 
 TEST(cxqapi, cxml_delete_descendants){
-    deb()
     // "<fruit><name>apple</name><color>red<br/>blue</color><shape>roundish</shape></fruit>"
     cxml_root_node * root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     CHECK(cxml_delete_descendants(root->root_element));
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     FREE(got);
@@ -2266,10 +2185,9 @@ TEST(cxqapi, cxml_delete_descendants){
 }
 
 TEST(cxqapi, cxml_drop_descendants){
-    deb()
     // "<fruit><name>apple</name><color>red<br/>blue</color><shape>roundish</shape></fruit>"
     cxml_root_node * root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->root_element->children), 3);
 
     cxml_list desc = new_cxml_list();
@@ -2277,7 +2195,7 @@ TEST(cxqapi, cxml_drop_descendants){
     char *expected = "<fruit/>";
     char *got = cxml_element_to_rstring(root->root_element);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->root_element->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->root_element->children));
     CHECK_FALSE(root->root_element->has_child);
     CHECK_TRUE(root->root_element->is_self_enclosing);
     CHECK_EQ(cxml_list_size(&desc), 3);
@@ -2291,14 +2209,13 @@ TEST(cxqapi, cxml_drop_descendants){
 }
 
 TEST(cxqapi, cxml_delete_parent){
-    deb()
     // "<fruit><name>apple</name><color>red<br/>blue</color><shape>roundish</shape></fruit>"
     cxml_root_node *root = cxml_load_string(wf_xml_7);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 1);
 
     cxml_element_node *elem = cxml_find(root, "<shape>/");
-    CHECK_NE(elem, NULL);
+    CHECK_NOT_NULL(elem);
 
     // the parent of the element `shape` is the root element.
     // Deleting this means the root node no longer has any child, since that
@@ -2308,7 +2225,7 @@ TEST(cxqapi, cxml_delete_parent){
     char *expected = "<XMLDocument/>";
     char *got = cxml_document_to_rstring(root);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
-    CHECK_EQ(cxml_list_size(&root->children), NULL);
+    CHECK_NULL(cxml_list_size(&root->children));
     CHECK_FALSE(root->has_child);
     FREE(got);
     cxml_destroy(root);
@@ -2336,12 +2253,11 @@ TEST(cxqapi, cxml_delete_parent){
 }
 
 TEST(cxqapi, cxml_delete_comments){
-    deb()
     // "<start><!--first comment--><begin><abc><!--maybe-->
     //  </abc><xyz>foo<!--sometimes-->bar</xyz></begin><!--first comment-->
     //  </start>"
     cxml_root_node *root = cxml_load_string(wf_xml_15);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     int comment_count = 0;
     cxml_for_each(node, &root->root_element->children){
@@ -2384,7 +2300,7 @@ TEST(cxqapi, cxml_delete_comments){
                 "  </begin>\n"
                 "</start>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_FALSE(root->root_element->has_comment);
     FREE(got);
@@ -2395,12 +2311,11 @@ TEST(cxqapi, cxml_delete_comments){
 }
 
 TEST(cxqapi, cxml_drop_comments){
-    deb()
     // "<start><!--first comment--><begin><abc><!--maybe-->
     //  </abc><xyz>foo<!--sometimes-->bar</xyz></begin><!--first comment-->
     //  </start>"
     cxml_root_node *root = cxml_load_string(wf_xml_15);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     int comment_count = 0;
     cxml_for_each(node, &root->root_element->children){
@@ -2447,7 +2362,7 @@ TEST(cxqapi, cxml_drop_comments){
                 "  </begin>\n"
                 "</start>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_FALSE(root->root_element->has_comment);
     CHECK_EQ(cxml_list_size(&comments), 4);
@@ -2457,12 +2372,11 @@ TEST(cxqapi, cxml_drop_comments){
     CHECK_FALSE(cxml_drop_comments(root, true, &comments));
     CHECK_FALSE(cxml_drop_comments(root->root_element, true, NULL));
     CHECK_FALSE(cxml_drop_comments(NULL, true, &comments));
-    CHECK_EQ(cxml_list_size(&comments), NULL);
+    CHECK_NULL(cxml_list_size(&comments));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_drop_texts){
-    deb()
     /*
      * "<thesaurus>"
      * "begin"
@@ -2480,7 +2394,7 @@ TEST(cxqapi, cxml_drop_texts){
      * "</thesaurus>"
      */
     cxml_root_node *root = cxml_load_string(wf_xml_16);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     int text_count = 0;
     cxml_for_each(node, &root->root_element->children){
@@ -2532,7 +2446,7 @@ TEST(cxqapi, cxml_drop_texts){
                 "  </entry>\n"
                 "</thesaurus>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     CHECK_EQ(cxml_list_size(&texts), 8);
     cxml_list_free(&texts);
@@ -2541,12 +2455,11 @@ TEST(cxqapi, cxml_drop_texts){
     CHECK_FALSE(cxml_drop_texts(root, true, &texts));
     CHECK_FALSE(cxml_drop_texts(root->root_element, true, NULL));
     CHECK_FALSE(cxml_drop_texts(NULL, true, &texts));
-    CHECK_EQ(cxml_list_size(&texts), NULL);
+    CHECK_NULL(cxml_list_size(&texts));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_delete_texts){
-    deb()
     /*
      * "<thesaurus>"
      * "begin"
@@ -2564,7 +2477,7 @@ TEST(cxqapi, cxml_delete_texts){
      * "</thesaurus>"
      */
     cxml_root_node *root = cxml_load_string(wf_xml_16);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     int text_count = 0;
     cxml_for_each(node, &root->root_element->children){
@@ -2613,7 +2526,7 @@ TEST(cxqapi, cxml_delete_texts){
                 "  </entry>\n"
                 "</thesaurus>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     FREE(got);
 
@@ -2624,10 +2537,9 @@ TEST(cxqapi, cxml_delete_texts){
 }
 
 TEST(cxqapi, cxml_delete_pis){
-    deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     int pi_count = 0;
     cxml_for_each(node, &root->root_element->children){
@@ -2658,7 +2570,7 @@ TEST(cxqapi, cxml_delete_pis){
                "  </class>\n"
                "</fruit>";
     got = cxml_element_to_rstring(root->root_element);
-    CHECK_NE(got, NULL);
+    CHECK_NOT_NULL(got);
     CHECK_TRUE(cxml_string_llraw_equals(got, expected, strlen(got), strlen(expected)));
     FREE(got);
 
@@ -2668,10 +2580,9 @@ TEST(cxqapi, cxml_delete_pis){
 }
 
 TEST(cxqapi, cxml_drop_pis){
-    deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
 
     cxml_list pis = new_cxml_list();
     int pi_count = 0;
@@ -2712,15 +2623,14 @@ TEST(cxqapi, cxml_drop_pis){
     CHECK_FALSE(cxml_drop_pis(root->root_element, false, &pis));
     CHECK_FALSE(cxml_drop_pis(root->root_element, false, NULL));
     CHECK_FALSE(cxml_drop_pis(NULL, false, &pis));
-    CHECK_EQ(cxml_list_size(&pis), NULL);
+    CHECK_NULL(cxml_list_size(&pis));
     cxml_destroy(root);
 }
 
 TEST(cxqapi, cxml_delete_prolog){
-    deb()
     // <?xml version="1.0"?><!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 3);
 
     CHECK(cxml_delete_prolog(root));
@@ -2739,10 +2649,9 @@ TEST(cxqapi, cxml_delete_prolog){
 }
 
 TEST(cxqapi, cxml_drop_prolog){
-    deb()
     // <?xml version="1.0"?><!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_EQ(cxml_list_size(&root->children), 3);
 
     cxml_list prolog = new_cxml_list();
@@ -2766,32 +2675,29 @@ TEST(cxqapi, cxml_drop_prolog){
 }
 
 TEST(cxqapi, cxml_delete_document){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(cxml_delete_document(root));
     CHECK_FALSE(cxml_delete_document(NULL));
 }
 
 TEST(cxqapi, cxml_delete){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     CHECK_TRUE(cxml_delete(root));
     CHECK_FALSE(cxml_delete(NULL));
 }
 
 TEST(cxqapi, cxml_clear){
-    deb()
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
-    CHECK_NE(root, NULL);
+    CHECK_NOT_NULL(root);
     // should not seg-fault.
     cxml_clear(root);
 }
 
 TEST(cxqapi, cxml_get_number){
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
-    CHECK_NE(attr, NULL);
+    CHECK_NOT_NULL(attr);
     CHECK_TRUE(cxml_set_attribute_data(attr, "xml", "food", "12345"));
     double n = cxml_get_number(attr);
     CHECK_EQ(n, 12345);
@@ -2802,8 +2708,8 @@ TEST(cxqapi, cxml_get_number){
     CHECK_EQ(n, 0x100);
 
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
-    CHECK_EQ(cxml_get_number(elem), NULL);
-    CHECK_EQ(cxml_get_number(NULL), NULL);
+    CHECK_NULL(cxml_get_number(elem));
+    CHECK_NULL(cxml_get_number(NULL));
 
     cxml_free_attribute_node(attr);
     cxml_free_text_node(text);

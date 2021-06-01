@@ -4,14 +4,15 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 void empty_table_asserts(cxml_table *table){
     CHECK_EQ(table->count, 0);
     CHECK_EQ(table->capacity, 0);
-    CHECK_EQ(table->entries, NULL);
+    CHECK_NULL(table->entries);
     CHECK_EQ(table->keys.len, 0);
-    CHECK_EQ(table->keys.head, NULL);
-    CHECK_EQ(table->keys.tail, NULL);
+    CHECK_NULL(table->keys.head);
+    CHECK_NULL(table->keys.tail);
 }
 
 TEST(cxtable, cxml_table_free){
@@ -50,8 +51,8 @@ TEST(cxtable, cxml_table_put){
     CHECK_EQ(cxml_table_put(&table, "project-1", "cxml test"), 1);
     CHECK_EQ(cxml_table_put(&table, "project-2", "bug fixes"), 1);
     CHECK_EQ(cxml_table_size(&table), 2);
-    CHECK_NE(cxml_list_first(&table.keys), NULL);
-    CHECK_NE(cxml_list_last(&table.keys), NULL);
+    CHECK_NOT_NULL(cxml_list_first(&table.keys));
+    CHECK_NOT_NULL(cxml_list_last(&table.keys));
     CHECK_EQ(cxml_list_size(&table.keys), 2);
 
     // error
@@ -77,8 +78,8 @@ TEST(cxtable, cxml_table_put){
 
     CHECK_EQ(cxml_table_size(&table), 11);
     CHECK_EQ(cxml_list_size(&table.keys), 11);
-    CHECK_NE(cxml_list_first(&table.keys), NULL);
-    CHECK_NE(cxml_list_last(&table.keys), NULL);
+    CHECK_NOT_NULL(cxml_list_first(&table.keys));
+    CHECK_NOT_NULL(cxml_list_last(&table.keys));
     cxml_table_free(&table);
 }
 
@@ -165,8 +166,8 @@ TEST(cxtable, cxml_table_remove){
     CHECK_EQ(cxml_table_put(&table, "xml parser", "a"), 1);
     // rehash occurs here, with capacity smartly preserved - table remains un-bloated.
     // 5 items (3 live, 2 deleted) (+ 1 for current) 8 * .75 -> 6 <- threshold
-    CHECK_EQ(cxml_table_put(&table, "foo", "bar"))  // 5 items (3 live, 2 deleted) + current (1 item live, 1);
-    CHECK_EQ(cxml_table_put(&table, "powerful", "dissapointing")) // 5 items (live, 1);
+    CHECK_EQ(cxml_table_put(&table, "foo", "bar"), 1);  // 5 items (3 live, 2 deleted) + current (1 item live, 1);
+    CHECK_EQ(cxml_table_put(&table, "powerful", "dissapointing"), 1); // 5 items (live, 1);
     CHECK_EQ(cxml_table_size(&table), 5);
     // threshold exceeded, 5 items (live) + current (1 item live) -> 6 | rehash
     CHECK_EQ(cxml_table_put(&table, "foofoo", "delicious"), 1);
@@ -185,7 +186,7 @@ TEST(cxtable, cxml_table_remove){
     cxml_table_remove(&table, "simple");
     CHECK_EQ(cxml_table_size(&table), 4);
     // 4 items (live) + 1 (deleted) + current (1 item live)
-    CHECK_EQ(cxml_table_put(&table, "powerful", "dissapointing")) // 5 items (live, 1);
+    CHECK_EQ(cxml_table_put(&table, "powerful", "dissapointing"), 1); // 5 items (live, 1);
     // no smart savings, since this is already >= to the savings threshold (_CXML_HT_LOAD_FACTOR_AC)
     CHECK_EQ(table.capacity, 16);
     CHECK_EQ(cxml_table_size(&table), 5);
@@ -247,8 +248,8 @@ TEST(cxtable, cxml_table_remove_raw){
     CHECK_EQ(cxml_table_put_raw(&table, &d6, "a"), 1);
     // rehash occurs here, with capacity smartly preserved - table remains un-bloated.
     // 5 items (3 live, 2 deleted) (+ 1 for current) 8 * .75 -> 6 <- threshold
-    CHECK_EQ(cxml_table_put_raw(&table, &d7, "bar"))  // 5 items (3 live, 2 deleted) + current (1 item live, 1);
-    CHECK_EQ(cxml_table_put_raw(&table, &d8, &d1)) // 5 items (live, 1);
+    CHECK_EQ(cxml_table_put_raw(&table, &d7, "bar"), 1);  // 5 items (3 live, 2 deleted) + current (1 item live, 1);
+    CHECK_EQ(cxml_table_put_raw(&table, &d8, &d1), 1); // 5 items (live, 1);
     CHECK_EQ(cxml_table_size(&table), 5);
     // threshold exceeded, 5 items (live) + current (1 item live) -> 6 | rehash
     CHECK_EQ(cxml_table_put_raw(&table, &d3, &d2), 1);
@@ -267,7 +268,7 @@ TEST(cxtable, cxml_table_remove_raw){
     cxml_table_remove_raw(&table, &d2);
     CHECK_EQ(cxml_table_size(&table), 4);
     // 4 items (live) + 1 (deleted) + current (1 item live)
-    CHECK_EQ(cxml_table_put_raw(&table, &d8, "dissapointing")) // 5 items (live, 1);
+    CHECK_EQ(cxml_table_put_raw(&table, &d8, "dissapointing"), 1); // 5 items (live, 1);
     // no smart savings, since this is already >= to the savings threshold (_CXML_HT_LOAD_FACTOR_AC)
     CHECK_EQ(table.capacity, 16);
     CHECK_EQ(cxml_table_size(&table), 5);
@@ -281,24 +282,24 @@ TEST(cxtable, cxml_table_get){
     CHECK_EQ(cxml_table_put(&table, "project-1", "cxml test"), 1);
     CHECK_EQ(cxml_table_put(&table, "project-2", "bug fixes"), 1);
 
-    CHECK_NE((v = cxml_table_get(&table, "project-1")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "project-1")));
     CHECK_EQ(strcmp(v, "cxml test"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "project-2")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "project-2")));
     CHECK_EQ(strcmp(v, "bug fixes"), 0);
 
     // error
-    CHECK_EQ(cxml_table_get(&table, "project"), NULL);
-    CHECK_EQ(cxml_table_get(&table, NULL), NULL);
-    CHECK_EQ(cxml_table_get(&table, "code cleanup"), NULL);
-    CHECK_EQ(cxml_table_get(NULL, "code cleanup"), NULL);
+    CHECK_NULL(cxml_table_get(&table, "project"));
+    CHECK_NULL(cxml_table_get(&table, NULL));
+    CHECK_NULL(cxml_table_get(&table, "code cleanup"));
+    CHECK_NULL(cxml_table_get(NULL, "code cleanup"));
 
     // update
     CHECK_EQ(cxml_table_put(&table, "project-2", "round up"), 2);
     CHECK_EQ(cxml_table_put(&table, "project-1", "finishes"), 2);
 
-    CHECK_NE((v = cxml_table_get(&table, "project-1")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "project-1")));
     CHECK_EQ(strcmp(v, "finishes"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "project-2")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "project-2")));
     CHECK_EQ(strcmp(v, "round up"), 0);
 
     // rehash
@@ -311,28 +312,28 @@ TEST(cxtable, cxml_table_get){
     CHECK_EQ(cxml_table_put(&table, "  in iaculis ", "  vitae efficitur"), 1);
     CHECK_EQ(cxml_table_size(&table), 9);
 
-    CHECK_NE((v = cxml_table_get(&table, "test-key-2")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "test-key-2")));
     CHECK_EQ(strcmp(v, "bug fixes"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "adipiscing elit")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "adipiscing elit")));
     CHECK_EQ(strcmp(v, "adipiscing elit"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "lorem ipsum")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "lorem ipsum")));
     CHECK_EQ(strcmp(v, "dolor sit amet"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "tristique sem")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "tristique sem")));
     CHECK_EQ(strcmp(v, "1234"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "a")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "a")));
     CHECK_EQ(strcmp(v, "a"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "\0")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "\0")));
     CHECK_EQ(strcmp(v, "Duis a aliquet libero"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "  in iaculis ")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "  in iaculis ")));
     CHECK_EQ(strcmp(v, "  vitae efficitur"), 0);
-    CHECK_NE((v = cxml_table_get(&table, "")), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "")));
     CHECK_EQ(strcmp(v, "Duis a aliquet libero"), 0);
 
-    CHECK_EQ(cxml_table_get(NULL, "  in iaculis"), NULL);
-    CHECK_EQ(cxml_table_get(&table, "12345"), NULL);
+    CHECK_NULL(cxml_table_get(NULL, "  in iaculis"));
+    CHECK_NULL(cxml_table_get(&table, "12345"));
 
-    CHECK_EQ(cxml_table_put(&table, "खुशियों की बरसातें", "Jerry")), 1;;
-    CHECK_NE((v = cxml_table_get(&table, "खुशियों की बरसातें")), NULL);
+    CHECK_EQ(cxml_table_put(&table, "खुशियों की बरसातें", "Jerry"), 1);
+    CHECK_NOT_NULL((v = cxml_table_get(&table, "खुशियों की बरसातें")));
     CHECK_EQ(strcmp(v, "Jerry"), 0);
 
     cxml_table_free(&table);
@@ -348,25 +349,25 @@ TEST(cxtable, cxml_table_get_raw){
     CHECK_EQ(cxml_table_put_raw(&table, &d1, "cxml test"), 1);
     CHECK_EQ(cxml_table_put_raw(&table, &d2, "bug fixes"), 1);
 
-    CHECK_NE((v = cxml_table_get_raw(&table, &d1)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d1)));
     CHECK_EQ(strcmp(v, "cxml test"), 0);
-    CHECK_NE((v = cxml_table_get_raw(&table, &d2)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d2)));
     CHECK_EQ(strcmp(v, "bug fixes"), 0);
 
     // error
-    CHECK_EQ(cxml_table_get_raw(&table, &d3), NULL);
-    CHECK_EQ(cxml_table_get_raw(&table, "project"), NULL);
-    CHECK_EQ(cxml_table_get_raw(&table, NULL), NULL);
-    CHECK_EQ(cxml_table_get_raw(&table, "code cleanup"), NULL);
-    CHECK_EQ(cxml_table_get_raw(NULL, "code cleanup"), NULL);
+    CHECK_NULL(cxml_table_get_raw(&table, &d3));
+    CHECK_NULL(cxml_table_get_raw(&table, "project"));
+    CHECK_NULL(cxml_table_get_raw(&table, NULL));
+    CHECK_NULL(cxml_table_get_raw(&table, "code cleanup"));
+    CHECK_NULL(cxml_table_get_raw(NULL, "code cleanup"));
 
     // update
     CHECK_EQ(cxml_table_put_raw(&table, &d2, "round up"), 2);
     CHECK_EQ(cxml_table_put_raw(&table, &d1, "finishes"), 2);
 
-    CHECK_NE((v = cxml_table_get_raw(&table, &d1)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d1)));
     CHECK_EQ(strcmp(v, "finishes"), 0);
-    CHECK_NE((v = cxml_table_get_raw(&table, &d2)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d2)));
     CHECK_EQ(strcmp(v, "round up"), 0);
 
     // rehash
@@ -381,31 +382,31 @@ TEST(cxtable, cxml_table_get_raw){
     CHECK_EQ(cxml_table_put_raw(&table, k4, "foo"), 2);
     CHECK_EQ(cxml_table_size(&table), 10);
 
-    CHECK_NE((v = cxml_table_get_raw(&table, &d3)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d3)));
     CHECK_EQ(v, &d3);
     CHECK_EQ(((struct Data*)v), &d3);
-    CHECK_NE((v = cxml_table_get_raw(&table, &d4)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d4)));
     CHECK_EQ(v, &d1);
-    CHECK_NE((v = cxml_table_get_raw(&table, &d5)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d5)));
     CHECK_EQ(v, &d5);
-    CHECK_NE((v = cxml_table_get_raw(&table, &d6)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, &d6)));
     CHECK_EQ(v, &d2);
-    CHECK_NE((v = cxml_table_get_raw(&table, k1)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, k1)));
     CHECK_EQ(v, &d7);
-    CHECK_NE((v = cxml_table_get_raw(&table, k3)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, k3)));
     CHECK_EQ(v, &d3);
-    CHECK_NE((c = cxml_table_get_raw(&table, k4)), NULL);
+    CHECK_NOT_NULL((c = cxml_table_get_raw(&table, k4)));
     CHECK_EQ(strcmp(c, "foo"), 0);
-    CHECK_NE((v = cxml_table_get_raw(&table, k1)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, k1)));
     CHECK_EQ(v, &d7);
     CHECK_EQ(cxml_table_put_raw(&table, k1, &d8), 2);
-    CHECK_NE((v = cxml_table_get_raw(&table, k1)), NULL);
+    CHECK_NOT_NULL((v = cxml_table_get_raw(&table, k1)));
     CHECK_EQ(v, &d8);
-    CHECK_NE((c = cxml_table_get_raw(&table, k2)), NULL);
+    CHECK_NOT_NULL((c = cxml_table_get_raw(&table, k2)));
     CHECK_EQ(strcmp(c, "UP!"), 0);
 
-    CHECK_EQ(cxml_table_get_raw(NULL, "  in iaculis"), NULL);
-    CHECK_EQ(cxml_table_get_raw(&table, &d8), NULL);
+    CHECK_NULL(cxml_table_get_raw(NULL, "  in iaculis"));
+    CHECK_NULL(cxml_table_get_raw(&table, &d8));
     cxml_table_free(&table);
 }
 
@@ -414,7 +415,7 @@ TEST(cxtable, cxml_table_is_empty){
     CHECK_TRUE(cxml_table_is_empty(&table));
     CHECK_TRUE(cxml_table_is_empty(NULL));
     cxml_table_put(&table, "--cxml--", "C XML Minimalistic Library");
-    CHECK_FALSE(cxml_table_is_empty(&table));;
+    CHECK_FALSE(cxml_table_is_empty(&table));
     cxml_table_free(&table);
 }
 
@@ -423,6 +424,6 @@ TEST(cxtable, cxml_table_size){
     CHECK_EQ(cxml_table_size(&table), 0);
     CHECK_EQ(cxml_table_size(NULL), 0);
     cxml_table_put(&table, "cxml", "xml library for C");
-    CHECK_EQ(cxml_table_size(&table)), 1;;
+    CHECK_EQ(cxml_table_size(&table), 1);
     cxml_table_free(&table);
 }

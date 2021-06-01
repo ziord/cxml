@@ -4,13 +4,14 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 void empty_set_asserts(cxml_set *set){
     CHECK_EQ(set->size, 0);
     CHECK_EQ(set->capacity, 0);
-    CHECK_EQ(set->entries, NULL);
-    CHECK_EQ(set->items.head, NULL);
-    CHECK_EQ(set->items.tail, NULL);
+    CHECK_NULL(set->entries);
+    CHECK_NULL(set->items.head);
+    CHECK_NULL(set->items.tail);
     CHECK_EQ(set->items.len, 0);
 }
 
@@ -42,9 +43,9 @@ TEST(cxmset, cxml_set_add){
     cxml_set_add(&set, &d1);
     CHECK_EQ(cxml_set_size(&set), 1);
     CHECK_EQ(set.capacity, 8);
-    CHECK_NE(cxml_list_first(&set.items), NULL);
-    CHECK_NE(cxml_list_last(&set.items), NULL);
-    CHECK_NE(set.entries, NULL);
+    CHECK_NOT_NULL(cxml_list_first(&set.items));
+    CHECK_NOT_NULL(cxml_list_last(&set.items));
+    CHECK_NOT_NULL(set.entries);
     CHECK_EQ(cxml_list_size(&set.items), 1);
     cxml_set_add(&set, &d1);
     CHECK_EQ(cxml_set_size(&set), 1);
@@ -69,8 +70,8 @@ TEST(cxmset, cxml_set_add){
     CHECK_EQ(cxml_set_size(&set), 6);
     CHECK_EQ(cxml_list_size(&set.items), 6);
     CHECK_EQ(set.capacity, 16);
-    CHECK_NE(set.items.head, NULL);
-    CHECK_NE(set.items.tail, NULL);
+    CHECK_NOT_NULL(set.items.head);
+    CHECK_NOT_NULL(set.items.tail);
     FREE(d4);
     cxml_set_free(&set);
 }
@@ -95,10 +96,10 @@ TEST(cxmset, cxml_set_get){
     }
 
     // errors
-    CHECK_EQ(cxml_set_get(&set, -1), NULL);
-    CHECK_EQ(cxml_set_get(&set, 7), NULL);
-    CHECK_EQ(cxml_set_get(&set, 8), NULL);
-    CHECK_EQ(cxml_set_get(NULL, 0), NULL);
+    CHECK_NULL(cxml_set_get(&set, -1));
+    CHECK_NULL(cxml_set_get(&set, 7));
+    CHECK_NULL(cxml_set_get(&set, 8));
+    CHECK_NULL(cxml_set_get(NULL, 0));
 
     cxml_set_free(&set);
 }
@@ -341,7 +342,7 @@ TEST(cxmset, cxml_set_free){
     empty_set_asserts(&set);
     CHECK_EQ(set.size, 0);
     CHECK_EQ(set.capacity, 0);
-    CHECK_EQ(set.entries, NULL);
+    CHECK_NULL(set.entries);
 }
 
 TEST(cxmset, cxml_set__init_with){
@@ -350,23 +351,23 @@ TEST(cxmset, cxml_set__init_with){
     cxml_set_add(&set2, "bar");
     CHECK_EQ(set2.size, 2);
     CHECK_EQ(set2.capacity, 8);
-    CHECK_NE(set2.entries, NULL);
-    CHECK_NE(set2.items.head, NULL);
-    CHECK_NE(set2.items.tail, NULL);
+    CHECK_NOT_NULL(set2.entries);
+    CHECK_NOT_NULL(set2.items.head);
+    CHECK_NOT_NULL(set2.items.tail);
 
     empty_set_asserts(&set);
     cxml_set_init_with(&set, &set2);
     CHECK_EQ(set2.capacity, 0);
     CHECK_EQ(set2.size, 0);
-    CHECK_EQ(set2.entries, NULL);
-    CHECK_EQ(set2.items.head, NULL);
-    CHECK_EQ(set2.items.tail, NULL);
+    CHECK_NULL(set2.entries);
+    CHECK_NULL(set2.items.head);
+    CHECK_NULL(set2.items.tail);
 
     CHECK_EQ(set.size, 2);
     CHECK_EQ(set.capacity, 8);
-    CHECK_NE(set.entries, NULL);
-    CHECK_NE(set.items.head, NULL);
-    CHECK_NE(set.items.tail, NULL);
+    CHECK_NOT_NULL(set.entries);
+    CHECK_NOT_NULL(set.items.head);
+    CHECK_NOT_NULL(set.items.tail);
 
     cxml_set_free(&set);
 }
@@ -377,23 +378,23 @@ TEST(cxmset, cxml_set_init_with){
     cxml_set_add(&set2, "bar");
     CHECK_EQ(set2.size, 2);
     CHECK_EQ(set2.capacity, 8);
-    CHECK_NE(set2.entries, NULL);
-    CHECK_NE(set2.items.head, NULL);
-    CHECK_NE(set2.items.tail, NULL);
+    CHECK_NOT_NULL(set2.entries);
+    CHECK_NOT_NULL(set2.items.head);
+    CHECK_NOT_NULL(set2.items.tail);
 
     empty_set_asserts(&set);
     cxml_set_init_with(&set, &set2);
     CHECK_EQ(set2.capacity, 0);
     CHECK_EQ(set2.size, 0);
-    CHECK_EQ(set2.entries, NULL);
-    CHECK_EQ(set2.items.head, NULL);
-    CHECK_EQ(set2.items.tail, NULL);
+    CHECK_NULL(set2.entries);
+    CHECK_NULL(set2.items.head);
+    CHECK_NULL(set2.items.tail);
 
     CHECK_EQ(set.size, 2);
     CHECK_EQ(set.capacity, 8);
-    CHECK_NE(set.entries, NULL);
-    CHECK_NE(set.items.head, NULL);
-    CHECK_NE(set.items.tail, NULL);
+    CHECK_NOT_NULL(set.entries);
+    CHECK_NOT_NULL(set.items.head);
+    CHECK_NOT_NULL(set.items.tail);
 
     // should not seg-fault
     cxml_set_init_with(&set, NULL);

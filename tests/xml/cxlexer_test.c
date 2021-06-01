@@ -4,6 +4,7 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 TEST(cxlexer, cxml_lexer_init){
     _cxml_lexer lexer;
@@ -32,8 +33,8 @@ TEST(cxlexer, cxml_lexer_close){
     _cxml_lexer lexer;
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
     _cxml_lexer_close(&lexer);
-    CHECK_EQ(lexer.start, NULL);
-    CHECK_EQ(lexer.current, NULL);
+    CHECK_NULL(lexer.start);
+    CHECK_NULL(lexer.current);
 }
 
 extern _cxml_token cxml_get_token(_cxml_lexer *cxlexer);
@@ -134,7 +135,7 @@ TEST(cxlexer, cxml_get_token){
     tok = cxml_get_token(&lexer);
     CHECK_EQ(tok.type, CXML_TOKEN_DOCTYPE);
     CHECK_EQ(lexer.start, tok.start);
-    CHECK_EQ(lexer.current, (tok.start + 26)) // at eof;
+    CHECK_EQ(lexer.current, (tok.start + 26)); // at eof;
     CHECK_NE(tok.start, src);
     CHECK_EQ(tok.literal_type, CXML_NON_LITERAL);
     // under trim_dtd configuration, only the dtd name is preserved

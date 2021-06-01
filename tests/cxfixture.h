@@ -7,7 +7,6 @@
 #define CXMLTESTS_CXFIXTURE_H
 #include <cxml/cxml.h>
 
-#define deb()
 
 struct Data{
     int data;

@@ -4,6 +4,7 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 // todo: more comprehensive tests
 
@@ -11,7 +12,7 @@ TEST(cxxpath, cxml_xpath){
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     CHECK(root);
     cxml_set *nodeset = cxml_xpath(root, "//*");
-    CHECK_NE(nodeset, NULL);
+    CHECK_NOT_NULL(nodeset);
     CHECK_EQ(cxml_set_size(nodeset), 2);
 
     int i = 0;
@@ -24,8 +25,8 @@ TEST(cxxpath, cxml_xpath){
         i++;
     }
 
-    CHECK_EQ(cxml_xpath(root, NULL), NULL);
-    CHECK_EQ(cxml_xpath(NULL, "//*"), NULL);
+    CHECK_NULL(cxml_xpath(root, NULL));
+    CHECK_NULL(cxml_xpath(NULL, "//*"));
     // automatically cleans up all nodes, including in the nodeset
     cxml_destroy(root);
     cxml_set_free(nodeset);

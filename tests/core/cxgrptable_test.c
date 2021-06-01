@@ -4,16 +4,16 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 #include "core/cxgrptable.h"
 
-TEST(empty_grp_table_asserts, cxml_grp_table){
-    cxml_grp_table *table;
+void empty_grp_table_asserts(cxml_grp_table *table){
     CHECK_EQ(table->count, 0);
     CHECK_EQ(table->capacity, 0);
-    CHECK_EQ(table->entries, NULL);
+    CHECK_NULL(table->entries);
     CHECK_EQ(table->keys.len, 0);
-    CHECK_EQ(table->keys.head, NULL);
-    CHECK_EQ(table->keys.tail, NULL);
+    CHECK_NULL(table->keys.head);
+    CHECK_NULL(table->keys.tail);
 }
 
 TEST(cxgrptable, cxml_grp_table_put){
@@ -45,12 +45,12 @@ TEST(cxgrptable, cxml_grp_table_put){
     CHECK_EQ(table.capacity, 16);
 
     CHECK_EQ(cxml_list_size(&table.keys), 7);
-    CHECK_NE(cxml_list_first(&table.keys), NULL);
-    CHECK_NE(cxml_list_last(&table.keys), NULL);
+    CHECK_NOT_NULL(cxml_list_first(&table.keys));
+    CHECK_NOT_NULL(cxml_list_last(&table.keys));
     cxml_grp_table_free(&table);
 }
 
-extern int empty_list_asserts(cxml_list *list);
+extern void empty_list_asserts(cxml_list *list);
 
 TEST(cxgrptable, cxml_grp_table_get){
     cxml_grp_table table = new_cxml_grp_table();
@@ -89,11 +89,11 @@ TEST(cxgrptable, cxml_grp_table_get){
 
     // errors
     cxml_grp_table_get(&table, NULL, &value);
-    CHECK_EQ(empty_list_asserts(&value), 1);
+    empty_list_asserts(&value);
 
     cxml_grp_table_get(&table, &parent1, NULL);
     cxml_grp_table_get(NULL, &parent1, &value);
-    CHECK_EQ(empty_list_asserts(&value), 1);
+    empty_list_asserts(&value);
 
     // rehash
     char *tmp = "stuff";
@@ -258,8 +258,8 @@ TEST(cxgrptable, cxml_grp_table_free){
     cxml_grp_table_put(&table, &parent, &child2);
 
     cxml_grp_table_free(&table);
-    CHECK_EQ(empty_grp_table_asserts(&table), 1);
+    empty_grp_table_asserts(&table);
 
     cxml_grp_table_free(&table);
-    CHECK_EQ(empty_grp_table_asserts(&table), 1);
+    empty_grp_table_asserts(&table);
 }

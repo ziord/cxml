@@ -4,6 +4,7 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 extern int empty_list_asserts(cxml_list *list);
 
@@ -65,7 +66,7 @@ TEST(cxstack, cxml_stack__pop){
     CHECK_EQ(cxml_list_size(&stack.stack), 0);
 
     d = _cxml_stack__pop(&stack);
-    CHECK_EQ(d, NULL);
+    CHECK_NULL(d);
     CHECK_EQ(cxml_list_size(&stack.stack), 0);
 
     _cxml_stack_free(&stack);

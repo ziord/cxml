@@ -4,6 +4,7 @@
  */
 
 #include "cxfixture.h"
+#include <Muon/Muon.h>
 
 // no seg-fault tests, because cxml_number is an internal structure with
 // very precise use-case, and isn't meant to be used (directly) by external users.
@@ -66,13 +67,14 @@ TEST(cxliteral, cxml_literal_to_double){
     cxml_string_free(&str);
 }
 
+
 TEST(cxliteral, cxml_set_literal){
     cxml_number number = new_cxml_number();
-    CHECK_EQ(empty_literal_asserts(&number), 1);
+    empty_literal_asserts(&number);
 
     cxml_string str = new_cxml_string_s("121");
     cxml_set_literal(&number, 2000, &str);
-    CHECK_EQ(empty_literal_asserts(&number), 1);
+    empty_literal_asserts(&number);
 
     cxml_set_literal(&number, CXML_INTEGER_LITERAL, &str);
     CHECK_EQ(number.dec_val, 121);
@@ -87,7 +89,6 @@ TEST(cxliteral, cxml_set_literal){
     cxml_set_literal(&number, CXML_DOUBLE_LITERAL, &str);
     CHECK_EQ(number.dec_val, 3.142);
     cxml_string_free(&str);
-
 }
 
 TEST(cxliteral, _cxml_is_integer){
@@ -145,7 +146,6 @@ TEST(cxliteral, cxml_literal_to_num){
     CHECK_EQ(number.dec_val, 32042);
     CHECK_EQ(number.type, CXML_NUMERIC_DOUBLE_T);
     cxml_string_free(&str);
-
 }
 
 TEST(cxliteral, cxml_number_is_d_equal){
