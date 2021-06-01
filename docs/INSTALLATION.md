@@ -8,7 +8,7 @@ You can build the library from sources using cmake. If you're using an IDE like 
 
 cxml is quite modular. It provides a couple of flags that can be used in the build process. This means that you can build cxml according to your own use-cases.
 
-As mentioned in the [readme](https://github.com/ziord/cxml/blob/master/docs/README.md), cxml provides three interfaces that can be used to interact with an XML document, after it's parsed. These interfaces are not enforced on the user, and in fact the library can be built without any of them!
+As mentioned in the [readme](https://github.com/ziord/cxml/blob/master/README.md), cxml provides three interfaces that can be used to interact with an XML document, after it's parsed. These interfaces are not enforced on the user, and in fact the library can be built without any of them!
 
 Here are some of the flags that can be used in the build command:
 
