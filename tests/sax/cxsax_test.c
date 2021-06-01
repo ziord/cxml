@@ -94,10 +94,6 @@ TEST(cxsax, cxml_stream_file){
     CHECK_NE(reader.is_open, 1);
 }
 
-
-/****object getters*****/
-
-
 TEST(cxsax, cxml_sax_as_comment_node){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_3.xml", true);
     cxml_comment_node *comment;
@@ -362,9 +358,6 @@ TEST(cxsax, cxml_sax_as_xml_hdr_node){
     cxml_free_xhdr_node(xh);
     CHECK_NULL(cxml_sax_as_xml_hdr_node(NULL));
 }
-
-
-/****data getters*****/
 
 TEST(cxsax, cxml_sax_get_element_name){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
