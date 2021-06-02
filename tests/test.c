@@ -107,7 +107,8 @@ int main(){
     cxml_cfg_show_warnings(0);
     cxml_cfg_enable_debugging(0);
     set_data_path();
-    CXML_TEST_RUNNER(6,
+    int status;
+    CXML_TEST_RUNNER(&status, 6,
                      super_suite_internals,
                      super_suite_utils,
                      super_suite_xml,
@@ -115,5 +116,5 @@ int main(){
                      super_suite_sax,
                      super_suite_xpath)
     free_data_path();
-    printf("\nhello world\n");
+    return status;
 }
