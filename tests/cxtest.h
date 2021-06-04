@@ -18,12 +18,12 @@
 
 
 // run all tests in all suites provided, and also provide summary test report
-#define CXML_TEST_RUNNER(n, ...)    \
-    _cxml_t_run_suites(n, __VA_ARGS__);
+#define CXML_TEST_RUNNER(s, n, ...)    \
+    _cxml_t_run_suites(s, n, __VA_ARGS__);
 
 // run all tests in all suites provided, but provide no summary test report
-#define CXML_TEST_RUNNER_NR(n, ...)    \
-    _cxml_t_run_suites_nr(n, __VA_ARGS__);
+#define CXML_TEST_RUNNER_NR(s, n, ...)    \
+    _cxml_t_run_suites_nr(s, n, __VA_ARGS__);
 
 
 #define _BOLD     "\x1B[1m"
@@ -374,7 +374,7 @@ static void _cxml_t_run_suite_tests_randomly(cxml_t_suite *suite) {
     _g_runner.suites_run++;
 }
 
-static void _cxml_t_run__suites(int show_report, int n, ...){
+static void _cxml_t_run__suites(int *status, int show_report, int n, ...){
     _cxml_t_init_g_runner();
     va_list ap;
     va_start(ap, n);
@@ -382,18 +382,19 @@ static void _cxml_t_run__suites(int show_report, int n, ...){
         ((void (*)(void))va_arg(ap, cts(*)(void)))();
     }
     va_end(ap);
+    *status = _g_runner.failed;
     if (show_report) _cxml_t_g_runner_report();
     else _cxml_t_clear_g_runner();
 }
 
 // runs all suites without displaying the entire test summary report at the end
 // i.e. runs all suites without displaying the global runner report
-#define _cxml_t_run_suites_nr(n, ...)  \
-_cxml_t_run__suites(0, n, __VA_ARGS__)
+#define _cxml_t_run_suites_nr(s, n, ...)  \
+_cxml_t_run__suites(s, 0, n, __VA_ARGS__)
 
 // runs all suites, displaying the entire test summary report at the end
-#define _cxml_t_run_suites(n, ...)  \
-_cxml_t_run__suites(1, n, __VA_ARGS__)
+#define _cxml_t_run_suites(s, n, ...)  \
+_cxml_t_run__suites(s, 1, n, __VA_ARGS__)
 
 // function containing all tests -> runs them
 #define cxml_suite(_suite_name)     \

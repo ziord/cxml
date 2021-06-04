@@ -9,13 +9,13 @@
 #include "cxcomm.h"
 #include "cxmem.h"
 
-#define cxml_for_each(_node, __list)                                     \
-void *_node = NULL;                                                      \
-for(struct _cxml_list__node *__00prev00##_node = NULL,                   \
-                            *__00current00##_node = (__list)->head;      \
-    __00current00##_node ? (_node = (__00current00##_node)->item) : 0;   \
-    __00prev00##_node    = __00current00##_node,                         \
-    __00current00##_node = (__00current00##_node)->next                  \
+#define cxml_for_each(_node, __list)                                                    \
+void *_node = NULL;                                                                     \
+for(struct _cxml_list__node *__00prev00##_node = NULL,                                  \
+                            *__00current00##_node = (__list)->head;                     \
+    __00current00##_node ? (_node = (__00current00##_node)->item) : 0;                  \
+    __00prev00##_node    = __00current00##_node,                                        \
+    __00current00##_node = (((void)__00prev00##_node ), (__00current00##_node)->next)   \
 )
 
 // shorter (and perhaps cleaner?)
