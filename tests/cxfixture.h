@@ -30,10 +30,10 @@ extern char *wf_xml_xhdr;
 extern char *wf_xml_plg;
 extern char *df_xml_1;
 
-void set_data_path();
-void free_data_path();
+void set_data_path(void);
+void free_data_path(void);
 char* get_file_path(char *file_name);
 cxml_root_node *get_root(char *file_name, bool stream);
-void fixture_no_fancy_printing_and_warnings();
+void fixture_no_fancy_printing_and_warnings(void);
 
 #endif //CXMLTESTS_CXFIXTURE_H

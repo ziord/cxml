@@ -22,14 +22,14 @@ int parser_init_asserts(_cxml_parser *parser){
     cxml_assert__true(_cxml_stack_is_empty(&parser->_cx_stack))
     return 1;
 }
-cts test__cxml_parser_init(){
+cts test__cxml_parser_init(void){
     _cxml_parser parser;
     _cxml_parser_init(&parser, wf_xml_9, NULL, false);
     cxml_assert(parser_init_asserts(&parser))
     cxml_pass()
 }
 
-cts test_create_root_node(){
+cts test_create_root_node(void){
     cxml_root_node *root = create_root_node();
     cxml_assert__not_null(root)
     cxml_assert__true(cxml_string_raw_equals(&root->name, cxml_get_config().doc_name))
@@ -38,7 +38,7 @@ cts test_create_root_node(){
 }
 
 
-cts test_cxml_parse_xml(){
+cts test_cxml_parse_xml(void){
     cxml_root_node *root = cxml_parse_xml(wf_xml_9);
     cxml_assert__not_null(root)
     cxml_assert__not_null(root->root_element)
@@ -53,7 +53,7 @@ cts test_cxml_parse_xml(){
 }
 
 
-cts test_cxml_parse_xml_lazy(){
+cts test_cxml_parse_xml_lazy(void){
     char *fp = get_file_path("wf_xml_1.xml");
     cxml_root_node *root = cxml_parse_xml_lazy(fp);
     FREE(fp);
@@ -70,7 +70,7 @@ cts test_cxml_parse_xml_lazy(){
 }
 
 
-cts test__cxml_parser_free(){
+cts test__cxml_parser_free(void){
     _cxml_parser parser;
     _cxml_parser_init(&parser, wf_xml_9, NULL, false);
     cxml_assert__eq(parser.cxlexer.start, wf_xml_9)
@@ -80,7 +80,7 @@ cts test__cxml_parser_free(){
     cxml_pass()
 }
 
-void suite_cxparser(){
+void suite_cxparser(void){
     cxml_suite(cxparser)
     {
         cxml_add_m_test(5,

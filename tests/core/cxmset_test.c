@@ -16,20 +16,20 @@ int empty_set_asserts(cxml_set *set){
 }
 
 
-cts test_new_cxml_set(){
+cts test_new_cxml_set(void){
     cxml_set set = new_cxml_set();
     cxml_assert__one(empty_set_asserts(&set))
     cxml_pass()
 }
 
-cts test_new_alloc_cxml_set(){
+cts test_new_alloc_cxml_set(void){
     cxml_set *set = new_alloc_cxml_set();
     cxml_assert__one(empty_set_asserts(set))
     FREE(set);
     cxml_pass()
 }
 
-cts test_cxml_set_init(){
+cts test_cxml_set_init(void){
     cxml_set set;
     cxml_set_init(&set);
     cxml_assert__one(empty_set_asserts(&set))
@@ -38,7 +38,7 @@ cts test_cxml_set_init(){
     cxml_pass()
 }
 
-cts test_cxml_set_add(){
+cts test_cxml_set_add(void){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d5, d6;
     struct Data *d4 = ALLOC(struct Data, 1);
@@ -81,7 +81,7 @@ cts test_cxml_set_add(){
     cxml_pass()
 }
 
-cts test_cxml_set_get(){
+cts test_cxml_set_get(void){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7;
     struct Data *ds[] = {&d1, &d2, &d3, &d4, &d5, &d6, &d7};
@@ -110,7 +110,7 @@ cts test_cxml_set_get(){
     cxml_pass()
 }
 
-cts test_cxml_set_remove(){
+cts test_cxml_set_remove(void){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     cxml_set_add(&set, &d1);
@@ -186,7 +186,7 @@ cts test_cxml_set_remove(){
     cxml_pass()
 }
 
-cts test_cxml_set_copy(){
+cts test_cxml_set_copy(void){
     cxml_set set = new_cxml_set(),
              set2 = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
@@ -215,7 +215,7 @@ cts test_cxml_set_copy(){
     cxml_pass()
 }
 
-cts test_cxml_set_extend(){
+cts test_cxml_set_extend(void){
     cxml_set set = new_cxml_set(),
              set2 = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
@@ -275,7 +275,7 @@ cts test_cxml_set_extend(){
     cxml_pass()
 }
 
-cts test_cxml_set_extend_list(){
+cts test_cxml_set_extend_list(void){
     cxml_set set = new_cxml_set();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     struct Data *ds[] = {&d1, &d2, &d3, &d4, &d5, &d6, &d7, &d8};
@@ -311,7 +311,7 @@ cts test_cxml_set_extend_list(){
     cxml_pass()
 }
 
-cts test_cxml_set_size(){
+cts test_cxml_set_size(void){
     cxml_set set = new_cxml_set();
     cxml_assert__zero(cxml_set_size(&set))
     struct Data d1, d2, d3;
@@ -325,7 +325,7 @@ cts test_cxml_set_size(){
     cxml_pass()
 }
 
-cts test_cxml_set_is_empty(){
+cts test_cxml_set_is_empty(void){
     cxml_set set = new_cxml_set();
     cxml_assert__true(cxml_set_is_empty(&set))
     struct Data d1, d2, d3;
@@ -339,7 +339,7 @@ cts test_cxml_set_is_empty(){
     cxml_pass()
 }
 
-cts test_cxml_set_free(){
+cts test_cxml_set_free(void){
     cxml_set set = new_cxml_set();
     cxml_assert__one(empty_set_asserts(&set))
     struct Data d1, d2, d3;
@@ -358,7 +358,7 @@ cts test_cxml_set_free(){
     cxml_pass()
 }
 
-cts test_cxml_set__init_with(){
+cts test_cxml_set__init_with(void){
     cxml_set set = new_cxml_set(), set2 = new_cxml_set();
     cxml_set_add(&set2, "foo");
     cxml_set_add(&set2, "bar");
@@ -386,7 +386,7 @@ cts test_cxml_set__init_with(){
     cxml_pass()
 }
 
-cts test_cxml_set_init_with(){
+cts test_cxml_set_init_with(void){
     cxml_set set = new_cxml_set(), set2 = new_cxml_set();
     cxml_set_add(&set2, "foo");
     cxml_set_add(&set2, "bar");
@@ -418,7 +418,7 @@ cts test_cxml_set_init_with(){
     cxml_pass()
 }
 
-void suite_cxmset() {
+void suite_cxmset(void) {
     cxml_suite(cxmset)
     {
         cxml_add_m_test(14,

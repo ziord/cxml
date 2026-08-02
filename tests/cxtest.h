@@ -46,7 +46,7 @@
     printf(_GREEN "[PASSED] - " _RESET __FILE__ "::%s\n", _test_name);
 
 // should be called at the end of the function, in the function body.
-#define cxml_pass()  \
+#define cxml_pass(void)  \
     _cxml_t_pass(__func__)     \
     return CXML_T_PASS;
 
@@ -56,7 +56,7 @@
     return CXML_T_TODO;
 
 // should be called at the end of the function, in the function body.
-#define cxml_skip()  \
+#define cxml_skip(void)  \
     _cxml_t_skip(__func__)     \
     return CXML_T_SKIP;
 
@@ -159,8 +159,8 @@ typedef struct{
     double time_taken;
     const char *name;
     const char *file_name;
-    void (*test_setup)();
-    void (*test_teardown)();
+    void (*test_setup)(void);
+    void (*test_teardown)(void);
     cts (*tests[CXML_T_SUITE_TEST_THRESHOLD])(void);
 }cxml_t_suite;
 
@@ -196,7 +196,7 @@ static void _cxml_t_init_suite(
     _g_runner.current_suite = suite;
 }
 
-static void _cxml_t_init_g_runner(){
+static void _cxml_t_init_g_runner(void){
     _g_runner.passed = 0;
     _g_runner.failed = 0;
     _g_runner.skipped = 0;
@@ -207,7 +207,7 @@ static void _cxml_t_init_g_runner(){
     _g_runner.current_suite = NULL;
 }
 
-static void _cxml_t_clear_g_runner(){
+static void _cxml_t_clear_g_runner(void){
     _cxml_t_init_g_runner();
 }
 
@@ -232,7 +232,7 @@ static void _cxml_t_add_mtest(cxml_t_suite *suite, int n, ...) {
     va_end(ap);
 }
 
-static void _cxml_t_add_fixture(cxml_t_suite *suite, void (*fixture)(), int is_setup){
+static void _cxml_t_add_fixture(cxml_t_suite *suite, void (*fixture)(void), int is_setup){
     if (!suite || !fixture) return;
     if (is_setup) suite->test_setup = fixture;
     else suite->test_teardown = fixture;
@@ -289,7 +289,7 @@ static void _cxml_t_suite_report(cxml_t_suite *suite) {
            suite->passed, suite->failed, suite->skipped, suite->todo, suite->time_taken);
 }
 
-static void _cxml_t_g_runner_report() {
+static void _cxml_t_g_runner_report(void) {
     printf("\n==All Tests Summary==\n");
     printf("Total Standalone Tests Run: %d\n", _g_runner.sta_tests_run);
     printf("Total Suites Run: %d\n", _g_runner.suites_run);
@@ -326,7 +326,7 @@ static void _cxml_t_run_sta_test(
 static void _cxml_t_shuffle(cts (*arr[])(void), int count){
     // using the Fisher and Yates' algorithm
     int j;
-    cts (*tmp)();
+    cts (*tmp)(void);
     srand(time(NULL));
     // i -> n - 1, do:
     for (int i = (count - 1); i > 0; i--){

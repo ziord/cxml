@@ -26,7 +26,7 @@ int reader_init_asserts(cxml_sax_event_reader *reader, bool auto_close){
     cxml_assert__zero(reader->xml_parser->pos_c)
     return 1;
 }
-cts test_cxml_sax_init(){
+cts test_cxml_sax_init(void){
     char *fp = get_file_path("foo.xml");
     cxml_sax_event_reader reader = cxml_sax_init(fp, true);
     FREE(fp);
@@ -41,7 +41,7 @@ cxml_sax_event_reader get_event_reader(char *file_name, bool auto_close){
     return reader;
 }
 
-cts test_cxml_sax_has_event(){
+cts test_cxml_sax_has_event(void){
     deb()
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", true);
     // at the initialization state, cxml_sax_has_event() will always report true
@@ -55,7 +55,7 @@ cts test_cxml_sax_has_event(){
     cxml_pass()
 }
 
-cts test_cxml_sax_get_event(){
+cts test_cxml_sax_get_event(void){
     deb()
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", true);
     cxml_assert__eq(cxml_sax_get_event(&reader), CXML_SAX_BEGIN_DOCUMENT_EVENT)
@@ -69,7 +69,7 @@ cts test_cxml_sax_get_event(){
     cxml_pass()
 }
 
-cts test_cxml_sax_is_well_formed(){
+cts test_cxml_sax_is_well_formed(void){
     deb()
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", true);
     // we can't tell if the document is well formed until the entire
@@ -86,7 +86,7 @@ cts test_cxml_sax_is_well_formed(){
     cxml_pass()
 }
 
-cts test_cxml_stream_file(){
+cts test_cxml_stream_file(void){
     char *fp = get_file_path("foo.xml");
     cxml_sax_event_reader reader = cxml_stream_file(fp, false);
     FREE(fp);
@@ -105,7 +105,7 @@ cts test_cxml_stream_file(){
 /****object getters*****/
 
 
-cts test_cxml_sax_as_comment_node(){
+cts test_cxml_sax_as_comment_node(void){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_3.xml", true);
     cxml_comment_node *comment;
     cxml_list comments = new_cxml_list();
@@ -130,7 +130,7 @@ cts test_cxml_sax_as_comment_node(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_pi_node(){
+cts test_cxml_sax_as_pi_node(void){
     cxml_sax_event_reader reader = get_event_reader("foo.xml", true);
     cxml_pi_node *pi;
     cxml_list pis = new_cxml_list();
@@ -157,7 +157,7 @@ cts test_cxml_sax_as_pi_node(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_text_node(){
+cts test_cxml_sax_as_text_node(void){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("wf_xml_3.xml", true);
@@ -186,7 +186,7 @@ cts test_cxml_sax_as_text_node(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_cdsect_node(){
+cts test_cxml_sax_as_cdsect_node(void){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", true);
@@ -218,7 +218,7 @@ cts test_cxml_sax_as_cdsect_node(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_namespace_list(){
+cts test_cxml_sax_as_namespace_list(void){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_4.xml", false);
     cxml_list namespaces = new_cxml_list();
 
@@ -249,7 +249,7 @@ cts test_cxml_sax_as_namespace_list(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_attribute_list(){
+cts test_cxml_sax_as_attribute_list(void){
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
     cxml_attr_node *attr;
     cxml_list attrs = new_cxml_list();
@@ -289,7 +289,7 @@ cts test_cxml_sax_as_attribute_list(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_attribute_node(){
+cts test_cxml_sax_as_attribute_node(void){
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
     cxml_attr_node *attr;
     cxml_list attrs = new_cxml_list();
@@ -331,7 +331,7 @@ cts test_cxml_sax_as_attribute_node(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_dtd_node(){
+cts test_cxml_sax_as_dtd_node(void){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_5.xml", false);
     cxml_dtd_node *dtd = NULL;
     while (cxml_sax_has_event(&reader))
@@ -349,7 +349,7 @@ cts test_cxml_sax_as_dtd_node(){
     cxml_pass()
 }
 
-cts test_cxml_sax_as_xml_hdr_node(){
+cts test_cxml_sax_as_xml_hdr_node(void){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
     cxml_xhdr_node *xh = NULL;
 
@@ -382,7 +382,7 @@ cts test_cxml_sax_as_xml_hdr_node(){
 
 /****data getters*****/
 
-cts test_cxml_sax_get_element_name(){
+cts test_cxml_sax_get_element_name(void){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
     cxml_string name = new_cxml_string();
 
@@ -407,7 +407,7 @@ cts test_cxml_sax_get_element_name(){
     cxml_pass()
 }
 
-cts test_cxml_sax_get_comment_data(){
+cts test_cxml_sax_get_comment_data(void){
     cxml_sax_event_reader reader = get_event_reader("foo.xml", false);
     cxml_string data = new_cxml_string();
 
@@ -433,7 +433,7 @@ cts test_cxml_sax_get_comment_data(){
     cxml_pass()
 }
 
-cts test_cxml_sax_get_text_data(){
+cts test_cxml_sax_get_text_data(void){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("foo.xml", false);
@@ -461,7 +461,7 @@ cts test_cxml_sax_get_text_data(){
     cxml_pass()
 }
 
-cts test_cxml_sax_get_cdsect_data(){
+cts test_cxml_sax_get_cdsect_data(void){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
@@ -488,7 +488,7 @@ cts test_cxml_sax_get_cdsect_data(){
     cxml_pass()
 }
 
-cts test_cxml_sax_get_pi_data(){
+cts test_cxml_sax_get_pi_data(void){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("foo.xml", false);
@@ -528,7 +528,7 @@ cts test_cxml_sax_get_pi_data(){
     cxml_pass()
 }
 
-cts test_cxml_sax_get_attribute_data(){
+cts test_cxml_sax_get_attribute_data(void){
     cxml_config cfg = cxml_get_config();
     cxml_cfg_preserve_space(0);
     cxml_sax_event_reader reader = get_event_reader("cdata.xml", false);
@@ -562,7 +562,7 @@ cts test_cxml_sax_get_attribute_data(){
     cxml_pass()
 }
 
-cts test_cxml_sax_close_event_reader(){
+cts test_cxml_sax_close_event_reader(void){
     cxml_sax_event_reader reader = get_event_reader("wf_xml_1.xml", false);
     cxml_sax_close_event_reader(&reader);
     cxml_assert__neq(reader.is_open, 1)
@@ -570,7 +570,7 @@ cts test_cxml_sax_close_event_reader(){
     cxml_pass()
 }
 
-cts test_cxml_sax_open_event_reader(){
+cts test_cxml_sax_open_event_reader(void){
     char *fp = get_file_path("wf_xml_1.xml");
     cxml_sax_event_reader reader;
     cxml_sax_open_event_reader(&reader, fp, false);
@@ -581,7 +581,7 @@ cts test_cxml_sax_open_event_reader(){
 }
 
 
-void suite_cxsax() {
+void suite_cxsax(void) {
     cxml_suite(cxsax)
     {
         cxml_add_m_test(22,

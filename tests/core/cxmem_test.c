@@ -5,7 +5,7 @@
 
 #include "cxfixture.h"
 
-cts test__cxml_allocate(){
+cts test__cxml_allocate(void){
     char *foo = _cxml_allocate(10);
     cxml_assert__not_null(foo)
     free(foo);
@@ -16,7 +16,7 @@ cts test__cxml_allocate(){
     cxml_pass()
 }
 
-cts test__cxml_callocate(){
+cts test__cxml_callocate(void){
     char *foo = _cxml_callocate(1, 10);
     cxml_assert__not_null(foo)
     free(foo);
@@ -28,7 +28,7 @@ cts test__cxml_callocate(){
     cxml_pass()
 }
 
-cts test__cxml_rallocate(){
+cts test__cxml_rallocate(void){
     char *foo = malloc(3);
     foo = _cxml_rallocate(foo, 10);
     cxml_assert__not_null(foo)
@@ -40,7 +40,7 @@ cts test__cxml_rallocate(){
     cxml_pass()
 }
 
-cts test__cxml_allocate_r(){
+cts test__cxml_allocate_r(void){
     char *foo = _cxml_allocate_r(10, "not enough memory");
     cxml_assert__not_null(foo)
     free(foo);
@@ -53,7 +53,7 @@ cts test__cxml_allocate_r(){
 }
 
 
-cts test__cxml_callocate_r(){
+cts test__cxml_callocate_r(void){
     char *foo = _cxml_callocate_r(1, 10, "not enough memory");
     cxml_assert__not_null(foo)
     free(foo);
@@ -65,7 +65,7 @@ cts test__cxml_callocate_r(){
     cxml_pass()
 }
 
-cts test__cxml_rallocate_r(){
+cts test__cxml_rallocate_r(void){
     char *foo = malloc(3);
     if (!foo){
         cxml_skip()
@@ -81,7 +81,7 @@ cts test__cxml_rallocate_r(){
 }
 
 
-void suite_cxmem() {
+void suite_cxmem(void) {
     cxml_suite(cxmem)
     {
         cxml_add_m_test(6,

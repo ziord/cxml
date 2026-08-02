@@ -17,20 +17,20 @@ int empty_literal_asserts(cxml_number *number){
     return 1;
 }
 
-cts test_cxml_number_init(){
+cts test_cxml_number_init(void){
     cxml_number number;
     cxml_number_init(&number);
     cxml_assert__one(empty_literal_asserts(&number))
     cxml_pass()
 }
 
-cts test_new_cxml_number(){
+cts test_new_cxml_number(void){
     cxml_number number = new_cxml_number();
     cxml_assert__one(empty_literal_asserts(&number))
     cxml_pass()
 }
 
-cts test_cxml_literal_to_long(){
+cts test_cxml_literal_to_long(void){
     cxml_string str = new_cxml_string_s("123456");
     long number = cxml_literal_to_long(&str);
     cxml_assert__eq(number, 123456)
@@ -48,7 +48,7 @@ cts test_cxml_literal_to_long(){
     cxml_pass()
 }
 
-cts test_cxml_literal_to_double(){
+cts test_cxml_literal_to_double(void){
     cxml_string str = new_cxml_string_s("1234.564");
     double number = cxml_literal_to_double(&str);
     cxml_assert__eq(number, 1234.564)
@@ -71,7 +71,7 @@ cts test_cxml_literal_to_double(){
     cxml_pass()
 }
 
-cts test_cxml_set_literal(){
+cts test_cxml_set_literal(void){
     cxml_number number = new_cxml_number();
     cxml_assert__one(empty_literal_asserts(&number))
 
@@ -96,7 +96,7 @@ cts test_cxml_set_literal(){
     cxml_pass()
 }
 
-cts test__cxml_is_integer(){
+cts test__cxml_is_integer(void){
     cxml_assert__true(_cxml_is_integer("234", 3))
     cxml_assert__true(_cxml_is_integer("  \"234  \"  ", 11))
     cxml_assert__false(_cxml_is_integer("  \"234", 6))
@@ -111,7 +111,7 @@ cts test__cxml_is_integer(){
     cxml_pass()
 }
 
-cts test__cxml_is_double(){
+cts test__cxml_is_double(void){
     cxml_assert__false(_cxml_is_double("234", 3))
     cxml_assert__false(_cxml_is_double("0xdeadbeef", 10))
     cxml_assert__false(_cxml_is_double("0xaceface", 9))
@@ -129,7 +129,7 @@ cts test__cxml_is_double(){
     cxml_pass()
 }
 
-cts test_cxml_literal_to_num(){
+cts test_cxml_literal_to_num(void){
     cxml_string str = new_cxml_string_s("123.321");
     cxml_number number = cxml_literal_to_num(&str);
     cxml_assert__eq(number.dec_val, 123.321)
@@ -157,7 +157,7 @@ cts test_cxml_literal_to_num(){
     cxml_pass()
 }
 
-cts test_cxml_number_is_d_equal(){
+cts test_cxml_number_is_d_equal(void){
     cxml_assert__true(cxml_number_is_d_equal(1.234, 1.234))
     cxml_assert__true(cxml_number_is_d_equal(1.234, 1.2340))
     cxml_assert__false(cxml_number_is_d_equal(1.234, 12340))
@@ -165,7 +165,7 @@ cts test_cxml_number_is_d_equal(){
     cxml_pass()
 }
 
-cts test_cxml_number_is_equal(){
+cts test_cxml_number_is_equal(void){
     cxml_number num1 = new_cxml_number(),
                 num2 = new_cxml_number();
 
@@ -193,7 +193,7 @@ cts test_cxml_number_is_equal(){
     cxml_pass()
 }
 
-cts test_cxml_number_is_greater(){
+cts test_cxml_number_is_greater(void){
     cxml_number num1 = new_cxml_number(),
             num2 = new_cxml_number();
 
@@ -220,7 +220,7 @@ cts test_cxml_number_is_greater(){
     cxml_pass()
 }
 
-cts test_cxml_number_is_less(){
+cts test_cxml_number_is_less(void){
     cxml_number num1 = new_cxml_number(),
             num2 = new_cxml_number();
 
@@ -249,7 +249,7 @@ cts test_cxml_number_is_less(){
     cxml_pass()
 }
 
-cts test_cxml_number_is_not_equal(){
+cts test_cxml_number_is_not_equal(void){
     cxml_number num1 = new_cxml_number(),
             num2 = new_cxml_number();
 
@@ -280,7 +280,7 @@ cts test_cxml_number_is_not_equal(){
 }
 
 
-void suite_cxliteral(){
+void suite_cxliteral(void){
     cxml_suite(cxliteral)
     {
         cxml_add_m_test(13,

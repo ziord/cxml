@@ -16,7 +16,7 @@ int empty_lrucache_asserts(_cxml_lru_cache *cache){
     return 1;
 }
 
-cts test__cxml_cache_size(){
+cts test__cxml_cache_size(void){
     struct Data k, v;
     _cxml_lru_cache cache;
     _cxml_cache_init(&cache);
@@ -38,14 +38,14 @@ cts test__cxml_cache_size(){
     cxml_pass()
 }
 
-cts test__cxml_cache_init(){
+cts test__cxml_cache_init(void){
     _cxml_lru_cache cache;
     _cxml_cache_init(&cache);
     cxml_assert__one(empty_lrucache_asserts(&cache))
     cxml_pass()
 }
 
-cts test__cxml_cache_put(){
+cts test__cxml_cache_put(void){
     struct Data k, k2, k3, v, v2, v3;
     _cxml_lru_cache cache;
     _cxml_cache_init(&cache);
@@ -64,7 +64,7 @@ cts test__cxml_cache_put(){
     cxml_pass()
 }
 
-cts test__cxml_cache_get(){
+cts test__cxml_cache_get(void){
     struct Data k, k2, k3, v, v2, v3;
     _cxml_lru_cache cache;
     _cxml_cache_init(&cache);
@@ -94,7 +94,7 @@ cts test__cxml_cache_get(){
     cxml_pass()
 }
 
-cts test__cxml_cache_free(){
+cts test__cxml_cache_free(void){
     struct Data k, v;
     _cxml_lru_cache cache;
     _cxml_cache_init(&cache);
@@ -111,7 +111,7 @@ cts test__cxml_cache_free(){
 }
 
 
-void suite_cxlrucache(){
+void suite_cxlrucache(void){
     cxml_suite(cxstack)
     {
         cxml_add_m_test(5,

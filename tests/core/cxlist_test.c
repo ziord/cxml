@@ -14,13 +14,13 @@ int empty_list_asserts(cxml_list *list){
     return 1;
 }
 
-cts test_new_cxml_list(){
+cts test_new_cxml_list(void){
     cxml_list list = new_cxml_list();
     cxml_assert__one(empty_list_asserts(&list))
     cxml_pass()
 }
 
-cts test_cxml_list_init(){
+cts test_cxml_list_init(void){
     cxml_list list;
     cxml_list_init(&list);
     cxml_assert__one(empty_list_asserts(&list))
@@ -30,7 +30,7 @@ cts test_cxml_list_init(){
 }
 
 
-cts test_cxml_list_insert(){
+cts test_cxml_list_insert(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -57,7 +57,7 @@ cts test_cxml_list_insert(){
     cxml_pass()
 }
 
-cts test_cxml_list_insert_at_index(){
+cts test_cxml_list_insert_at_index(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2, data3, data4;
 
@@ -86,7 +86,7 @@ cts test_cxml_list_insert_at_index(){
     cxml_pass()
 }
 
-cts test_cxml_list_append(){
+cts test_cxml_list_append(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -104,7 +104,7 @@ cts test_cxml_list_append(){
     cxml_pass()
 }
 
-cts test_cxml_list_extend(){
+cts test_cxml_list_extend(void){
     cxml_list list1 = new_cxml_list(),
               list2 = new_cxml_list();
     cxml_assert__zero(list1.len)
@@ -132,7 +132,7 @@ cts test_cxml_list_extend(){
     cxml_pass()
 }
 
-cts test_cxml_list_init_with(){
+cts test_cxml_list_init_with(void){
     cxml_list list1 = new_cxml_list(),
             list2 = new_cxml_list();
 
@@ -157,7 +157,7 @@ cts test_cxml_list_init_with(){
     cxml_pass()
 }
 
-cts test_cxml_list_qextend(){
+cts test_cxml_list_qextend(void){
     cxml_list list1 = new_cxml_list(),
             list2 = new_cxml_list();
 
@@ -182,7 +182,7 @@ cts test_cxml_list_qextend(){
     cxml_pass()
 }
 
-cts test_cxml_list_add(){
+cts test_cxml_list_add(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -203,7 +203,7 @@ cts test_cxml_list_add(){
     cxml_pass()
 }
 
-cts test_cxml_list_search(){
+cts test_cxml_list_search(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2, data3;
 
@@ -228,7 +228,7 @@ cts test_cxml_list_search(){
     cxml_pass()
 }
 
-cts test_cxml_list_search_delete(){
+cts test_cxml_list_search_delete(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -270,7 +270,7 @@ cts test_cxml_list_search_delete(){
     cxml_pass()
 }
 
-cts test_cxml_list_cmp_str_items(){
+cts test_cxml_list_cmp_str_items(void){
     char *data1 = "foo", *data2 = "bar", *data3 = "foo";
     cxml_assert__false( cxml_list_cmp_str_items(&data1, &data2))
     cxml_assert__true(cxml_list_cmp_str_items(&data1, &data1))
@@ -279,7 +279,7 @@ cts test_cxml_list_cmp_str_items(){
     cxml_pass()
 }
 
-cts test_cxml_list_cmp_raw_items(){
+cts test_cxml_list_cmp_raw_items(void){
     struct Data data1, data2;
     cxml_assert__false(cxml_list_cmp_raw_items(&data1, &data2))
     cxml_assert__true(cxml_list_cmp_raw_items(&data1, &data1));
@@ -294,7 +294,7 @@ int assert_list(cxml_list *list){
     return 1;
 }
 
-cts test_new_alloc_cxml_list(){
+cts test_new_alloc_cxml_list(void){
     cxml_list *list1 = new_alloc_cxml_list();
     cxml_list *list2 = new_alloc_cxml_list();
     cxml_assert__one(assert_list(list1));
@@ -306,7 +306,7 @@ cts test_new_alloc_cxml_list(){
     cxml_pass()
 }
 
-cts test_cxml_list_size(){
+cts test_cxml_list_size(void){
     struct Data data;
     cxml_list list = new_cxml_list();
     cxml_assert__zero(cxml_list_size(&list))
@@ -317,7 +317,7 @@ cts test_cxml_list_size(){
     cxml_pass()
 }
 
-cts test_cxml_list_get(){
+cts test_cxml_list_get(void){
     struct Data data;
     cxml_list list = new_cxml_list();
     cxml_list_append(&list, &data);
@@ -330,7 +330,7 @@ cts test_cxml_list_get(){
     cxml_pass()
 }
 
-cts test_cxml_list_last(){
+cts test_cxml_list_last(void){
     struct Data data1, data2;
     cxml_list list = new_cxml_list();
     cxml_assert__null(cxml_list_last(&list));
@@ -343,7 +343,7 @@ cts test_cxml_list_last(){
     cxml_pass()
 }
 
-cts test_cxml_list_first(){
+cts test_cxml_list_first(void){
     struct Data data1, data2;
     cxml_list list = new_cxml_list();
     cxml_assert__null(cxml_list_first(&list));
@@ -356,7 +356,7 @@ cts test_cxml_list_first(){
     cxml_pass()
 }
 
-cts test_cxml_list_is_empty(){
+cts test_cxml_list_is_empty(void){
     struct Data data;
     cxml_list list = new_cxml_list();
     cxml_assert__true(cxml_list_is_empty(&list));
@@ -367,7 +367,7 @@ cts test_cxml_list_is_empty(){
     cxml_pass()
 }
 
-cts test_cxml_list_safe_delete(){
+cts test_cxml_list_safe_delete(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -399,7 +399,7 @@ cts test_cxml_list_safe_delete(){
     cxml_pass()
 }
 
-cts test_cxml_list_safe_delete_at_pos(){
+cts test_cxml_list_safe_delete_at_pos(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2, data3;
 
@@ -441,7 +441,7 @@ cts test_cxml_list_safe_delete_at_pos(){
     cxml_pass()
 }
 
-cts test_cxml_list_delete(){
+cts test_cxml_list_delete(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -471,7 +471,7 @@ cts test_cxml_list_delete(){
     cxml_pass()
 }
 
-cts test_cxml_list_copy(){
+cts test_cxml_list_copy(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
 
@@ -536,17 +536,17 @@ int test_cxml_list_delete_at_position(void (*fn)(cxml_list *, int)){
     return 1;
 }
 
-cts test_cxml_list_delete_at_pos(){
+cts test_cxml_list_delete_at_pos(void){
     cxml_assert__one(test_cxml_list_delete_at_position(cxml_list_delete_at_pos))
     cxml_pass()
 }
 
-cts test_cxml_list_delete_at_index(){
+cts test_cxml_list_delete_at_index(void){
     cxml_assert__one(test_cxml_list_delete_at_position(cxml_list_delete_at_index))
     cxml_pass()
 }
 
-cts test_cxml_list_free(){
+cts test_cxml_list_free(void){
     cxml_list list = new_cxml_list();
     cxml_list *list2 = new_alloc_cxml_list();
     struct Data data1, data2;
@@ -574,7 +574,7 @@ cts test_cxml_list_free(){
     cxml_pass()
 }
 
-cts test_cxml_for_each(){
+cts test_cxml_for_each(void){
     cxml_list list = new_cxml_list();
     struct Data data1, data2;
     struct Data *ds[] = {&data1, &data2, &data1, &data2};
@@ -595,7 +595,7 @@ cts test_cxml_for_each(){
 /*
  * cxlist.c suite
  */
-void suite_cxlist(){
+void suite_cxlist(void){
     cxml_suite(cxlist)
     {
         cxml_add_m_test(27,
