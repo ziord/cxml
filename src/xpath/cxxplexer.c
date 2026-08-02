@@ -24,7 +24,7 @@ void _cxml_xp_token_init(_cxml_xp_token* token){
     token->start = NULL;
 }
 
-static _cxml_xp_token _cx_new_xpath_token(){
+static _cxml_xp_token _cx_new_xpath_token(void){
     _cxml_xp_token token;
     _cxml_xp_token_init(&token);
     return token;

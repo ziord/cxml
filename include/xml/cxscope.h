@@ -19,7 +19,7 @@ void _cxml_scope_table_init(struct _cxml_scope_table *table);
 
 void _cxml_scope_table_free(struct _cxml_scope_table *scope);
 
-struct _cxml_scope_table * _cxml_scope_table_new();
+struct _cxml_scope_table * _cxml_scope_table_new(void);
 
 void* _cxml_scope_table_lookup(struct _cxml_scope_table *table, const char *name);
 

@@ -152,7 +152,7 @@ static void _cxml_p__consume(_cxml_parser *cxparser, _cxml_token_t type) {
 }
 
 #define __new_cxml_func(node_type)   \
-inline static cxml_##node_type##_node* _new_cxml_##node_type(){           \
+inline static cxml_##node_type##_node* _new_cxml_##node_type(void){           \
     cxml_##node_type##_node* node = ALLOCR(cxml_##node_type##_node, 1, \
                                       "Error during parsing.. Not enough memory");    \
     cxml_##node_type##_node_init(node);    \
@@ -181,7 +181,7 @@ __new_cxml_func(ns)
 
 /**************************/
 
-cxml_root_node* create_root_node(){
+cxml_root_node* create_root_node(void){
     cxml_root_node *doc = ALLOCR(cxml_root_node, 1, "Error during parsing.. Not enough memory");
     cxml_root_node_init(doc);
     cxml_config cfg = cxml_get_config();

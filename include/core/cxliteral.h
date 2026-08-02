@@ -31,7 +31,7 @@ typedef struct {
 
 void cxml_number_init(cxml_number *literal);
 
-cxml_number new_cxml_number();
+cxml_number new_cxml_number(void);
 
 long cxml_literal_to_long(cxml_string *str);
 

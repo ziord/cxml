@@ -15,7 +15,7 @@ int empty_table_asserts(cxml_table *table){
     return 1;
 }
 
-cts test_cxml_table_free(){
+cts test_cxml_table_free(void){
     cxml_table table = new_cxml_table();
     cxml_table_put(&table, "foo", "bar");
     cxml_assert__one(table.count)
@@ -27,20 +27,20 @@ cts test_cxml_table_free(){
     cxml_pass()
 }
 
-cts test_new_cxml_table(){
+cts test_new_cxml_table(void){
     cxml_table table = new_cxml_table();
     cxml_assert__one(empty_table_asserts(&table))
     cxml_pass()
 }
 
-cts test_new_alloc_cxml_table(){
+cts test_new_alloc_cxml_table(void){
     cxml_table *table = new_alloc_cxml_table();
     cxml_assert__one(empty_table_asserts(table))
     FREE(table);
     cxml_pass()
 }
 
-cts test_cxml_table_init(){
+cts test_cxml_table_init(void){
     cxml_table table;
     cxml_table_init(&table);
     cxml_assert__one(empty_table_asserts(&table))
@@ -49,7 +49,7 @@ cts test_cxml_table_init(){
     cxml_pass()
 }
 
-cts test_cxml_table_put(){
+cts test_cxml_table_put(void){
     cxml_table table = new_cxml_table();
     // put
     cxml_assert__one(cxml_table_put(&table, "project-1", "cxml test"))
@@ -88,7 +88,7 @@ cts test_cxml_table_put(){
     cxml_pass()
 }
 
-cts test_cxml_table_put_raw(){
+cts test_cxml_table_put_raw(void){
     cxml_table table = new_cxml_table();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     // put
@@ -122,7 +122,7 @@ cts test_cxml_table_put_raw(){
     cxml_pass()
 }
 
-cts test_cxml_table_remove(){
+cts test_cxml_table_remove(void){
     cxml_table table = new_cxml_table();
     cxml_assert__one(cxml_table_put(&table, "simple", "bug fixes"))
     cxml_assert__one(cxml_table_put(&table, "lorem ipsum", "dolor sit amet"))
@@ -200,7 +200,7 @@ cts test_cxml_table_remove(){
     cxml_pass()
 }
 
-cts test_cxml_table_remove_raw(){
+cts test_cxml_table_remove_raw(void){
     cxml_table table = new_cxml_table();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     cxml_assert__one(cxml_table_put_raw(&table, &d1, "bug fixes"))
@@ -283,7 +283,7 @@ cts test_cxml_table_remove_raw(){
     cxml_pass()
 }
 
-cts test_cxml_table_get(){
+cts test_cxml_table_get(void){
     cxml_table table = new_cxml_table();
     char *v;
     // put
@@ -348,7 +348,7 @@ cts test_cxml_table_get(){
     cxml_pass()
 }
 
-cts test_cxml_table_get_raw(){
+cts test_cxml_table_get_raw(void){
     cxml_table table = new_cxml_table();
     struct Data d1, d2, d3, d4, d5, d6, d7, d8;
     char *k1 = "abc", *k2 = "step-up", *k3 = "\0", *k4 = "";
@@ -420,7 +420,7 @@ cts test_cxml_table_get_raw(){
     cxml_pass()
 }
 
-cts test_cxml_table_is_empty(){
+cts test_cxml_table_is_empty(void){
     cxml_table table = new_cxml_table();
     cxml_assert__true(cxml_table_is_empty(&table))
     cxml_assert__true(cxml_table_is_empty(NULL))
@@ -430,7 +430,7 @@ cts test_cxml_table_is_empty(){
     cxml_pass()
 }
 
-cts test_cxml_table_size(){
+cts test_cxml_table_size(void){
     cxml_table table = new_cxml_table();
     cxml_assert__zero(cxml_table_size(&table))
     cxml_assert__zero(cxml_table_size(NULL))
@@ -440,7 +440,7 @@ cts test_cxml_table_size(){
     cxml_pass()
 }
 
-void suite_cxtable(){
+void suite_cxtable(void){
     cxml_suite(cxtable)
     {
         cxml_add_m_test(12,

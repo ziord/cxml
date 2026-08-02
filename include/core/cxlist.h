@@ -57,9 +57,9 @@ bool cxml_list_cmp_str_items(void* item1, void* item2);
 
 bool cxml_list_cmp_raw_items(void* item1, void* item2);
 
-cxml_list new_cxml_list();
+cxml_list new_cxml_list(void);
 
-cxml_list *new_alloc_cxml_list();
+cxml_list *new_alloc_cxml_list(void);
 
 int cxml_list_size(cxml_list* list);
 

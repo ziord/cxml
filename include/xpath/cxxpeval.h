@@ -12,7 +12,7 @@
 #include "cxxplib.h"
 
 /**Debug**/
-void cxml_xp_debug_expr();
+void cxml_xp_debug_expr(void);
 
 /** public api **/
 cxml_set* cxml_xpath(void *root, const char *expr);

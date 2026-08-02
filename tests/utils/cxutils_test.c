@@ -5,7 +5,7 @@
 
 #include "cxfixture.h"
 
-cts test__cxml_read_file(){
+cts test__cxml_read_file(void){
     char *fp = get_file_path("wf_xml_1.xml");
     char *dest;
     cxml_assert__zero(_cxml_read_file(fp, NULL))
@@ -17,7 +17,7 @@ cts test__cxml_read_file(){
     cxml_pass()
 }
 
-void suite_cxutils(){
+void suite_cxutils(void){
     cxml_suite(cxutils)
     {
         cxml_add_test(test__cxml_read_file)

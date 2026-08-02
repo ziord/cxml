@@ -72,7 +72,7 @@ char *df_xml_1 = \
 static char *file = __FILE__;
 static char *data_folder = NULL;
 
-void set_data_path(){
+void set_data_path(void){
     size_t  len = strlen(file) - 11;
     int data = 5;
     data_folder = malloc(len + data + 1);
@@ -81,7 +81,7 @@ void set_data_path(){
     data_folder[len + data] = '\0';
 }
 
-void free_data_path(){
+void free_data_path(void){
     free(data_folder);
 }
 
@@ -101,7 +101,7 @@ cxml_root_node *get_root(char *file_name, bool stream){
 
 /** fixtures **/
 
-void fixture_no_fancy_printing_and_warnings(){
+void fixture_no_fancy_printing_and_warnings(void){
     cxml_reset_config();
     cxml_cfg_enable_fancy_printing(0);
     cxml_cfg_show_warnings(0);

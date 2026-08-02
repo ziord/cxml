@@ -104,7 +104,7 @@ int empty_xhdr_asserts(cxml_xhdr_node *node){
     return 1;
 }
 
-cts test_cxml_elem_node_init(){
+cts test_cxml_elem_node_init(void){
     cxml_elem_node node;
     cxml_elem_node_init(&node);
     cxml_assert__one(empty_elem_asserts(&node))
@@ -114,7 +114,7 @@ cts test_cxml_elem_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_text_node_init(){
+cts test_cxml_text_node_init(void){
     cxml_text_node node;
     cxml_text_node_init(&node);
     cxml_assert__one(empty_text_asserts(&node))
@@ -123,7 +123,7 @@ cts test_cxml_text_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_attr_node_init(){
+cts test_cxml_attr_node_init(void){
     cxml_attr_node node;
     cxml_attr_node_init(&node);
     cxml_assert__one(empty_attr_asserts(&node))
@@ -132,7 +132,7 @@ cts test_cxml_attr_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_ns_node_init(){
+cts test_cxml_ns_node_init(void){
     cxml_ns_node node;
     cxml_ns_node_init(&node);
     cxml_assert__one(empty_ns_asserts(&node))
@@ -141,7 +141,7 @@ cts test_cxml_ns_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_root_node_init(){
+cts test_cxml_root_node_init(void){
     cxml_root_node node;
     cxml_root_node_init(&node);
     cxml_assert__one(empty_root_asserts(&node))
@@ -151,7 +151,7 @@ cts test_cxml_root_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_comm_node_init(){
+cts test_cxml_comm_node_init(void){
     cxml_comm_node node;
     cxml_comm_node_init(&node);
     cxml_assert__one(empty_comm_asserts(&node))
@@ -161,7 +161,7 @@ cts test_cxml_comm_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_pi_node_init(){
+cts test_cxml_pi_node_init(void){
     cxml_pi_node node;
     cxml_pi_node_init(&node);
     cxml_assert__one(empty_pi_asserts(&node))
@@ -171,7 +171,7 @@ cts test_cxml_pi_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_dtd_node_init(){
+cts test_cxml_dtd_node_init(void){
     cxml_dtd_node node;
     cxml_dtd_node_init(&node);
     cxml_assert__one(empty_dtd_asserts(&node))
@@ -181,7 +181,7 @@ cts test_cxml_dtd_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_xhdr_node_init(){
+cts test_cxml_xhdr_node_init(void){
     cxml_xhdr_node node;
     cxml_xhdr_node_init(&node);
     cxml_assert__one(empty_xhdr_asserts(&node))
@@ -191,7 +191,7 @@ cts test_cxml_xhdr_node_init(){
     cxml_pass()
 }
 
-cts test_cxml_name_init(){
+cts test_cxml_name_init(void){
     cxml_name name;
     cxml_name_init(&name);
     cxml_assert__zero(cxml_string_len(&name.qname))
@@ -202,7 +202,7 @@ cts test_cxml_name_init(){
     cxml_pass()
 }
 
-cts test__cxml_get_node_type(){
+cts test__cxml_get_node_type(void){
     cxml_elem_node *node = ALLOC(cxml_elem_node, 1);
     cxml_elem_node_init(node);
     cxml_elem_node_init(node);
@@ -212,7 +212,7 @@ cts test__cxml_get_node_type(){
     cxml_pass()
 }
 
-cts test__cxml_get_node_pos(){
+cts test__cxml_get_node_pos(void){
     cxml_elem_node node;
     cxml_elem_node_init(&node);
     cxml_assert__zero(_cxml_get_node_pos(&node))
@@ -221,7 +221,7 @@ cts test__cxml_get_node_pos(){
     cxml_pass()
 }
 
-cts test__cxml_get_node_parent(){
+cts test__cxml_get_node_parent(void){
     cxml_elem_node node, parent;
     cxml_elem_node_init(&node);
     cxml_elem_node_init(&parent);
@@ -232,7 +232,7 @@ cts test__cxml_get_node_parent(){
     cxml_pass()
 }
 
-cts test__cxml_node_parent(){
+cts test__cxml_node_parent(void){
     cxml_elem_node node, parent;
     cxml_elem_node_init(&node);
     cxml_elem_node_init(&parent);
@@ -242,7 +242,7 @@ cts test__cxml_node_parent(){
     cxml_pass()
 }
 
-cts test__cxml_unset_parent(){
+cts test__cxml_unset_parent(void){
     cxml_elem_node node, parent;
     cxml_elem_node_init(&node);
     cxml_elem_node_init(&parent);
@@ -253,7 +253,7 @@ cts test__cxml_unset_parent(){
     cxml_pass()
 }
 
-cts test__cxml_cmp_node(){
+cts test__cxml_cmp_node(void){
     cxml_elem_node *node1 = ALLOC(cxml_elem_node, 1);
     cxml_elem_node *node2 = ALLOC(cxml_elem_node, 1);
     cxml_elem_node_init(node1);
@@ -276,7 +276,7 @@ cts test__cxml_cmp_node(){
 }
 
 
-void suite_cxdefs(){
+void suite_cxdefs(void){
     cxml_suite(cxdefs)
     {
         cxml_add_m_test(16,

@@ -52,7 +52,7 @@ typedef struct {
 _cxml_xp_parser _xpath_parser;
 
 
-void _cxml_xpath_parser_free();
+void _cxml_xpath_parser_free(void);
 
 void cxml_xp_free_ast_nodes(_cxml_xp_parser *xpp);
 

@@ -15,14 +15,14 @@ int empty_stack_asserts(_cxml_stack *stack){
     return 1;
 }
 
-cts test__cxml_stack_init(){
+cts test__cxml_stack_init(void){
     _cxml_stack stack;
     _cxml_stack_init(&stack);
     cxml_assert__one(empty_stack_asserts(&stack))
     cxml_pass()
 }
 
-cts test__cxml_stack__push(){
+cts test__cxml_stack__push(void){
     _cxml_stack stack;
     _cxml_stack_init(&stack);
     struct Data d1, d2, d3;
@@ -46,7 +46,7 @@ cts test__cxml_stack__push(){
     cxml_pass()
 }
 
-cts test__cxml_stack__pop(){
+cts test__cxml_stack__pop(void){
     _cxml_stack stack;
     _cxml_stack_init(&stack);
     struct Data d1, d2, d3;
@@ -75,7 +75,7 @@ cts test__cxml_stack__pop(){
     cxml_pass()
 }
 
-cts test__cxml_stack__get(){
+cts test__cxml_stack__get(void){
     _cxml_stack stack;
     _cxml_stack_init(&stack);
     struct Data d1, d2, d3;
@@ -98,7 +98,7 @@ cts test__cxml_stack__get(){
     cxml_pass()
 }
 
-cts test__cxml_stack_is_empty(){
+cts test__cxml_stack_is_empty(void){
     _cxml_stack stack;
     _cxml_stack_init(&stack);
     struct Data d;
@@ -116,7 +116,7 @@ cts test__cxml_stack_is_empty(){
     cxml_pass()
 }
 
-cts test__cxml_stack_free(){
+cts test__cxml_stack_free(void){
     _cxml_stack stack;
     _cxml_stack_init(&stack);
     struct Data d;
@@ -134,7 +134,7 @@ cts test__cxml_stack_free(){
     cxml_pass()
 }
 
-void suite_cxstack(){
+void suite_cxstack(void){
     cxml_suite(cxstack)
     {
         cxml_add_m_test(6,

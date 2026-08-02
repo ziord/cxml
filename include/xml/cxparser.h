@@ -47,7 +47,7 @@ void _cxml_parser_init(
         const char* file_name,
         bool stream);
 
-cxml_root_node* create_root_node();
+cxml_root_node* create_root_node(void);
 
 cxml_root_node* cxml_parse_xml(const char *src);
 

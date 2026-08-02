@@ -31,9 +31,9 @@ typedef struct {
 
 void cxml_table_free(cxml_table *table);
 
-cxml_table new_cxml_table();
+cxml_table new_cxml_table(void);
 
-cxml_table *new_alloc_cxml_table();
+cxml_table *new_alloc_cxml_table(void);
 
 void cxml_table_init(cxml_table *);
 

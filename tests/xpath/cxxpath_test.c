@@ -7,7 +7,7 @@
 
 // todo: more comprehensive tests
 
-cts test_cxml_xpath(){
+cts test_cxml_xpath(void){
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert(root)
     cxml_set *nodeset = cxml_xpath(root, "//*");
@@ -33,7 +33,7 @@ cts test_cxml_xpath(){
     cxml_pass()
 }
 
-void suite_cxxpath(){
+void suite_cxxpath(void){
     cxml_suite(cxxpath)
     {
         cxml_add_test(test_cxml_xpath)

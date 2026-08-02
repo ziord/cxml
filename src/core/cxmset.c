@@ -30,13 +30,13 @@ void cxml_set_init(cxml_set* mset){
     __init_mset(mset)
 }
 
-cxml_set new_cxml_set(){
+cxml_set new_cxml_set(void){
     cxml_set mset;
     __init_mset(&mset)
     return mset;
 }
 
-cxml_set* new_alloc_cxml_set(){
+cxml_set* new_alloc_cxml_set(void){
     cxml_set *mset = ALLOC(cxml_set, 1);
     __init_mset(mset);
     return mset;

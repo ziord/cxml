@@ -13,7 +13,7 @@
 *      This should be a collaboratory test with cxconfig.c module
 */
 
-cts test_cxml_prettify(){
+cts test_cxml_prettify(void){
     cxml_cfg_preserve_space(0);
     cxml_cfg_show_doc_as_top_level(0);
     cxml_root_node *root = get_root("ugly.xml", false);
@@ -45,7 +45,7 @@ cts test_cxml_prettify(){
 }
 
 
-void suite_cxprinter() {
+void suite_cxprinter(void) {
     cxml_suite(cxprinter)
     {
         cxml_add_test_setup(fixture_no_fancy_printing_and_warnings)

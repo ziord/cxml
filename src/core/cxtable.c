@@ -30,13 +30,13 @@ void cxml_table_init(cxml_table *table) {
     __init_table(table)
 }
 
-cxml_table new_cxml_table(){
+cxml_table new_cxml_table(void){
     cxml_table table;
     __init_table(&table)
     return table;
 }
 
-cxml_table *new_alloc_cxml_table(){
+cxml_table *new_alloc_cxml_table(void){
     cxml_table *table = ALLOC(cxml_table, 1);
     __init_table(table)
     return table;

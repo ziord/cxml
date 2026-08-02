@@ -14,7 +14,7 @@
 
 
 // General functions
-cts test_cxml_is_well_formed(){
+cts test_cxml_is_well_formed(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", false);
     cxml_assert__not_null(root)
@@ -27,7 +27,7 @@ cts test_cxml_is_well_formed(){
     cxml_pass()
 }
 
-cts test_cxml_get_node_type(){
+cts test_cxml_get_node_type(void){
     deb()
     cxml_root_node root;
     cxml_root_node_init(&root);
@@ -39,7 +39,7 @@ cts test_cxml_get_node_type(){
     cxml_pass()
 }
 
-cts test_cxml_get_dtd_node(){
+cts test_cxml_get_dtd_node(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_5.xml", true);
     cxml_assert__not_null(root)
@@ -55,7 +55,7 @@ cts test_cxml_get_dtd_node(){
     cxml_pass()
 }
 
-cts test_cxml_get_xml_hdr_node(){
+cts test_cxml_get_xml_hdr_node(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", false);
 
@@ -73,7 +73,7 @@ cts test_cxml_get_xml_hdr_node(){
     cxml_pass()
 }
 
-cts test_cxml_get_root_element(){
+cts test_cxml_get_root_element(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", false);
     cxml_assert__not_null(root)
@@ -114,7 +114,7 @@ int name_asserts(
     return 1;
 }
 
-cts test_cxml_find(){
+cts test_cxml_find(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", true);
     cxml_assert__not_null(root)
@@ -128,7 +128,7 @@ cts test_cxml_find(){
     cxml_pass()
 }
 
-cts test_cxml_find_all(){
+cts test_cxml_find_all(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
     cxml_assert__not_null(root)
@@ -155,7 +155,7 @@ cts test_cxml_find_all(){
     cxml_pass()
 }
 
-cts test_cxml_find_children(){
+cts test_cxml_find_children(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
     cxml_assert__not_null(root)
@@ -182,7 +182,7 @@ cts test_cxml_find_children(){
     cxml_pass()
 }
 
-cts test_cxml_children(){
+cts test_cxml_children(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", false);
     cxml_assert__not_null(root)
@@ -207,7 +207,7 @@ cts test_cxml_children(){
     cxml_pass()
 }
 
-cts test_cxml_next_element(){
+cts test_cxml_next_element(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", false);
     cxml_assert__not_null(root)
@@ -228,7 +228,7 @@ cts test_cxml_next_element(){
     cxml_pass()
 }
 
-cts test_cxml_previous_element(){
+cts test_cxml_previous_element(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", true);
     cxml_assert__not_null(root)
@@ -250,7 +250,7 @@ cts test_cxml_previous_element(){
 }
 
 // cimple
-cts test_cxml_next_comment(){
+cts test_cxml_next_comment(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_3.xml", true);
     cxml_assert__not_null(root)
@@ -276,7 +276,7 @@ cts test_cxml_next_comment(){
     cxml_pass()
 }
 
-cts test_cxml_previous_comment(){
+cts test_cxml_previous_comment(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_3.xml", false);
     cxml_assert__not_null(root)
@@ -306,7 +306,7 @@ cts test_cxml_previous_comment(){
     cxml_pass()
 }
 
-cts test_cxml_next_text(){
+cts test_cxml_next_text(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -332,7 +332,7 @@ cts test_cxml_next_text(){
     cxml_pass()
 }
 
-cts test_cxml_previous_text(){
+cts test_cxml_previous_text(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -361,7 +361,7 @@ cts test_cxml_previous_text(){
     cxml_pass()
 }
 
-cts test_cxml_first_child(){
+cts test_cxml_first_child(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -377,7 +377,7 @@ cts test_cxml_first_child(){
     cxml_pass()
 }
 
-cts test_cxml_find_first_child(){
+cts test_cxml_find_first_child(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -392,7 +392,7 @@ cts test_cxml_find_first_child(){
     cxml_pass()
 }
 
-cts test_cxml_parent(){
+cts test_cxml_parent(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
     cxml_assert__not_null(root)
@@ -413,7 +413,7 @@ cts test_cxml_parent(){
     cxml_pass()
 }
 
-cts test_cxml_find_parent(){
+cts test_cxml_find_parent(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_4.xml", false);
     cxml_assert__not_null(root)
@@ -435,7 +435,7 @@ cts test_cxml_find_parent(){
     cxml_pass()
 }
 
-cts test_cxml_ancestors(){
+cts test_cxml_ancestors(void){
     deb()
     cxml_cfg_set_doc_name("ancestor");
     cxml_root_node *root = get_root("wf_xml_2.xml", false);
@@ -467,7 +467,7 @@ cts test_cxml_ancestors(){
     cxml_pass()
 }
 
-cts test_cxml_find_ancestors(){
+cts test_cxml_find_ancestors(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_2.xml", true);
     cxml_assert__not_null(root)
@@ -506,7 +506,7 @@ cts test_cxml_find_ancestors(){
     cxml_pass()
 }
 
-cts test_cxml_descendants(){
+cts test_cxml_descendants(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -545,7 +545,7 @@ cts test_cxml_descendants(){
     cxml_pass()
 }
 
-cts test_cxml_find_descendants(){
+cts test_cxml_find_descendants(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -583,7 +583,7 @@ cts test_cxml_find_descendants(){
     cxml_pass()
 }
 
-cts test_cxml_next_sibling(){
+cts test_cxml_next_sibling(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
     cxml_assert__not_null(root)
@@ -601,7 +601,7 @@ cts test_cxml_next_sibling(){
     cxml_pass()
 }
 
-cts test_cxml_previous_sibling(){
+cts test_cxml_previous_sibling(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
     cxml_assert__not_null(root)
@@ -617,7 +617,7 @@ cts test_cxml_previous_sibling(){
     cxml_pass()
 }
 
-cts test_cxml_find_next_sibling(){
+cts test_cxml_find_next_sibling(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
     cxml_assert__not_null(root)
@@ -633,7 +633,7 @@ cts test_cxml_find_next_sibling(){
     cxml_pass()
 }
 
-cts test_cxml_find_previous_sibling(){
+cts test_cxml_find_previous_sibling(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
     cxml_assert__not_null(root)
@@ -649,7 +649,7 @@ cts test_cxml_find_previous_sibling(){
     cxml_pass()
 }
 
-cts test_cxml_siblings(){
+cts test_cxml_siblings(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -687,7 +687,7 @@ cts test_cxml_siblings(){
     cxml_pass()
 }
 
-cts test_cxml_find_siblings(){
+cts test_cxml_find_siblings(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -728,7 +728,7 @@ cts test_cxml_find_siblings(){
     cxml_pass()
 }
 
-cts test_cxml_get_attribute(){
+cts test_cxml_get_attribute(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", false);
     cxml_assert__not_null(root)
@@ -745,7 +745,7 @@ cts test_cxml_get_attribute(){
     cxml_pass()
 }
 
-cts test_cxml_find_attribute(){
+cts test_cxml_find_attribute(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_1.xml", true);
     cxml_assert__not_null(root)
@@ -764,7 +764,7 @@ cts test_cxml_find_attribute(){
     cxml_pass()
 }
 
-cts test_cxml_attributes(){
+cts test_cxml_attributes(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_8.xml", true);
     cxml_assert__not_null(root)
@@ -801,7 +801,7 @@ cts test_cxml_attributes(){
     cxml_pass()
 }
 
-cts test_cxml_find_attributes(){
+cts test_cxml_find_attributes(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_8.xml", false);
     cxml_assert__not_null(root)
@@ -838,7 +838,7 @@ cts test_cxml_find_attributes(){
     cxml_pass()
 }
 
-cts test_cxml_text_as_cxml_string(){
+cts test_cxml_text_as_cxml_string(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_6);
     cxml_assert__not_null(root)
@@ -879,7 +879,7 @@ cts test_cxml_text_as_cxml_string(){
     cxml_pass()
 }
 
-cts test_cxml_text(){
+cts test_cxml_text(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
     cxml_assert__not_null(root)
@@ -916,7 +916,7 @@ cts test_cxml_text(){
     cxml_pass()
 }
 
-cts test_cxml_get_name(){
+cts test_cxml_get_name(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_7);
     cxml_assert__not_null(root)
@@ -937,7 +937,7 @@ cts test_cxml_get_name(){
     cxml_pass()
 }
 
-cts test_cxml_get_bound_namespace(){
+cts test_cxml_get_bound_namespace(void){
     deb()
     /*
      * "<f:table xmlns:f=\"https://www.w3schools.com/furniture\">\n"
@@ -975,7 +975,7 @@ cts test_cxml_get_bound_namespace(){
     cxml_pass()
 }
 
-cts test_cxml_get_comments(){
+cts test_cxml_get_comments(void){
     deb()
     cxml_root_node *root = get_root("wf_xml_3.xml", false);
     cxml_assert__not_null(root)
@@ -1021,7 +1021,7 @@ cts test_cxml_get_comments(){
  *********************************
  */
 /**General**/
-cts test_cxml_create_node(){
+cts test_cxml_create_node(void){
     deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     cxml_assert__not_null(elem)
@@ -1032,7 +1032,7 @@ cts test_cxml_create_node(){
     cxml_pass()
 }
 
-cts test_cxml_set_name(){
+cts test_cxml_set_name(void){
     deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     cxml_assert__not_null(elem)
@@ -1099,7 +1099,7 @@ cts test_cxml_set_name(){
     cxml_pass()
 }
 
-cts test_cxml_add_child(){
+cts test_cxml_add_child(void){
     deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     cxml_assert__not_null(elem)
@@ -1147,7 +1147,7 @@ cts test_cxml_add_child(){
     cxml_pass()
 }
 
-cts test_cxml_set_namespace(){
+cts test_cxml_set_namespace(void){
     deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     cxml_assert__true(cxml_set_name(elem, "pp", "element"))
@@ -1213,7 +1213,7 @@ cts test_cxml_set_namespace(){
     cxml_pass()
 }
 
-cts test_cxml_add_namespace(){
+cts test_cxml_add_namespace(void){
     deb()
     cxml_element_node *elem = cxml_create_node(CXML_ELEM_NODE);
     cxml_assert__not_null(elem)
@@ -1257,7 +1257,7 @@ cts test_cxml_add_namespace(){
     cxml_pass()
 }
 
-cts test_cxml_add_attribute(){
+cts test_cxml_add_attribute(void){
     deb()
     // "<fruit a=\"boy\"><name>apple</name></fruit>"
     cxml_root_node *root = cxml_load_string(wf_xml_09);
@@ -1292,7 +1292,7 @@ cts test_cxml_add_attribute(){
     cxml_pass()
 }
 
-cts test_cxml_set_attribute_value(){
+cts test_cxml_set_attribute_value(void){
     deb()
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
     cxml_assert__not_null(attr)
@@ -1310,7 +1310,7 @@ cts test_cxml_set_attribute_value(){
     cxml_pass()
 }
 
-cts test_cxml_set_attribute_name(){
+cts test_cxml_set_attribute_name(void){
     deb()
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
     cxml_assert__not_null(attr)
@@ -1335,7 +1335,7 @@ cts test_cxml_set_attribute_name(){
     cxml_pass()
 }
 
-cts test_cxml_set_attribute_data(){
+cts test_cxml_set_attribute_data(void){
     deb()
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
     cxml_assert__not_null(attr)
@@ -1352,7 +1352,7 @@ cts test_cxml_set_attribute_data(){
     cxml_pass()
 }
 
-cts test_cxml_set_text_value(){
+cts test_cxml_set_text_value(void){
     deb()
     cxml_text_node *text = cxml_create_node(CXML_TEXT_NODE);
     cxml_assert__not_null(text)
@@ -1367,7 +1367,7 @@ cts test_cxml_set_text_value(){
     cxml_pass()
 }
 
-cts test_cxml_set_comment_value(){
+cts test_cxml_set_comment_value(void){
     deb()
     cxml_comment_node *comment = cxml_create_node(CXML_COMM_NODE);
     cxml_assert__not_null(comment)
@@ -1378,7 +1378,7 @@ cts test_cxml_set_comment_value(){
     cxml_pass()
 }
 
-cts test_cxml_set_pi_target(){
+cts test_cxml_set_pi_target(void){
     deb()
     cxml_pi_node *pi = cxml_create_node(CXML_PI_NODE);
     cxml_assert__not_null(pi)
@@ -1392,7 +1392,7 @@ cts test_cxml_set_pi_target(){
     cxml_pass()
 }
 
-cts test_cxml_set_pi_value(){
+cts test_cxml_set_pi_value(void){
     deb()
     cxml_pi_node *pi = cxml_create_node(CXML_PI_NODE);
     cxml_assert__not_null(pi)
@@ -1405,7 +1405,7 @@ cts test_cxml_set_pi_value(){
     cxml_pass()
 }
 
-cts test_cxml_set_pi_data(){
+cts test_cxml_set_pi_data(void){
     deb()
     cxml_pi_node *pi = cxml_create_node(CXML_PI_NODE);
     cxml_assert__not_null(pi)
@@ -1421,7 +1421,7 @@ cts test_cxml_set_pi_data(){
     cxml_pass()
 }
 
-cts test_cxml_set_namespace_prefix(){
+cts test_cxml_set_namespace_prefix(void){
     deb()
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
     cxml_assert__not_null(ns)
@@ -1435,7 +1435,7 @@ cts test_cxml_set_namespace_prefix(){
     cxml_pass()
 }
 
-cts test_cxml_set_namespace_uri(){
+cts test_cxml_set_namespace_uri(void){
     deb()
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
     cxml_assert__not_null(ns)
@@ -1452,7 +1452,7 @@ cts test_cxml_set_namespace_uri(){
     cxml_pass()
 }
 
-cts test_cxml_set_namespace_data(){
+cts test_cxml_set_namespace_data(void){
     deb()
     cxml_namespace_node *ns = cxml_create_node(CXML_NS_NODE);
     cxml_assert__not_null(ns)
@@ -1472,7 +1472,7 @@ cts test_cxml_set_namespace_data(){
     cxml_pass()
 }
 
-cts test_cxml_set_root_node_name(){
+cts test_cxml_set_root_node_name(void){
     deb()
     cxml_root_node *root = cxml_create_node(CXML_ROOT_NODE);
     cxml_assert__not_null(root)
@@ -1485,7 +1485,7 @@ cts test_cxml_set_root_node_name(){
     cxml_pass()
 }
 
-cts test_cxml_set_root_element(){
+cts test_cxml_set_root_element(void){
     deb()
     cxml_root_node *root = cxml_create_node(CXML_ROOT_NODE);
     cxml_assert__false(root->has_child)
@@ -1516,7 +1516,7 @@ cts test_cxml_set_root_element(){
  *********************************
  */
 
-cts test_cxml_insert_before(){
+cts test_cxml_insert_before(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1549,7 +1549,7 @@ cts test_cxml_insert_before(){
     cxml_pass()
 }
 
-cts test_cxml_insert_after(){
+cts test_cxml_insert_after(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1610,7 +1610,7 @@ int element_repr_asserts(cxml_root_node *root){
     return 1;
 }
 
-cts test_cxml_delete_element(){
+cts test_cxml_delete_element(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1654,7 +1654,7 @@ cts test_cxml_delete_element(){
     cxml_pass()
 }
 
-cts test_cxml_drop_element(){
+cts test_cxml_drop_element(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1705,7 +1705,7 @@ cts test_cxml_drop_element(){
     cxml_pass()
 }
 
-cts test_cxml_drop_element_by_query(){
+cts test_cxml_drop_element_by_query(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1757,7 +1757,7 @@ cts test_cxml_drop_element_by_query(){
     cxml_pass()
 }
 
-cts test_cxml_delete_elements(){
+cts test_cxml_delete_elements(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1811,7 +1811,7 @@ cts test_cxml_delete_elements(){
     cxml_pass()
 }
 
-cts test_cxml_delete_elements_by_query(){
+cts test_cxml_delete_elements_by_query(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_10);
     cxml_assert__not_null(root)
@@ -1871,7 +1871,7 @@ cts test_cxml_delete_elements_by_query(){
     cxml_pass()
 }
 
-cts test_cxml_drop_elements(){
+cts test_cxml_drop_elements(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_9);
     cxml_assert__not_null(root)
@@ -1898,7 +1898,7 @@ cts test_cxml_drop_elements(){
     cxml_pass()
 }
 
-cts test_cxml_drop_elements_by_query(){
+cts test_cxml_drop_elements_by_query(void){
     deb()
     // "<fruit><name>apple</name><name>banana</name></fruit>"
     cxml_root_node *root = cxml_load_string(wf_xml_10);
@@ -1926,7 +1926,7 @@ cts test_cxml_drop_elements_by_query(){
     cxml_pass()
 }
 
-cts test_cxml_delete_comment(){
+cts test_cxml_delete_comment(void){
     deb()
     // <fruit><!--some comment--><name>apple</name><!--another comment--></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_11);
@@ -1952,7 +1952,7 @@ cts test_cxml_delete_comment(){
     cxml_pass()
 }
 
-cts test_cxml_drop_comment(){
+cts test_cxml_drop_comment(void){
     deb()
     // <fruit><!--some comment--><name>apple</name><!--another comment--></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_11);
@@ -1980,7 +1980,7 @@ cts test_cxml_drop_comment(){
     cxml_pass()
 }
 
-cts test_cxml_delete_text(){
+cts test_cxml_delete_text(void){
     deb()
     // <fruit><name>apple</name></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_9);
@@ -2011,7 +2011,7 @@ cts test_cxml_delete_text(){
     cxml_pass()
 }
 
-cts test_cxml_drop_text(){
+cts test_cxml_drop_text(void){
     deb()
     // <fruit><name>apple</name></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_9);
@@ -2047,7 +2047,7 @@ cts test_cxml_drop_text(){
     cxml_pass()
 }
 
-cts test_cxml_delete_attribute(){
+cts test_cxml_delete_attribute(void){
     deb()
     // <x:fruit one="1" two="2" xmlns:x="uri"></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_12);
@@ -2069,7 +2069,7 @@ cts test_cxml_delete_attribute(){
     cxml_pass()
 }
 
-cts test_cxml_drop_attribute(){
+cts test_cxml_drop_attribute(void){
     deb()
     // <x:fruit one="1" two="2" xmlns:x="uri"></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_12);
@@ -2091,7 +2091,7 @@ cts test_cxml_drop_attribute(){
 }
 
 
-cts test_cxml_unbound_element(){
+cts test_cxml_unbound_element(void){
     deb()
     // <x:fruit one="1" two="2" xmlns:x="uri"></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_12);
@@ -2115,7 +2115,7 @@ cts test_cxml_unbound_element(){
     cxml_pass()
 }
 
-cts test_cxml_unbound_attribute(){
+cts test_cxml_unbound_attribute(void){
     deb()
     // "<a xmlns:x=\"uri\"><x:fruit one=\"1\" two=\"2\" x:three=\"3\" four=\"4\"></x:fruit></a>"
     cxml_root_node *root = cxml_load_string(wf_xml_13);
@@ -2141,7 +2141,7 @@ cts test_cxml_unbound_attribute(){
     cxml_pass()
 }
 
-cts test_cxml_delete_pi(){
+cts test_cxml_delete_pi(void){
     deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
@@ -2171,7 +2171,7 @@ cts test_cxml_delete_pi(){
     cxml_pass()
 }
 
-cts test_cxml_drop_pi(){
+cts test_cxml_drop_pi(void){
     deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
@@ -2201,7 +2201,7 @@ cts test_cxml_drop_pi(){
     cxml_pass()
 }
 
-cts test_cxml_delete_dtd(){
+cts test_cxml_delete_dtd(void){
     deb()
     // <!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_dtd);
@@ -2232,7 +2232,7 @@ cts test_cxml_delete_dtd(){
     cxml_pass()
 }
 
-cts test_cxml_drop_dtd(){
+cts test_cxml_drop_dtd(void){
     deb()
     // <!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_dtd);
@@ -2263,7 +2263,7 @@ cts test_cxml_drop_dtd(){
     cxml_pass()
 }
 
-cts test_cxml_delete_xml_hdr(){
+cts test_cxml_delete_xml_hdr(void){
     deb()
     // "<?xml version=\"1.0\"?><start>testing</start>"
     cxml_root_node *root = cxml_load_string(wf_xml_xhdr);
@@ -2294,7 +2294,7 @@ cts test_cxml_delete_xml_hdr(){
     cxml_pass()
 }
 
-cts test_cxml_drop_xml_hdr(){
+cts test_cxml_drop_xml_hdr(void){
     deb()
     // "<?xml version=\"1.0\"?><start>testing</start>"
     cxml_root_node *root = cxml_load_string(wf_xml_xhdr);
@@ -2325,7 +2325,7 @@ cts test_cxml_drop_xml_hdr(){
     cxml_pass()
 }
 
-cts test_cxml_delete_descendants(){
+cts test_cxml_delete_descendants(void){
     deb()
     // "<fruit><name>apple</name><color>red<br/>blue</color><shape>roundish</shape></fruit>"
     cxml_root_node * root = cxml_load_string(wf_xml_7);
@@ -2346,7 +2346,7 @@ cts test_cxml_delete_descendants(){
     cxml_pass()
 }
 
-cts test_cxml_drop_descendants(){
+cts test_cxml_drop_descendants(void){
     deb()
     // "<fruit><name>apple</name><color>red<br/>blue</color><shape>roundish</shape></fruit>"
     cxml_root_node * root = cxml_load_string(wf_xml_7);
@@ -2372,7 +2372,7 @@ cts test_cxml_drop_descendants(){
     cxml_pass()
 }
 
-cts test_cxml_delete_parent(){
+cts test_cxml_delete_parent(void){
     deb()
     // "<fruit><name>apple</name><color>red<br/>blue</color><shape>roundish</shape></fruit>"
     cxml_root_node *root = cxml_load_string(wf_xml_7);
@@ -2418,7 +2418,7 @@ cts test_cxml_delete_parent(){
     cxml_pass()
 }
 
-cts test_cxml_delete_comments(){
+cts test_cxml_delete_comments(void){
     deb()
     // "<start><!--first comment--><begin><abc><!--maybe-->
     //  </abc><xyz>foo<!--sometimes-->bar</xyz></begin><!--first comment-->
@@ -2478,7 +2478,7 @@ cts test_cxml_delete_comments(){
     cxml_pass()
 }
 
-cts test_cxml_drop_comments(){
+cts test_cxml_drop_comments(void){
     deb()
     // "<start><!--first comment--><begin><abc><!--maybe-->
     //  </abc><xyz>foo<!--sometimes-->bar</xyz></begin><!--first comment-->
@@ -2546,7 +2546,7 @@ cts test_cxml_drop_comments(){
     cxml_pass()
 }
 
-cts test_cxml_drop_texts(){
+cts test_cxml_drop_texts(void){
     deb()
     /*
      * "<thesaurus>"
@@ -2631,7 +2631,7 @@ cts test_cxml_drop_texts(){
     cxml_pass()
 }
 
-cts test_cxml_delete_texts(){
+cts test_cxml_delete_texts(void){
     deb()
     /*
      * "<thesaurus>"
@@ -2710,7 +2710,7 @@ cts test_cxml_delete_texts(){
     cxml_pass()
 }
 
-cts test_cxml_delete_pis(){
+cts test_cxml_delete_pis(void){
     deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
@@ -2755,7 +2755,7 @@ cts test_cxml_delete_pis(){
     cxml_pass()
 }
 
-cts test_cxml_drop_pis(){
+cts test_cxml_drop_pis(void){
     deb()
     // <fruit><?pi data?><class>basic<?pi data?></class><?pi data2?></fruit>
     cxml_root_node *root = cxml_load_string(wf_xml_14);
@@ -2805,7 +2805,7 @@ cts test_cxml_drop_pis(){
     cxml_pass()
 }
 
-cts test_cxml_delete_prolog(){
+cts test_cxml_delete_prolog(void){
     deb()
     // <?xml version="1.0"?><!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
@@ -2828,7 +2828,7 @@ cts test_cxml_delete_prolog(){
     cxml_pass()
 }
 
-cts test_cxml_drop_prolog(){
+cts test_cxml_drop_prolog(void){
     deb()
     // <?xml version="1.0"?><!DOCTYPE people_list SYSTEM "example.dtd"><start>testing</start>
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
@@ -2856,7 +2856,7 @@ cts test_cxml_drop_prolog(){
     cxml_pass()
 }
 
-cts test_cxml_delete_document(){
+cts test_cxml_delete_document(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
     cxml_assert__not_null(root)
@@ -2865,7 +2865,7 @@ cts test_cxml_delete_document(){
     cxml_pass()
 }
 
-cts test_cxml_delete(){
+cts test_cxml_delete(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
     cxml_assert__not_null(root)
@@ -2874,7 +2874,7 @@ cts test_cxml_delete(){
     cxml_pass()
 }
 
-cts test_cxml_clear(){
+cts test_cxml_clear(void){
     deb()
     cxml_root_node *root = cxml_load_string(wf_xml_plg);
     cxml_assert__not_null(root)
@@ -2883,7 +2883,7 @@ cts test_cxml_clear(){
     cxml_pass()
 }
 
-cts test_cxml_get_number(){
+cts test_cxml_get_number(void){
     cxml_attribute_node *attr = cxml_create_node(CXML_ATTR_NODE);
     cxml_assert__not_null(attr)
     cxml_assert__true(cxml_set_attribute_data(attr, "xml", "food", "12345"))
@@ -2906,7 +2906,7 @@ cts test_cxml_get_number(){
 }
 
 
-void suite_cxqapi(){
+void suite_cxqapi(void){
     cxml_suite(cxqapi)
     {
         cxml_add_test_setup(fixture_no_fancy_printing_and_warnings)

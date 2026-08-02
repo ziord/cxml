@@ -16,7 +16,7 @@ int empty_grp_table_asserts(cxml_grp_table *table){
     return 1;
 }
 
-cts test_cxml_grp_table_init(){
+cts test_cxml_grp_table_init(void){
     cxml_grp_table table;
     cxml_grp_table_init(&table);
     cxml_assert__one(empty_grp_table_asserts(&table))
@@ -25,13 +25,13 @@ cts test_cxml_grp_table_init(){
     cxml_pass()
 }
 
-cts test_new_cxml_grp_table(){
+cts test_new_cxml_grp_table(void){
     cxml_grp_table table = new_cxml_grp_table();
     cxml_assert__one(empty_grp_table_asserts(&table))
     cxml_pass()
 }
 
-cts test_cxml_grp_table_put(){
+cts test_cxml_grp_table_put(void){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, parent3, child1, child2;
 
@@ -68,7 +68,7 @@ cts test_cxml_grp_table_put(){
 
 extern int empty_list_asserts(cxml_list *list);
 
-cts test_cxml_grp_table_get(){
+cts test_cxml_grp_table_get(void){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, parent3,
             parent4, parent5, parent6, child1, child2;
@@ -140,7 +140,7 @@ cts test_cxml_grp_table_get(){
     cxml_pass()
 }
 
-cts test_cxml_grp_table_remove(){
+cts test_cxml_grp_table_remove(void){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, parent3,
             parent4, parent5, parent6, parent7, child1, child2;
@@ -234,7 +234,7 @@ cts test_cxml_grp_table_remove(){
     cxml_pass()
 }
 
-cts test_cxml_grp_table_is_empty(){
+cts test_cxml_grp_table_is_empty(void){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent, child1, child2;
 
@@ -249,7 +249,7 @@ cts test_cxml_grp_table_is_empty(){
     cxml_pass()
 }
 
-cts test_cxml_grp_table_size(){
+cts test_cxml_grp_table_size(void){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent1, parent2, child1, child2;
 
@@ -270,7 +270,7 @@ cts test_cxml_grp_table_size(){
     cxml_pass()
 }
 
-cts test_cxml_grp_table_free(){
+cts test_cxml_grp_table_free(void){
     cxml_grp_table table = new_cxml_grp_table();
     struct Data parent, child1, child2;
 
@@ -286,7 +286,7 @@ cts test_cxml_grp_table_free(){
 }
 
 
-void suite_cxgrptable() {
+void suite_cxgrptable(void) {
     cxml_suite(cxgrptable)
     {
         cxml_add_m_test(8,

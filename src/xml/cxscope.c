@@ -16,7 +16,7 @@ void _cxml_scope_table_free(struct _cxml_scope_table *table){
     FREE(table);
 }
 
-struct _cxml_scope_table * _cxml_scope_table_new(){
+struct _cxml_scope_table * _cxml_scope_table_new(void){
     struct _cxml_scope_table *scope = ALLOC(struct _cxml_scope_table, 1);
     _cxml_scope_table_init(scope);
     return scope;

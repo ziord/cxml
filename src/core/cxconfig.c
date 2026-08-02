@@ -24,11 +24,11 @@ static cxml_config _cxml_config_gb = {
 };
 
 
-cxml_config cxml_get_config(){
+cxml_config cxml_get_config(void){
     return _cxml_config_gb;
 }
 
-cxml_config cxml_get_config_defaults(){
+cxml_config cxml_get_config_defaults(void){
     return (cxml_config) {
             .doc_name = "XMLDocument",
             .preserve_space = 1,
@@ -52,7 +52,7 @@ void cxml_set_config(cxml_config config){
     _cxml_config_gb = config;
 }
 
-void cxml_reset_config(){
+void cxml_reset_config(void){
     cxml_set_config(cxml_get_config_defaults());
 }
 

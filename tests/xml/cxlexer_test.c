@@ -5,7 +5,7 @@
 
 #include "cxfixture.h"
 
-cts test__cxml_lexer_init(){
+cts test__cxml_lexer_init(void){
     _cxml_lexer lexer;
     cxml_config cfg = cxml_get_config();
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
@@ -23,14 +23,14 @@ cts test__cxml_lexer_init(){
     cxml_pass()
 }
 
-cts test__cxml_token_init(){
+cts test__cxml_token_init(void){
     _cxml_token tok;
     _cxml_token_init(&tok);
     cxml_assert__eq(tok.literal_type, CXML_NON_LITERAL)
     cxml_pass()
 }
 
-cts test__cxml_lexer_close(){
+cts test__cxml_lexer_close(void){
     _cxml_lexer lexer;
     _cxml_lexer_init(&lexer, wf_xml_6, NULL, false);
     _cxml_lexer_close(&lexer);
@@ -41,7 +41,7 @@ cts test__cxml_lexer_close(){
 
 extern _cxml_token cxml_get_token(_cxml_lexer *cxlexer);
 
-cts test_cxml_get_token(){
+cts test_cxml_get_token(void){
     cxml_cfg_preserve_space(0);
     _cxml_lexer lexer;
     // <fruit><name>apple</name><name>banana</name></fruit>
@@ -216,7 +216,7 @@ cts test_cxml_get_token(){
 }
 
 
-void suite_cxlexer(){
+void suite_cxlexer(void){
     cxml_suite(cxlexer)
     {
         cxml_add_m_test(4,

@@ -36,7 +36,7 @@ static void cxml_xp_visit_Predicate(cxml_xp_predicate *node);
 /*************************************************************/
 
 
-inline static cxml_ns_node* _get_xml_namespace(){
+inline static cxml_ns_node* _get_xml_namespace(void){
     cxml_ns_node *xml_ns = ALLOC(cxml_ns_node, 1);
     cxml_ns_node_init(xml_ns);
     xml_ns->is_global = 1;
@@ -342,7 +342,7 @@ static void _cxml_xp__e_push(_cxml_xp_data *val){
     _cxml_stack__push(&_xpath_parser.acc_stack, val);
 }
 
-static _cxml_xp_data * _cxml_xp__e_pop(){
+static _cxml_xp_data * _cxml_xp__e_pop(void){
     // pop an element node off the result accumulator stack
     return _cxml_stack__pop(&_xpath_parser.acc_stack);
 }
@@ -351,7 +351,7 @@ static bool is_not_prolog_type(_cxml_node_t node_type){
     return (node_type != CXML_XHDR_NODE && node_type != CXML_DTD_NODE);
 }
 
-_cxml_xp_data *_cxml_xp_new_data() {
+_cxml_xp_data *_cxml_xp_new_data(void) {
     _cxml_xp_data *res = ALLOC(_cxml_xp_data, 1);
     // store for later de-allocation
     cxml_list_append(&_xpath_parser.data_nodes, res);
@@ -531,7 +531,7 @@ _find_all(
  */
 //***********************************************//
 
-static void _set_state_1(){
+static void _set_state_1(void){
     // `/.`
     // '/' refers to root node. '.' selects the context node, hence,
     // we save the root node when the result set is empty
@@ -542,7 +542,7 @@ static void _set_state_1(){
     // exact same nodes in the accumulating nodeset (`_xpath_parser.nodeset`)
 }
 
-static void _set_state_2(){
+static void _set_state_2(void){
     // `/..`  -> captures parent of context node
     if (cxml_set_size(&_xpath_parser.nodeset)){
         cxml_set node_set = new_cxml_set();
@@ -586,7 +586,7 @@ static void _set_state_3(cxml_xp_step* node){
 }
 
 
-static void _set_state_4(){
+static void _set_state_4(void){
      /*
       * `/@*` -> selects all attributes in an elem node if it has any.
       * when the accumulating nodeset (_xpath_parser.nodeset)
@@ -1000,7 +1000,7 @@ static void _set_state_16(cxml_xp_step* node){
     }
 }
 
-static void _set_state_17(){
+static void _set_state_17(void){
     /*
      * `.` -> selects the context node
      * when the accumulating nodeset (_xpath_parser.nodeset) is empty,
@@ -1023,7 +1023,7 @@ static void _set_state_17(){
      */
 }
 
-static void _set_state_18(){
+static void _set_state_18(void){
     /*
      * `..` ->  selects the parent of the context node
     * when the accumulating nodeset (_xpath_parser.nodeset) is empty,
@@ -1067,7 +1067,7 @@ static void _set_state_19(cxml_xp_step* node){
     _set_state_3(node);
 }
 
-static void _set_state_20(){
+static void _set_state_20(void){
      /*
       * `@*` ->  selects all the attributes of the context node
       * `@pn:*` ->  selects all the attributes of the context node under
@@ -1764,7 +1764,7 @@ void cxml_xp_visit(cxml_xp_astnode * ast_node){  // generic cxml_xp_visit
     }
 }
 
-cxml_set* cxml_xp_eval_expr(){
+cxml_set* cxml_xp_eval_expr(void){
     if (!_xpath_parser.root_node || !_xpath_parser.root_element) return NULL;
     // don't pop the node off the stack since it's needed when calling cxml_xp_free_ast_nodes()
     cxml_xp_astnode* node = _cxml_stack__get(&_xpath_parser.ast_stack);
@@ -1779,7 +1779,7 @@ cxml_set* cxml_xp_eval_expr(){
 }
 
 
-static void _set_root_elem(){
+static void _set_root_elem(void){
     if (_xpath_parser.root_node->root_element){
         _xpath_parser.root_element = _xpath_parser.root_node->root_element;
         return;
@@ -1825,7 +1825,7 @@ static void _set_roots(void *root){
 }
 
 
-void cxml_xp_debug_expr(){
+void cxml_xp_debug_expr(void){
     // don't pop the node off the stack since it's needed
     // when calling cxml_xp_free_ast_nodes()
     cxml_xp_astnode* node = _cxml_stack__get(&_xpath_parser.ast_stack);

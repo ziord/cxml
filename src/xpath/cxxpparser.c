@@ -15,41 +15,41 @@ extern _cxml_xp_token _cxml_xp_get_token(_cxml_xp_lexer *xplexer);
 
 static void _cxml_xp_p__consume(_cxml_xp_token_t type);
 
-static void _cxml_xp_p__advance();
+static void _cxml_xp_p__advance(void);
 
 static void _cxml_xp_p__copy_token_v(cxml_string *str, _cxml_xp_token *token);
 
-static void *_cxml_xp_p__pop();
+static void *_cxml_xp_p__pop(void);
 
 static void _cxml_xp_p__push(void *node);
 
-static bool _cxml_xp_p__stack_empty();
+static bool _cxml_xp_p__stack_empty(void);
 
-static void location_path();
+static void location_path(void);
 
-static void absolute_location_path();
+static void absolute_location_path(void);
 
-static void relative_location_path();
+static void relative_location_path(void);
 
-static void step();
+static void step(void);
 
-static void predicate();
+static void predicate(void);
 
-static void node_test();
+static void node_test(void);
 
-static void function_call();
+static void function_call(void);
 
 static void expression(int rbp);
 
-static void unary();
+static void unary(void);
 
-static void binary();
+static void binary(void);
 
-static void num();
+static void num(void);
 
-static void group();
+static void group(void);
 
-static void str_literal();
+static void str_literal(void);
 
 static void _cxml_xp__err(
         _cxml_xp_token *token,
@@ -58,7 +58,7 @@ static void _cxml_xp__err(
         const int *_col);
 
 
-void _cxml_xpath_parser_init() {
+void _cxml_xpath_parser_init(void) {
     _xpath_parser.consume_cnt = 0;
 
     _xpath_parser.is_empty_nodeset = 0;
@@ -92,7 +92,7 @@ void cxml_xp_free_ast_nodes(_cxml_xp_parser *xpp){
     cxml_xp_fvisit(_cxml_stack__pop(&xpp->ast_stack));
 }
 
-void _cxml_xpath_parser_free(){
+void _cxml_xpath_parser_free(void){
 _CXML__TRACE(
     cxml_string acc = new_cxml_string();
     cxml_xp_bvisit(_cxml_stack__get(&_xpath_parser.ast_stack), &acc);
@@ -142,7 +142,7 @@ _CXML__TRACE(
  * advance to the next token in the token sequence,
  * i.e. get the next token.
  */
-static void _cxml_xp_p__advance() {
+static void _cxml_xp_p__advance(void) {
     _xpath_parser.prev_tok = _xpath_parser.current_tok;
     _cxml_xp_token token  = _cxml_xp_get_token(&_xpath_parser.lexer);
     if ((int)token.type == 0xff){
@@ -263,12 +263,12 @@ void _cxml_xp_p__push(void *node){
     _cxml_stack__push(&_xpath_parser.ast_stack, node);
 }
 
-void * _cxml_xp_p__pop(){
+void * _cxml_xp_p__pop(void){
     // pop an element node off the stack
     return _cxml_stack__pop(&_xpath_parser.ast_stack);
 }
 
-bool _cxml_xp_p__stack_empty(){
+bool _cxml_xp_p__stack_empty(void){
     return _cxml_stack_is_empty(&_xpath_parser.ast_stack);
 }
 
@@ -292,14 +292,14 @@ cxml_xp_op _cxml_xp_get_op(_cxml_xp_token_t type){
     }
 }
 
-static cxml_xp_astnode* new_astnode(){
+static cxml_xp_astnode* new_astnode(void){
     cxml_xp_astnode* node = ALLOC(cxml_xp_astnode, 1);
     node->type = CXML_XP_AST_OBJECT;
     node->wrapped_type = CXML_XP_AST_NIL;
     return node;
 }
 
-static cxml_xp_unaryop* new_unary(){
+static cxml_xp_unaryop* new_unary(void){
     cxml_xp_unaryop* unary = ALLOC(cxml_xp_unaryop, 1);
     unary->type = CXML_XP_AST_UNARYOP_NODE;
     unary->op = -1;
@@ -307,14 +307,14 @@ static cxml_xp_unaryop* new_unary(){
     return unary;
 }
 
-static cxml_xp_num* new_num(){
+static cxml_xp_num* new_num(void){
     cxml_xp_num* num = ALLOC(cxml_xp_num, 1);
     num->type = CXML_XP_AST_NUM_NODE;
     cxml_string_init(&num->val);
     return num;
 }
 
-static cxml_xp_functioncall* new_function_call(){
+static cxml_xp_functioncall* new_function_call(void){
     cxml_xp_functioncall* func_call = ALLOC(cxml_xp_functioncall, 1);
     func_call->type = CXML_XP_AST_FUNCTION_CALL_NODE;
     func_call->pos = -1;
@@ -323,7 +323,7 @@ static cxml_xp_functioncall* new_function_call(){
     return func_call;
 }
 
-static cxml_xp_path* new_path(){
+static cxml_xp_path* new_path(void){
     cxml_xp_path* path_node = ALLOC(cxml_xp_path, 1);
     path_node->type = CXML_XP_AST_PATH_NODE;
     path_node->from_predicate = 0;
@@ -331,27 +331,27 @@ static cxml_xp_path* new_path(){
     return path_node;
 }
 
-static cxml_xp_predicate* new_predicate(){
+static cxml_xp_predicate* new_predicate(void){
     cxml_xp_predicate* pred = ALLOC(cxml_xp_predicate, 1);
     pred->type = CXML_XP_AST_PREDICATE_NODE;
     pred->expr_node = NULL;
     return pred;
 }
 
-static cxml_xp_string* new_str_literal(){
+static cxml_xp_string* new_str_literal(void){
     cxml_xp_string* literal = ALLOC(cxml_xp_string, 1);
     literal->type = CXML_XP_AST_STR_LITERAL_NODE;
     cxml_string_init(&literal->str);
     return literal;
 }
 
-static cxml_xp_nodetest* new_node_test(){
+static cxml_xp_nodetest* new_node_test(void){
     cxml_xp_nodetest* nt = ALLOC(cxml_xp_nodetest, 1);
     nt->type = CXML_XP_AST_NODETEST_NODE;
     return nt;
 }
 
-static cxml_xp_step* new_step(){
+static cxml_xp_step* new_step(void){
     cxml_xp_step* step = ALLOC(cxml_xp_step, 1);
     step->type = CXML_XP_AST_STEP_NODE;
     step->abbrev_step = 0;
@@ -362,7 +362,7 @@ static cxml_xp_step* new_step(){
     return step;
 }
 
-static cxml_xp_binaryop* new_binary(){
+static cxml_xp_binaryop* new_binary(void){
     cxml_xp_binaryop* binary = ALLOC(cxml_xp_binaryop, 1);
     binary->type = CXML_XP_AST_BINOP_NODE;
     binary->op = -1;
@@ -373,7 +373,7 @@ static cxml_xp_binaryop* new_binary(){
 
 /*** symbols & productions ***/
 
-void num(){
+void num(void){
     cxml_xp_num* num = new_num();
     _cxml_xp_p__copy_token_v(&num->val, &_xpath_parser.current_tok);
     _cxml_xp_p__consume(CXML_XP_TOKEN_NUMBER);
@@ -383,7 +383,7 @@ void num(){
     _cxml_xp_p__push(node);
 }
 
-void str_literal(){
+void str_literal(void){
     cxml_xp_string* literal = new_str_literal();
     cxml_string_append(&literal->str, _xpath_parser.current_tok.start + 1,
                        _xpath_parser.current_tok.length - 2);
@@ -394,7 +394,7 @@ void str_literal(){
     _cxml_xp_p__push(node);
 }
 
-void unary(){
+void unary(void){
     cxml_xp_unaryop* unary = new_unary();
     cxml__assert((_xpath_parser.current_tok.type == CXML_XP_TOKEN_MINUS ||
                  _xpath_parser.current_tok.type == CXML_XP_TOKEN_PLUS),
@@ -413,7 +413,7 @@ void unary(){
     _cxml_xp_p__push(node);
 }
 
-void binary(){
+void binary(void){
     cxml_xp_astnode* left = _cxml_xp_p__pop();
     _cxml_xp_token op_token = _xpath_parser.current_tok;
     cxml_xp_op op = _cxml_xp_get_op(op_token.type);
@@ -434,16 +434,16 @@ void binary(){
     _cxml_xp_p__push(node);
 }
 
-void group(){
+void group(void){
     _cxml_xp_p__consume(CXML_XP_TOKEN_L_BRACKET);
     expression(0);
     _cxml_xp_p__consume(CXML_XP_TOKEN_R_BRACKET);
 }
 
 
-static void prefix(){
+static void prefix(void){
     _cxml_xp_token token = _xpath_parser.current_tok;
-    void (*func)() = bpow_LUTable[token.type].prefix;
+    void (*func)(void) = bpow_LUTable[token.type].prefix;
     if (func){
         func();
     }else{
@@ -452,9 +452,9 @@ static void prefix(){
     }
 }
 
-static void infix(){
+static void infix(void){
     _cxml_xp_token token = _xpath_parser.current_tok;
-    void (*func)() = bpow_LUTable[token.type].infix;
+    void (*func)(void) = bpow_LUTable[token.type].infix;
     if (func){
         func();
     }else{
@@ -483,7 +483,7 @@ inline static bool _is_kwd_token(_cxml_xp_token *token){
    Argument ::= Expr
    FunctionName ::= QName
  */
-void function_call(){
+void function_call(void){
     // save name for lookup
     _cxml_xp_token token = _xpath_parser.current_tok;
     int line = _xpath_parser.lexer.line_no;
@@ -563,7 +563,7 @@ void function_call(){
 
 '@'? NodeTest Predicate* | ('.' | '..')
  */
-void predicate(){
+void predicate(void){
     _cxml_xp_p__consume(CXML_XP_TOKEN_L_SQR_BRACKET);
     // set flag to determine if the parsed path nodes resides inside a predicate node
     _xpath_parser.from_predicate = true;
@@ -705,7 +705,7 @@ static void _store_type_test(cxml_xp_nodetest* nt_node){
     }
 }
 
-void node_test(){
+void node_test(void){
     cxml_xp_step* node = _cxml_xp_p__pop();
     cxml_xp_nodetest* nt_node = new_node_test();
     _cxml_xp_token tok;
@@ -761,7 +761,7 @@ inline static short get_path_spec(_cxml_xp_token_t type){
 /*
  * Step ::= '@'? NameTest Predicate* | ('.' | '..')
  */
-void step(){
+void step(void){
     cxml_xp_step* step_node = new_step();
     step_node->path_spec = get_path_spec(_xpath_parser.prev_tok.type);
     // ('.' | '..')
@@ -801,7 +801,7 @@ void step(){
                         | RelativeLocationPath '/' Step
                         | RelativeLocationPath '//' Step
  */
-void relative_location_path(){
+void relative_location_path(void){
     cxml_xp_path* path_node = new_path();
     path_node->from_predicate = _xpath_parser.from_predicate;
     step();
@@ -824,7 +824,7 @@ void relative_location_path(){
 // helper function for transforming abbreviated step nodes in any of
 // the form:
 // '/' | '[/]' | '(/)' into '/.' | '[/.]' | '(/.)'
-static void _abbrev_step(){
+static void _abbrev_step(void){
     cxml_xp_step* step_node = new_step();
     step_node->path_spec = get_path_spec(_xpath_parser.prev_tok.type);
     step_node->abbrev_step = 1;
@@ -841,7 +841,7 @@ static void _abbrev_step(){
  * AbsoluteLocationPath ::= '/' RelativeLocationPath?
                         | '//' RelativeLocationPath
  */
-void absolute_location_path(){
+void absolute_location_path(void){
     if (_xpath_parser.current_tok.type == CXML_XP_TOKEN_F_SLASH
     || _xpath_parser.current_tok.type == CXML_XP_TOKEN_DF_SLASH)
     {
@@ -864,7 +864,7 @@ void absolute_location_path(){
 /*
  * LocationPath ::= RelativeLocationPath | AbsoluteLocationPath
  */
-void location_path() {
+void location_path(void) {
     absolute_location_path();
     while (_xpath_parser.current_tok.type == CXML_XP_TOKEN_PIPE){
         binary();
