@@ -56,13 +56,13 @@ void cxq_init_q(_cxml_q *q) {
     q->q_comm = NULL;
 }
 
-static _cxml_query *cxq__new_query() {
+static _cxml_query *cxq__new_query(void) {
     _cxml_query *query = ALLOC(_cxml_query, 1);
     cxq_init_query(query);
     return query;
 }
 
-static _cxml_q *cxq__new_q() {
+static _cxml_q *cxq__new_q(void) {
     _cxml_q *q = ALLOC(_cxml_q, 1);
     cxq_init_q(q);
     return q;

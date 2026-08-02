@@ -168,7 +168,7 @@ static int _cxml_xp_find_fn(const char* n1/*finding n1*/){
     return -1;
 }
 
-static struct _cxml_xp_func_LU_val _cxml_xp_new_fn_LU_val() {
+static struct _cxml_xp_func_LU_val _cxml_xp_new_fn_LU_val(void) {
     return (struct _cxml_xp_func_LU_val) {-1, -1, 0};
 }
 

@@ -35,7 +35,7 @@ typedef struct {
 
 void _cxml_xp_data_init(_cxml_xp_data **data);
 
-_cxml_xp_data *_cxml_xp_new_data();
+_cxml_xp_data *_cxml_xp_new_data(void);
 
 void _cxml_xp_data_free(_cxml_xp_data *data);
 
