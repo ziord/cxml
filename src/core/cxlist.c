@@ -31,7 +31,7 @@ static struct _cxml_list__node* new_node(void* item){
     return node;
 }
 
-cxml_list* new_alloc_cxml_list(){
+cxml_list* new_alloc_cxml_list(void){
     cxml_list* list = ALLOCR(cxml_list, 1, "CXMLFatalError: Not enough memory to allocate list.");
     __init_list(list);
     return list;
@@ -250,7 +250,7 @@ bool cxml_list_is_empty(cxml_list* list){
     return (!list) || (list->len == 0);
 }
 
-cxml_list new_cxml_list(){
+cxml_list new_cxml_list(void){
     cxml_list list;
     __init_list(&list);
     return list;

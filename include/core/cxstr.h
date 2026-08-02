@@ -17,9 +17,9 @@ typedef struct {
 
 void cxml_string_init(cxml_string *str);
 
-cxml_string new_cxml_string();
+cxml_string new_cxml_string(void);
 
-cxml_string* new_alloc_cxml_string();
+cxml_string* new_alloc_cxml_string(void);
 
 cxml_string new_cxml_string_s(const char *raw);
 

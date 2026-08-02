@@ -22,7 +22,7 @@ void cxml_number_init(cxml_number *literal){
     __init_number(literal)
 }
 
-cxml_number new_cxml_number(){
+cxml_number new_cxml_number(void){
     cxml_number literal;
     __init_number(&literal)
     return literal;

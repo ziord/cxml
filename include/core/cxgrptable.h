@@ -18,7 +18,7 @@ typedef struct{
 
 void cxml_grp_table_init(cxml_grp_table *table);
 
-cxml_grp_table new_cxml_grp_table();
+cxml_grp_table new_cxml_grp_table(void);
 
 void cxml_grp_table_put(cxml_grp_table *table, const void *key, void *value);
 

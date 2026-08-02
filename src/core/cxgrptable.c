@@ -33,7 +33,7 @@ void cxml_grp_table_init(cxml_grp_table* table){
     __init_grp_table(table)
 }
 
-cxml_grp_table new_cxml_grp_table(){
+cxml_grp_table new_cxml_grp_table(void){
     cxml_grp_table table;
     __init_grp_table(&table)
     return table;

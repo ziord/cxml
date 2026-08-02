@@ -16,9 +16,9 @@ typedef struct _cxml_set{
 }cxml_set;
 
 
-cxml_set new_cxml_set();
+cxml_set new_cxml_set(void);
 
-cxml_set* new_alloc_cxml_set();
+cxml_set* new_alloc_cxml_set(void);
 
 void cxml_set_init(cxml_set *mset);
 

@@ -33,13 +33,13 @@ void cxml_string_from_alloc(cxml_string *str, char **raw, int len) {
     }
 }
 
-cxml_string new_cxml_string(){
+cxml_string new_cxml_string(void){
     cxml_string str;
     __init_str(&str);
     return str;
 }
 
-cxml_string* new_alloc_cxml_string(){
+cxml_string* new_alloc_cxml_string(void){
     cxml_string *str = ALLOC(cxml_string, 1);
     __init_str(str);
     return str;

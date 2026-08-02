@@ -43,13 +43,13 @@ typedef struct _cxml_config{
     // other configs goes here
 }cxml_config;
 
-cxml_config cxml_get_config();
+cxml_config cxml_get_config(void);
 
-cxml_config cxml_get_config_defaults();
+cxml_config cxml_get_config_defaults(void);
 
 void cxml_set_config(cxml_config config);
 
-void cxml_reset_config();
+void cxml_reset_config(void);
 
 void cxml_cfg_enable_fancy_printing(bool enable);
 
